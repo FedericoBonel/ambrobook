@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Unit of measure POJO
+ */
 @Entity
 public class UnitOfMeasure {
 
