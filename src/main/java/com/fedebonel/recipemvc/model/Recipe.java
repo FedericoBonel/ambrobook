@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Recipe POJO
@@ -21,6 +22,8 @@ public class Recipe {
     private String directions;
     // TODO Add Numeration
     // private Difficulty difficulty;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
     @Lob
     private Byte[] image;
     @OneToOne(cascade = CascadeType.ALL)
@@ -88,6 +91,14 @@ public class Recipe {
 
     public void setDirections(String directions) {
         this.directions = directions;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Byte[] getImage() {
