@@ -15,6 +15,8 @@ import java.util.Optional;
 
 /**
  * BootStrap Recipe initializer
+ *
+ * (Pretty ugly but necessary to load data on start up if nothing gets loaded from DB)
  */
 @Component
 public class recipeInitializer implements ApplicationListener<ContextRefreshedEvent> {
@@ -113,15 +115,15 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
                 Be careful handling chilis! If using, it's best to wear food-safe gloves. If no gloves are available, wash your hands thoroughly after handling, and do not touch your eyes or the area near your eyes for several hours afterwards.
                 """);
         guacamole.setNote(guacNotes);
-        guacNotes.setRecipe(guacamole);
-        guacamole.getIngredients().add(new Ingredient("ripe avocados", BigDecimal.valueOf(2), each, guacamole));
-        guacamole.getIngredients().add(new Ingredient("kosher salt", BigDecimal.valueOf(0.25), tspoon, guacamole));
-        guacamole.getIngredients().add(new Ingredient("fresh lime juice", BigDecimal.valueOf(1), tblspoon, guacamole));
-        guacamole.getIngredients().add(new Ingredient("red onions thinly sliced", BigDecimal.valueOf(3), tblspoon, guacamole));
-        guacamole.getIngredients().add(new Ingredient("serrano chilis, stems and seeds removed, minced", BigDecimal.valueOf(1), each, guacamole));
-        guacamole.getIngredients().add(new Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal.valueOf(2), tblspoon, guacamole));
-        guacamole.getIngredients().add(new Ingredient("freshly ground black pepper", BigDecimal.valueOf(1), pinch, guacamole));
-        guacamole.getIngredients().add(new Ingredient("ripe tomato, chopped", BigDecimal.valueOf(0.5), each, guacamole));
+
+        guacamole.addIngredient(new Ingredient("ripe avocados", BigDecimal.valueOf(2), each));
+        guacamole.addIngredient(new Ingredient("kosher salt", BigDecimal.valueOf(0.25), tspoon));
+        guacamole.addIngredient(new Ingredient("fresh lime juice", BigDecimal.valueOf(1), tblspoon));
+        guacamole.addIngredient(new Ingredient("red onions thinly sliced", BigDecimal.valueOf(3), tblspoon));
+        guacamole.addIngredient(new Ingredient("serrano chilis, stems and seeds removed, minced", BigDecimal.valueOf(1), each));
+        guacamole.addIngredient(new Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal.valueOf(2), tblspoon));
+        guacamole.addIngredient(new Ingredient("freshly ground black pepper", BigDecimal.valueOf(1), pinch));
+        guacamole.addIngredient(new Ingredient("ripe tomato, chopped", BigDecimal.valueOf(0.5), each));
 
         Recipe tacos = new Recipe();
         tacos.setDescription("Spicy Grilled Chicken Tacos");
@@ -154,14 +156,13 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
                 Look for ancho chile powder with the Mexican ingredients at your grocery store, on buy it online. (If you can't find ancho chili powder, you replace the ancho chili, the oregano, and the cumin with 2 1/2 tablespoons regular chili powder, though the flavor won't be quite the same.)
                 """);
         tacos.setNote(tacosNotes);
-        tacos.getIngredients().add(new Ingredient("ancho chili powder", BigDecimal.valueOf(2), tblspoon, tacos));
-        tacos.getIngredients().add(new Ingredient("dried oregano", BigDecimal.valueOf(1), tspoon,tacos));
-        tacos.getIngredients().add(new Ingredient("salt", BigDecimal.valueOf(0.5), tspoon,tacos));
-        tacos.getIngredients().add(new Ingredient("clove garlic", BigDecimal.valueOf(1), each,tacos));
-        tacos.getIngredients().add(new Ingredient("finely grated orange zest", BigDecimal.valueOf(1), tblspoon,tacos));
-        tacos.getIngredients().add(new Ingredient("olive oil", BigDecimal.valueOf(3), tblspoon,tacos));
-        tacos.getIngredients().add(new Ingredient("boneless chicken things", BigDecimal.valueOf(5), each,tacos));
-        tacosNotes.setRecipe(tacos);
+        tacos.addIngredient(new Ingredient("ancho chili powder", BigDecimal.valueOf(2), tblspoon));
+        tacos.addIngredient(new Ingredient("dried oregano", BigDecimal.valueOf(1), tspoon));
+        tacos.addIngredient(new Ingredient("salt", BigDecimal.valueOf(0.5), tspoon));
+        tacos.addIngredient(new Ingredient("clove garlic", BigDecimal.valueOf(1), each));
+        tacos.addIngredient(new Ingredient("finely grated orange zest", BigDecimal.valueOf(1), tblspoon));
+        tacos.addIngredient(new Ingredient("olive oil", BigDecimal.valueOf(3), tblspoon));
+        tacos.addIngredient(new Ingredient("boneless chicken things", BigDecimal.valueOf(5), each));
 
         // Store the data
         result.add(guacamole);

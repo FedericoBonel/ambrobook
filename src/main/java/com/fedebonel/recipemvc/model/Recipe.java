@@ -115,6 +115,20 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public void addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+    }
+
+    public void removeIngredient(Ingredient ingredient) {
+        ingredients.forEach(ingredient1 -> {
+            if(ingredient.equals(ingredient1)) {
+                ingredient.setRecipe(null);
+                ingredients.remove(ingredient);
+            }
+        });
+    }
+
     public Byte[] getImage() {
         return image;
     }
@@ -128,6 +142,7 @@ public class Recipe {
     }
 
     public void setNote(Notes note) {
+        note.setRecipe(this);
         this.note = note;
     }
 
