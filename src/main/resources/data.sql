@@ -1,3 +1,4 @@
+-- Values to be inserted in database
 INSERT INTO category (name) VALUES ('American');
 INSERT INTO category (name) VALUES ('Italian');
 INSERT INTO category (name) VALUES ('Argentine');

@@ -4,6 +4,7 @@ import com.fedebonel.recipemvc.model.*;
 import com.fedebonel.recipemvc.repositories.CategoryRepository;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.Optional;
  *
  * (Pretty ugly but necessary to load data on start up if nothing gets loaded from DB)
  */
+@Slf4j
 @Component
 public class recipeInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -34,12 +36,14 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Initialized data");
     }
 
     private List<Recipe> getRecipes() {
+        log.debug("Initializing data");
         List<Recipe> result = new ArrayList<>(2);
 
-        // Load the uoms
+        log.debug("Loading UoMs");
         Optional<UnitOfMeasure> cupOptional = uomRepository.findByUnit("Cup");
         if (cupOptional.isEmpty()) throw new RuntimeException("Measure not found");
 
@@ -64,7 +68,6 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         Optional<UnitOfMeasure> eachOptional = uomRepository.findByUnit("Each");
         if (eachOptional.isEmpty()) throw new RuntimeException("Measure not found");
 
-        // Assign them
         UnitOfMeasure cup = cupOptional.get();
         UnitOfMeasure tblspoon = tblspoonOptional.get();
         UnitOfMeasure tspoon = tspoonOptional.get();
@@ -74,12 +77,12 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         UnitOfMeasure pint = pintOptional.get();
         UnitOfMeasure each = eachOptional.get();
 
-        //Get the categories
+        log.debug("Loading categories");
         Optional<Category> mexicanOptional = categoryRepository.findByName("Mexican");
         if (mexicanOptional.isEmpty()) throw new RuntimeException("Category not found");
         Category mexican = mexicanOptional.get();
 
-        // Create recipes
+        log.debug("Creating and saving recipes");
         Recipe guacamole = new Recipe();
         guacamole.setDescription("Perfect Guacamole");
         guacamole.setPrepTime(10);
