@@ -35,11 +35,14 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Recipe Description</th>
+                                <th>View</th>
                             </tr>
                             </thead>
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}">123</td>
                                 <td th:text="${recipe.description}">Federico</td>
+                                <!-- When clicked send it to the endpoint corresponding to that recipe -->
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
                             </tr>
                         </table>
                     </div>
