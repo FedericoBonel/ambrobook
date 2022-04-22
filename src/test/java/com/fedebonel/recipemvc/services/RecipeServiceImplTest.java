@@ -5,6 +5,7 @@ import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
@@ -57,6 +58,6 @@ class RecipeServiceImplTest {
         assertEquals(recipes.size(), recipesData.size());
         // Make sure that the recipes repository findAll only got called ONCE
         // (i.e. when the recipeService.getRecipes() gets called)
-        verify(recipeRepository, times(1)).findAll();
+        verify(recipeRepository, Mockito.times(1)).findAll();
     }
 }

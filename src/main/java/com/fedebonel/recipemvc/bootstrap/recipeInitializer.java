@@ -95,6 +95,7 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         guacamole.setDirections("""
                 Cut the avocado:
                 Cut the avocados in half. Remove the pit. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.
+                
                                 
                 How to make guacamole - scoring avocado
                 Mash the avocado flesh:
@@ -129,6 +130,8 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         guacamole.addIngredient(new Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal.valueOf(2), tblspoon));
         guacamole.addIngredient(new Ingredient("freshly ground black pepper", BigDecimal.valueOf(1), pinch));
         guacamole.addIngredient(new Ingredient("ripe tomato, chopped", BigDecimal.valueOf(0.5), each));
+        guacamole.setSource("Simply Recipes");
+        guacamole.setUrl("www.simplyrecipes.com");
 
         Recipe tacos = new Recipe();
         tacos.setDescription("Spicy Grilled Chicken Tacos");
@@ -168,6 +171,9 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         tacos.addIngredient(new Ingredient("finely grated orange zest", BigDecimal.valueOf(1), tblspoon));
         tacos.addIngredient(new Ingredient("olive oil", BigDecimal.valueOf(3), tblspoon));
         tacos.addIngredient(new Ingredient("boneless chicken things", BigDecimal.valueOf(5), each));
+        tacos.setSource("Simply Recipes");
+        tacos.setUrl("www.simplyrecipes.com");
+
 
         // Store the data
         result.add(guacamole);

@@ -53,6 +53,7 @@ public class Recipe {
     }
 
     public void setNote(Notes note) {
+        if (note == null) return;
         note.setRecipe(this);
         this.note = note;
     }

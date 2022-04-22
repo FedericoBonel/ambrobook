@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Recipe</title>
@@ -36,9 +37,9 @@
                             </div>
                             <div class="col-lg-9">
                                 <ul>
-                                    <li>Category</li>
-                                    <li>Category</li>
-                                    <li>Category</li>
+                                    <li th:each="category : ${recipe.categories}" th:text="${category.name}">
+                                        Category
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -48,13 +49,13 @@
                                 <h5>Preparation time:</h5>
                             </div>
                             <div class="col-lg-3">
-                                <p>30 minutes</p>
+                                <p th:text="${recipe.prepTime + ' minutes'}">30 minutes</p>
                             </div>
                             <div class="col-lg-3">
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-lg-3">
-                                <p>Easy</p>
+                                <p th:text="${recipe.difficulty.name()}">Easy</p>
                             </div>
                         </div>
                         <!-- Cooktime and servings -->
@@ -63,22 +64,28 @@
                                 <h5>Cook time:</h5>
                             </div>
                             <div class="col-lg-3">
-                                <p>30 minutes</p>
+                                <p th:text="${recipe.cookTime + ' minutes'}">30 minutes</p>
                             </div>
                             <div class="col-lg-3">
                                 <h5>Servings:</h5>
                             </div>
                             <div class="col-lg-3">
-                                <p>4</p>
+                                <p th:text="${recipe.servings}">4</p>
                             </div>
                         </div>
                         <!-- Source -->
                         <div class="row" style="margin-top: 4px">
                             <div class="col-lg-3">
+                                <h5>Source:</h5>
+                            </div>
+                            <div class="col-lg-3">
+                                <p th:text="${recipe.source}">example</p>
+                            </div>
+                            <div class="col-lg-3">
                                 <h5>URL:</h5>
                             </div>
                             <div class="col-lg-3">
-                                <p>https://www.example.com/</p>
+                                <p th:text="${recipe.url}">https://www.example.com/</p>
                             </div>
                         </div>
                     </div>
@@ -92,9 +99,14 @@
                         <div class="row" style="margin-top: 4px">
                             <div class="col-lg-12">
                                 <ul>
-                                    <li>1 Cup of flour</li>
-                                    <li>1 Teaspoon of salt</li>
-                                    <li>1 Teaspoon of sugar</li>
+                                    <li th:each="ingredient : ${recipe.ingredients}"
+                                        th:text="${ingredient.amount
+                                        + ' ' + ingredient.uom.unit
+                                        + ' - ' + ingredient.description}">
+                                        1
+                                        Cup of
+                                        flour
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -107,7 +119,7 @@
                     <div class="panel-body">
                         <div class="row" style="margin-top: 4px">
                             <div class="col-lg-12">
-                                <p>First you need to get your flour and
+                                <p th:text="${recipe.directions}">First you need to get your flour and
                                     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                                     aaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
                             </div>
@@ -121,7 +133,11 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
+                                <p th:text="${recipe.note.recipeNotes}">Lorem ipsum dolor sit amet, consectetuer
+                                    adipiscing elit.
+                                    Aenean
+                                    commodo
+                                    ligula eget
                                     dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
                                     nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
                                     quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
