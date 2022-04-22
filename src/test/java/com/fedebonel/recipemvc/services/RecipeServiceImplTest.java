@@ -1,5 +1,6 @@
 package com.fedebonel.recipemvc.services;
 
+import com.fedebonel.recipemvc.converters.*;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,15 @@ class RecipeServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository,
+                new RecipeCommandToRecipe(
+                        new CategoryCommandToCategory(),
+                        new NotesCommandToNotes(),
+                        new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure())),
+                new RecipeToRecipeCommand(
+                        new CategoryToCategoryCommand(),
+                        new NotesToNotesCommand(),
+                        new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand())));
     }
 
     @Test

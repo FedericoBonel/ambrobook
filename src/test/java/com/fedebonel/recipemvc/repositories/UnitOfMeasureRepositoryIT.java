@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.repositories;
 
 import com.fedebonel.recipemvc.model.UnitOfMeasure;
+import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

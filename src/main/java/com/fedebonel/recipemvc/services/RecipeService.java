@@ -1,5 +1,6 @@
 package com.fedebonel.recipemvc.services;
 
+import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.model.Recipe;
 
 import java.util.Set;
@@ -10,4 +11,5 @@ import java.util.Set;
 public interface RecipeService {
     Set<Recipe> getRecipes();
     Recipe findById(Long id);
+    RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
 }
