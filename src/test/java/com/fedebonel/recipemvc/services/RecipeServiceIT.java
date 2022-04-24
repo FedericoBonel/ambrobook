@@ -14,8 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+// Bring in the spring context to autowire values and test that only the updated fields
+// get changed in persistence layer
+@ExtendWith(SpringExtension.class) @SpringBootTest
 public class RecipeServiceIT {
     public static final String NEW_DESCRIPTION = "New Description";
 
