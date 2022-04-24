@@ -23,11 +23,14 @@
     <div class="row justify-content-center">
         <!-- from the 12 column layout get 6 for the content and 3 for the "margins" -->
         <div class="col-lg-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h1 class="panel-title">My Recipes!</h1>
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title">My Recipes!</h1>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
+                    <form th:action="@{'recipe/new'}">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px">New</button>
+                    </form>
                     <!-- If nothing comes up in the model that we receive from the controller don't display anything -->
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
                         <table class="table table-hover">
@@ -36,13 +39,15 @@
                                 <th>ID</th>
                                 <th>Recipe Description</th>
                                 <th>View</th>
+                                <th>Edit</th>
                             </tr>
                             </thead>
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}">123</td>
                                 <td th:text="${recipe.description}">Federico</td>
                                 <!-- When clicked send it to the endpoint corresponding to that recipe -->
-                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Edit</a></td>
                             </tr>
                         </table>
                     </div>

@@ -24,12 +24,14 @@
 <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px">
     <div class="row justify-content-center">
         <div class="col-lg-6">
+            <!-- This makes sure to make a post request against host:8080/recipe with the object recipe received from
+            the controller -->
             <form method="post" th:action="@{/recipe/}" th:object="${recipe}">
                 <input th:field="*{id}" type="hidden"/>
                 <div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="card-title">Edit recipe information</h1>
+                            <h1 class="card-title">Recipe information</h1>
                         </div>
                         <div class="card-body">
                             <!-- Description -->
