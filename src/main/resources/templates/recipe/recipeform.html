@@ -72,10 +72,11 @@
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <option th:each="diff : ${T(com.fedebonel.recipemvc.model.Difficulty).values()}"
+                                                th:value="${diff.name()}"
+                                                th:text="${diff.name().substring(0, 1) + diff.name().substring(1).toLowerCase()}">
+                                        </option>
                                     </select>
                                 </div>
                             </div>

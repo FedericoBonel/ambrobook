@@ -55,7 +55,8 @@
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-lg-3">
-                                <p th:text="${recipe.difficulty}">Easy</p>
+                                <p
+                                        th:text="${recipe.difficulty.name().substring(0, 1) + recipe.difficulty.name().substring(1).toLowerCase()}"></p>
                             </div>
                         </div>
                         <!-- Cooktime and servings -->

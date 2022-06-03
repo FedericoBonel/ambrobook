@@ -138,7 +138,7 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         tacos.setPrepTime(20);
         tacos.setCookTime(15);
         tacos.setServings(5);
-        tacos.setDifficulty(Difficulty.MODERATE);
+        tacos.setDifficulty(Difficulty.MEDIUM);
         tacos.getCategories().add(mexican);
         tacos.setDirections("""
                 Prepare a gas or charcoal grill for medium-high, direct heat
