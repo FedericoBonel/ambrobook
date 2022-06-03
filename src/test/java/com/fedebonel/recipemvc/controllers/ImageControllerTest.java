@@ -1,0 +1,68 @@
+package com.fedebonel.recipemvc.controllers;
+
+import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.services.ImageService;
+import com.fedebonel.recipemvc.services.RecipeService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+class ImageControllerTest {
+    @Mock
+    RecipeService recipeService;
+
+    @Mock
+    ImageService imageService;
+
+    ImageController imageController;
+
+    MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        imageController = new ImageController(recipeService, imageService);
+
+        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+    }
+
+    @Test
+    void showUploadImageForm() throws Exception {
+        RecipeCommand recipe = new RecipeCommand();
+        recipe.setId(1L);
+
+        when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
+
+        mockMvc.perform(get("/recipe/" + recipe.getId() + "/image"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipe/imageform"));
+    }
+
+    @Test
+    void uploadImage() throws Exception {
+        RecipeCommand recipe = new RecipeCommand();
+        recipe.setId(1L);
+        MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
+                "Test file".getBytes());
+
+        mockMvc.perform(multipart("/recipe/" + recipe.getId() + "/image").file(multipartFile))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/" + recipe.getId() + "/show"));
+
+        verify(imageService).saveRecipeImage(anyLong(), any());
+    }
+}
