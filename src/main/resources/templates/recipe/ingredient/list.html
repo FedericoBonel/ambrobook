@@ -28,6 +28,9 @@
                     <h1 class="card-title">Ingredients</h1>
                 </div>
                 <div class="card-body">
+                    <form th:action="@{'ingredient/new'}">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px">New</button>
+                    </form>
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipe.ingredients)}">
                         <table class="table table-hover">
                         <thead>
@@ -47,7 +50,7 @@
                                    th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/update'}">Edit</a>
                             </td>
                             <td><a href="#"
-                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/Delete'}">Delete</a>
+                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/delete'}">Delete</a>
                             </td>
                         </tr>
                         </table>

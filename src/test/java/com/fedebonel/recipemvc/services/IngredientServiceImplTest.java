@@ -7,6 +7,7 @@ import com.fedebonel.recipemvc.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import com.fedebonel.recipemvc.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
+import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +65,7 @@ class IngredientServiceImplTest {
     }
 
     @Test
-    void saveCommand() {
+    void updateCommand() {
         Optional<Recipe> recipeOptional = Optional.of(new Recipe());
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setId(1L);

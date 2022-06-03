@@ -3,7 +3,8 @@ package com.fedebonel.recipemvc.controllers;
 import com.fedebonel.recipemvc.commands.IngredientCommand;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
-import com.fedebonel.recipemvc.model.UnitOfMeasure;
+import com.fedebonel.recipemvc.model.Ingredient;
+import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.IngredientService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import com.fedebonel.recipemvc.services.UnitOfMeasureService;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -71,7 +72,24 @@ class IngredientControllerTest {
     }
 
     @Test
-    void updateRecipeIngredient() throws Exception {
+    void createRecipeIngredientForm() throws Exception {
+        RecipeCommand recipe = new RecipeCommand();
+        recipe.setId(1L);
+
+        when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
+        when(unitOfMeasureService.listAllUOM()).thenReturn(new HashSet<>());
+
+        mockMvc.perform(get("/recipe/" + recipe.getId() + "/ingredient/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/ingredientform"))
+                .andExpect(model().attributeExists("ingredient", "uomList"));
+
+        verify(recipeService).findCommandById(recipe.getId());
+        verify(unitOfMeasureService).listAllUOM();
+    }
+
+    @Test
+    void updateRecipeIngredientForm() throws Exception {
         IngredientCommand command = new IngredientCommand();
         command.setId(1L);
         UnitOfMeasureCommand uom1 = new UnitOfMeasureCommand();
@@ -103,5 +121,17 @@ class IngredientControllerTest {
                                 + ingredientCommand.getId() + "/show"));
     }
 
+    @Test
+    void deleteRecipeIngredient() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(2L);
 
+        mockMvc.perform(get("/recipe/" + recipe.getId() + "/ingredient/" + ingredient.getId() + "/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/" + recipe.getId() + "/ingredients"));
+
+        verify(ingredientService).deleteById(anyLong(), anyLong());
+    }
 }

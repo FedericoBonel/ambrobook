@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 /**
  * Ingredient POJO
  */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Ingredient {

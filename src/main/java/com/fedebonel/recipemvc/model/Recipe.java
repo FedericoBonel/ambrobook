@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -44,12 +45,12 @@ public class Recipe {
     }
 
     public void removeIngredient(Ingredient ingredient) {
-        ingredients.forEach(ingredient1 -> {
-            if(ingredient.equals(ingredient1)) {
-                ingredient.setRecipe(null);
-                ingredients.remove(ingredient);
-            }
-        });
+        Ingredient ingredientToDelete = ingredients.stream()
+                .filter(recipeIngredient -> recipeIngredient.getId().equals(ingredient.getId())).findFirst().orElse(null);
+
+        if (ingredientToDelete != null) ingredientToDelete.setRecipe(null);
+
+        ingredients.remove(ingredientToDelete);
     }
 
     public void setNote(Notes note) {
