@@ -26,7 +26,7 @@
         <div class="col-lg-9">
             <!-- This makes sure to make a post request against host:8080/recipe with the object recipe received from
             the controller -->
-            <form method="post" th:object="${recipe}" th:action="@{/recipe/}">
+            <form method="post" th:action="@{/recipe/}" th:object="${recipe}">
                 <input th:field="*{id}" type="hidden"/>
                 <div class="content">
                     <div class="card">
@@ -144,7 +144,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+                    <button class="btn btn-primary" style="margin-top: 10px" type="submit">Submit</button>
                 </div>
             </form>
         </div>

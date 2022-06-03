@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,10 +63,10 @@ class IndexControllerTest {
         // Then
         assertEquals(expectedViewName, actualViewName);
 
-            // Verify interactions in the mocks only happens ONCE
+        // Verify interactions in the mocks only happens ONCE
         verify(recipeService, times(1)).getRecipes();
-            // Verify specifically that the model has a string that is equal (eq) to "recipes" and the
-            // recipes set that we have set for the recipes service at the beginning of the test
+        // Verify specifically that the model has a string that is equal (eq) to "recipes" and the
+        // recipes set that we have set for the recipes service at the beginning of the test
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
         assertEquals(expectedSet.size(), argumentCaptor.getValue().size());
     }

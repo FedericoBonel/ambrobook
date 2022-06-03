@@ -17,7 +17,7 @@ import java.util.Optional;
 
 /**
  * BootStrap Recipe initializer
- *
+ * <p>
  * (Pretty ugly but necessary to load data on start up if nothing gets loaded from DB)
  */
 @Slf4j
@@ -95,7 +95,7 @@ public class recipeInitializer implements ApplicationListener<ContextRefreshedEv
         guacamole.setDirections("""
                 Cut the avocado:
                 Cut the avocados in half. Remove the pit. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.
-                
+                                
                                 
                 How to make guacamole - scoring avocado
                 Mash the avocado flesh:

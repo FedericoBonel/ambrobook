@@ -29,30 +29,31 @@
                 </div>
                 <div class="card-body">
                     <form th:action="@{'ingredient/new'}">
-                        <button type="submit" class="btn btn-primary" style="margin-top: 10px">New</button>
+                        <button class="btn btn-primary" style="margin-top: 10px" type="submit">New</button>
                     </form>
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipe.ingredients)}">
                         <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Description</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tr th:each="ingredient:${recipe.ingredients}">
-                            <td th:text="${ingredient.id}"></td>
-                            <td><a href="#"
-                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/show'}"
-                                   th:text="${ingredient.amount + ' ' + ingredient.uom.unit + ' ' + ingredient.description}"></a></td>
-                            <td><a href="#"
-                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/update'}">Edit</a>
-                            </td>
-                            <td><a href="#"
-                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/delete'}">Delete</a>
-                            </td>
-                        </tr>
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="ingredient:${recipe.ingredients}">
+                                <td th:text="${ingredient.id}"></td>
+                                <td><a href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/show'}"
+                                       th:text="${ingredient.amount + ' ' + ingredient.uom.unit + ' ' + ingredient.description}"></a>
+                                </td>
+                                <td><a href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/update'}">Edit</a>
+                                </td>
+                                <td><a href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/delete'}">Delete</a>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>

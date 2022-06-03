@@ -47,7 +47,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .findFirst();
         // We need to do this because the ingredient could exist with its unique id
         // If it exists we need to update its stored instance (since it will share the same id)
-        if (foundIngredient.isPresent()){
+        if (foundIngredient.isPresent()) {
             // Update ingredient
             Ingredient ingredientFound = foundIngredient.get();
             ingredientFound.setDescription(ingredientCommand.getDescription());

@@ -7,7 +7,6 @@ import com.fedebonel.recipemvc.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import com.fedebonel.recipemvc.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
-import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class IngredientServiceImplTest {

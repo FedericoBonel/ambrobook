@@ -23,9 +23,9 @@
 <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px">
     <div class="row justify-content-center">
         <div class="col-lg-9">
-            <form method="post" th:object="${ingredient}"
-                  th:action="@{'/recipe/' + ${ingredient.getRecipeId()} + '/ingredient'}">
-                <input type="hidden" th:field="*{id}"/>
+            <form method="post" th:action="@{'/recipe/' + ${ingredient.getRecipeId()} + '/ingredient'}"
+                  th:object="${ingredient}">
+                <input th:field="*{id}" type="hidden"/>
                 <div class="content">
                     <div class="card">
                         <div class="card-header">
@@ -35,25 +35,26 @@
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group">
                                     <label>Description:</label>
-                                    <input class="form-control" type="text" th:field="*{description}"/>
+                                    <input class="form-control" th:field="*{description}" type="text"/>
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>Quantity:</label>
-                                    <input class="form-control" type="text" th:field="*{amount}"/>
+                                    <input class="form-control" th:field="*{amount}" type="text"/>
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>Unit of measure:</label>
                                     <select class="form-control" name="uom.id">
                                         <option th:each="uomEach : ${uomList}"
-                                                th:value="${uomEach.id}"
                                                 th:selected="${uomEach.id == ingredient.uom.id}"
-                                                th:text="${uomEach.unit}">Each</option>
+                                                th:text="${uomEach.unit}"
+                                                th:value="${uomEach.id}">Each
+                                        </option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+                    <button class="btn btn-primary" style="margin-top: 10px" type="submit">Submit</button>
                 </div>
             </form>
         </div>

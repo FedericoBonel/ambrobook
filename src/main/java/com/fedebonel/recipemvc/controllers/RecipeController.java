@@ -24,7 +24,7 @@ public class RecipeController {
      * Handles GET methods to view details of recipe
      */
     @GetMapping({"{id}/show"})
-    public String showById(@PathVariable String id, Model model){
+    public String showById(@PathVariable String id, Model model) {
         Recipe foundRecipe = recipeService.findById(Long.valueOf(id));
         model.addAttribute("recipe", foundRecipe);
         return "recipe/show";

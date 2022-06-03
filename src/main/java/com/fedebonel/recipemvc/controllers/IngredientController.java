@@ -32,7 +32,7 @@ public class IngredientController {
      * Handles GET requests for viewing list of ingredients of a recipe
      */
     @GetMapping("/recipe/{recipeId}/ingredients")
-    public String listIngredients(@PathVariable Long recipeId, Model model){
+    public String listIngredients(@PathVariable Long recipeId, Model model) {
         log.debug("Getting list of Ingredients for recipe: " + recipeId);
         model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return "recipe/ingredient/list";
@@ -52,7 +52,7 @@ public class IngredientController {
      * Handles GET requests for viewing the ingredient form to create ingredients
      */
     @GetMapping("/recipe/{recipeId}/ingredient/new")
-    public String createRecipeIngredient(@PathVariable Long recipeId, Model model){
+    public String createRecipeIngredient(@PathVariable Long recipeId, Model model) {
         log.debug("Getting creation form for ingredients for the recipe: " + recipeId);
 
         // Find the recipe, check it exists, create the commmand and asign it to the recipe so that it can be handled
@@ -74,7 +74,7 @@ public class IngredientController {
      * Handles GET requests for viewing the ingredient form to update ingredients
      */
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
-    public String updateRecipeIngredient(@PathVariable Long recipeId, @PathVariable Long ingredientId, Model model){
+    public String updateRecipeIngredient(@PathVariable Long recipeId, @PathVariable Long ingredientId, Model model) {
         log.debug("Getting update form for ingredient with id: " + ingredientId);
         model.addAttribute("ingredient", ingredientService.findCommandById(recipeId, ingredientId));
         model.addAttribute("uomList", unitOfMeasureService.listAllUOM());

@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.model;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
