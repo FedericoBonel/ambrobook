@@ -1,15 +1,25 @@
 package com.fedebonel.recipemvc.controllers;
 
+import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 @Slf4j
 @Controller
@@ -41,5 +51,25 @@ public class ImageController {
         log.debug("Uploading an image for recipe: " + recipeId);
         imageService.saveRecipeImage(recipeId, image);
         return "redirect:/recipe/" + recipeId + "/show";
+    }
+
+    /**
+     * Handles GET requests to render the recipe image
+     */
+    @GetMapping("/recipe/{recipeId}/image/render")
+    public void renderRecipeImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
+        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+
+        // Transform the Byte array to a byte array
+        byte[] finalImage = new byte[recipeCommand.getImage().length];
+        int currByte = 0;
+        for (Byte imageByte : recipeCommand.getImage()) {
+            finalImage[currByte++] = imageByte;
+        }
+
+        // Return it through the output stream of the response
+        response.setContentType("image/jpeg");
+        InputStream is = new ByteArrayInputStream(finalImage);
+        IOUtils.copy(is, response.getOutputStream());
     }
 }
