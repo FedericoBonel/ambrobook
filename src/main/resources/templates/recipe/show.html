@@ -22,7 +22,7 @@
 <body>
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row justify-content-center">
-        <div class="col-lg-6">
+        <div class="col-lg-9">
             <div class="content">
                 <div class="card">
                     <!-- Recipe name -->
@@ -93,7 +93,16 @@
                 <div class="card">
                     <!-- Ingredients -->
                     <div class="card-header">
-                        <h1 class="card-title">Ingredients</h1>
+                        <div class="row">
+                            <div class="col-lg-11">
+                                <h1 class="card-title">Ingredients</h1>
+                            </div>
+                            <div class="col-lg-1">
+                                <form th:action="@{'/recipe/'+ ${recipe.id} +'/ingredients'}">
+                                    <button type="submit" class="btn btn-primary" style="margin-top: 10px">View</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row" style="margin-top: 4px">
@@ -103,9 +112,6 @@
                                         th:text="${ingredient.amount
                                         + ' ' + ingredient.uom.unit
                                         + ' - ' + ingredient.description}">
-                                        1
-                                        Cup of
-                                        flour
                                     </li>
                                 </ul>
                             </div>

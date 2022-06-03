@@ -19,10 +19,10 @@
 </head>
 <body>
 
-<div class="container-fluid" style="margin-top: 20px">
+<div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px">
     <div class="row justify-content-center">
         <!-- from the 12 column layout get 6 for the content and 3 for the "margins" -->
-        <div class="col-lg-6">
+        <div class="col-lg-9">
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">My Recipes!</h1>
@@ -38,16 +38,17 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Recipe Description</th>
-                                <th>View</th>
                                 <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tr th:each="recipe : ${recipes}">
-                                <td th:text="${recipe.id}">123</td>
-                                <td th:text="${recipe.description}">Federico</td>
+                                <td th:text="${recipe.id}"></td>
                                 <!-- When clicked send it to the endpoint corresponding to that recipe -->
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">View</a></td>
+                                <td><a th:text="${recipe.description}" href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/show'}"></a></td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Edit</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
                             </tr>
                         </table>
                     </div>

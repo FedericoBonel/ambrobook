@@ -33,7 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Set<Recipe> getRecipes() {
-        log.debug("I'm in the service");
+        log.debug("Getting recipes");
         HashSet<Recipe> recipes = new HashSet<>();
         recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
         return recipes;
@@ -41,20 +41,15 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe findById(Long id) {
-        log.debug("finding recipe by id: " + id);
+        log.debug("Finding recipe by id: " + id);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
         return optionalRecipe.orElse(null);
     }
 
     @Override
-    @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
-        log.debug("Saving recipe command: " + recipeCommand.getId());
-        // Still a pojo not yet in hibernate context, that's why is detached
-        Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
-        // Save it in the database (if exists it will update it where necessary)
-        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
-        return recipeToRecipeCommand.convert(savedRecipe);
+    public void deleteById(Long id) {
+        log.debug("Deleting recipe by id: " + id);
+        recipeRepository.deleteById(id);
     }
 
     @Override
@@ -62,5 +57,16 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeCommand findCommandById(Long id) {
         log.debug("Finding command by id: " + id);
         return recipeToRecipeCommand.convert(findById(id));
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
+        log.debug("Saving recipe command with name: " + recipeCommand.getDescription());
+        // Still a pojo not yet in hibernate context, that's why is detached
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
+        // Save it in the database (if exists it will update it where necessary)
+        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 }

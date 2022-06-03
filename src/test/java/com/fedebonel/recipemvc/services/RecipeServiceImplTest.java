@@ -69,4 +69,11 @@ class RecipeServiceImplTest {
         // (i.e. when the recipeService.getRecipes() gets called)
         verify(recipeRepository, Mockito.times(1)).findAll();
     }
+
+    @Test
+    void deleteById() {
+        Long idToDelete = 1L;
+        recipeService.deleteById(idToDelete);
+        verify(recipeRepository, times(1)).deleteById(idToDelete);
+    }
 }
