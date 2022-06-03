@@ -60,11 +60,15 @@ public class ImageController {
     public void renderRecipeImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
         RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
 
-        // Transform the Byte array to a byte array
-        byte[] finalImage = new byte[recipeCommand.getImage().length];
-        int currByte = 0;
-        for (Byte imageByte : recipeCommand.getImage()) {
-            finalImage[currByte++] = imageByte;
+        byte[] finalImage = {};
+
+        if (recipeCommand.getImage() != null) {
+            // Transform the Byte array to a byte array
+            finalImage = new byte[recipeCommand.getImage().length];
+            int currByte = 0;
+            for (Byte imageByte : recipeCommand.getImage()) {
+                finalImage[currByte++] = imageByte;
+            }
         }
 
         // Return it through the output stream of the response
