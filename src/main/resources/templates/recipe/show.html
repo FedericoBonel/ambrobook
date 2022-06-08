@@ -40,6 +40,9 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Image -->
+                    <img class="card-img-top" style="max-height: 450px; object-fit: cover"
+                         th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}">
                     <div class="card-body">
                         <div class="row" style="margin-top: 4px">
                             <!-- Categories -->
@@ -52,13 +55,6 @@
                                         Category
                                     </li>
                                 </ul>
-                            </div>
-                            <!-- Image -->
-                            <div class="col-lg-6">
-                                <div>
-                                    <img class="img-fluid w-100 h-auto"
-                                         th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}">
-                                </div>
                             </div>
                         </div>
                         <!-- Prep time and difficulty -->

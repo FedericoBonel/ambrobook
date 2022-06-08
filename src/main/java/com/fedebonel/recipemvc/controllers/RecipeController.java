@@ -1,12 +1,15 @@
 package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
@@ -65,5 +68,19 @@ public class RecipeController {
         log.debug("Deleted recipe: " + id);
         recipeService.deleteById(id);
         return "redirect:/";
+    }
+
+    /**
+     * Handles Not Found Exceptions
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView notFound(Exception exception) {
+        log.debug("Handling not found exception in Recipe Controller");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("error", exception);
+        modelAndView.setViewName("error/error404");
+        return modelAndView;
     }
 }
