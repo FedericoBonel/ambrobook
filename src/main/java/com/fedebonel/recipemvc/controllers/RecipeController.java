@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
@@ -79,8 +80,24 @@ public class RecipeController {
         log.debug("Handling not found exception in Recipe Controller");
 
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("title", "404 - Not found!");
         modelAndView.addObject("error", exception);
-        modelAndView.setViewName("error/error404");
+        modelAndView.setViewName("error/show");
+        return modelAndView;
+    }
+
+    /**
+     * Handles bad requests
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ModelAndView badRequest(Exception exception) {
+        log.debug("Handling bad request in Recipe Controller");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("title", "400 - Bad request!");
+        modelAndView.addObject("error", exception);
+        modelAndView.setViewName("error/show");
         return modelAndView;
     }
 }

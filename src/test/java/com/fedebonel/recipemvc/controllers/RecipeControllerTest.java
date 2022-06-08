@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -50,15 +49,23 @@ class RecipeControllerTest {
 
     @Test
     void getRecipeNotExisting() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
         when(recipeService.findById(1L)).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name("error/error404"));
+                .andExpect(view().name("error/show"));
 
         verify(recipeService).findById(anyLong());
+    }
+
+    @Test
+    void getRecipeBadRequest() throws Exception {
+
+        mockMvc.perform(get("/recipe/asd/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("error/show"));
+
+        verifyNoInteractions(recipeService);
     }
 
     @Test

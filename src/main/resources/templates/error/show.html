@@ -26,7 +26,7 @@
             <h2>Error</h2>
         </div>
         <div class="card-body">
-            <h1>404 - Not found! 😿</h1>
+            <h1 th:text="${title + ' 😿'}"></h1>
             <p th:text="${error.getMessage()}"></p>
         </div>
     </div>
