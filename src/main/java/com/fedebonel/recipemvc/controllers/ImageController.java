@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 @Slf4j
 @Controller
@@ -71,8 +69,9 @@ public class ImageController {
             }
         }
 
-        // Return it through the output stream of the response
         response.setContentType("image/jpeg");
+
+        // Return it through the output stream of the response
         InputStream is = new ByteArrayInputStream(finalImage);
         IOUtils.copy(is, response.getOutputStream());
     }

@@ -62,14 +62,15 @@ public class IngredientServiceImpl implements IngredientService {
             recipe.addIngredient(ingredient);
         }
 
-        // Save/update the ingredient
+        // Save/update the ingredient by saving the recipe
         Recipe savedRecipe = recipeRepository.save(recipe);
 
-        // Look for the ingredient
+        // Look for the saved ingredient
         Optional<Ingredient> savedIngredient = savedRecipe.getIngredients()
                 .stream().filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
                 .findFirst();
 
+        // If it doesn't have an id assigned yet
         if (savedIngredient.isEmpty()) {
             savedIngredient = savedRecipe.getIngredients().stream()
                     .filter(ingredient -> ingredient.getDescription().equals(ingredientCommand.getDescription()))

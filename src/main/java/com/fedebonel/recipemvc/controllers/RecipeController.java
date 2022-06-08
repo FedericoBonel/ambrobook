@@ -24,8 +24,8 @@ public class RecipeController {
      * Handles GET methods to view details of recipe
      */
     @GetMapping({"{id}/show"})
-    public String showById(@PathVariable String id, Model model) {
-        Recipe foundRecipe = recipeService.findById(Long.valueOf(id));
+    public String showById(@PathVariable Long id, Model model) {
+        Recipe foundRecipe = recipeService.findById(id);
         model.addAttribute("recipe", foundRecipe);
         return "recipe/show";
     }
@@ -62,8 +62,8 @@ public class RecipeController {
      */
     @GetMapping({"{id}/delete"})
     public String deleteById(@PathVariable Long id) {
-        recipeService.deleteById(id);
         log.debug("Deleted recipe: " + id);
+        recipeService.deleteById(id);
         return "redirect:/";
     }
 }

@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.services;
 
 import com.fedebonel.recipemvc.converters.*;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class RecipeServiceImplTest {
@@ -51,6 +51,16 @@ class RecipeServiceImplTest {
         assertNotNull(recipeFound);
         assertEquals(1L, recipeFound.getId());
         verify(recipeRepository).findById(1L);
+    }
+
+    @Test
+    void getRecipesByIdNotExisting() {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        when(recipeRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> recipeService.findById(1L));
     }
 
     @Test

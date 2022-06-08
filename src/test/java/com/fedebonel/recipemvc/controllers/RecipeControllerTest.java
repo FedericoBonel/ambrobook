@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +46,16 @@ class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
+    }
+
+    @Test
+    void getRecipeNotExisting() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        when(recipeService.findById(1L)).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

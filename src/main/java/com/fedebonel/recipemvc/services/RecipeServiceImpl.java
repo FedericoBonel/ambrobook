@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.services;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.converters.RecipeCommandToRecipe;
 import com.fedebonel.recipemvc.converters.RecipeToRecipeCommand;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,11 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe findById(Long id) {
         log.debug("Finding recipe by id: " + id);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+
+        if (optionalRecipe.isEmpty()) {
+            throw new NotFoundException("Recipe not found - id = " + id);
+        }
+
         return optionalRecipe.orElse(null);
     }
 
