@@ -17,10 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,7 +39,10 @@ class ImageControllerTest {
         MockitoAnnotations.openMocks(this);
         imageController = new ImageController(recipeService, imageService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(imageController)
+                .setControllerAdvice(ControllerExceptionHandler.class)
+                .build();
     }
 
     @Test
@@ -93,5 +95,15 @@ class ImageControllerTest {
                 .andReturn().getResponse();
 
         assertEquals(s.length(), response.getContentAsByteArray().length);
+    }
+
+    @Test
+    void renderRecipeImageNotExisting() throws Exception {
+        mockMvc.perform(get("/recipe/asd/image/render"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("error/show"));
+
+        verifyNoInteractions(recipeService);
+        verifyNoInteractions(imageService);
     }
 }
