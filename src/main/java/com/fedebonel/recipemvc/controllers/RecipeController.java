@@ -8,14 +8,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
+
+    public final static String RECIPE_SHOW_PATH = "recipe/show";
+    public final static String RECIPE_FORM_PATH = "recipe/recipeform";
 
     private final RecipeService recipeService;
 
@@ -30,7 +36,7 @@ public class RecipeController {
     public String showById(@PathVariable Long id, Model model) {
         Recipe foundRecipe = recipeService.findById(id);
         model.addAttribute("recipe", foundRecipe);
-        return "recipe/show";
+        return RECIPE_SHOW_PATH;
     }
 
     /**
@@ -39,7 +45,7 @@ public class RecipeController {
     @GetMapping({"/new"})
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
-        return "recipe/recipeform";
+        return RECIPE_FORM_PATH;
     }
 
     /**
@@ -48,14 +54,20 @@ public class RecipeController {
     @GetMapping({"{id}/update"})
     public String updateRecipe(@PathVariable Long id, Model model) {
         model.addAttribute("recipe", recipeService.findCommandById(id));
-        return "recipe/recipeform";
+        return RECIPE_FORM_PATH;
     }
 
     /**
      * Handles POST methods to update or save a recipe
      */
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCommand) {
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand, BindingResult result) {
+
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
+            return RECIPE_FORM_PATH;
+        }
+
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand);
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }

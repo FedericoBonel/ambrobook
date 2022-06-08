@@ -21,12 +21,34 @@
 
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="/recipe/new">📋 New Recipe</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px">
     <div class="row justify-content-center">
         <div class="col-lg-9">
             <!-- This makes sure to make a post request against host:8080/recipe with the object recipe received from
             the controller -->
             <form method="post" th:action="@{/recipe/}" th:object="${recipe}">
+
+                <!-- If there were errors -->
+                <div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+                    <p>Some inputs were incorrect, please fix them below</p>
+                </div>
+
                 <input th:field="*{id}" type="hidden"/>
                 <div class="content">
                     <div class="card">
@@ -36,9 +58,17 @@
                         <div class="card-body">
                             <!-- Description -->
                             <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('description')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label>Recipe name:</label>
-                                    <input class="form-control" th:field="*{description}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid"
+                                           th:field="*{description}" type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors()}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('description')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
                             </div>
                             <!-- categories radio buttons -->
@@ -62,36 +92,76 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('prepTime')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label>Preparation time:</label>
-                                    <input class="form-control" th:field="*{prepTime}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid" th:field="*{prepTime}"
+                                           type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('prepTime')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('prepTime')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('cookTime')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label>Cooktime:</label>
-                                    <input class="form-control" th:field="*{cookTime}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid" th:field="*{cookTime}"
+                                           type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('cookTime')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('prepTime')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>Difficulty:</label>
                                     <select class="form-control" th:field="*{difficulty}">
                                         <option th:each="diff : ${T(com.fedebonel.recipemvc.model.Difficulty).values()}"
-                                                th:value="${diff.name()}"
-                                                th:text="${diff.name().substring(0, 1) + diff.name().substring(1).toLowerCase()}">
+                                                th:text="${diff.name().substring(0, 1) + diff.name().substring(1).toLowerCase()}"
+                                                th:value="${diff.name()}">
                                         </option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('servings')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label>Servings:</label>
-                                    <input class="form-control" th:field="*{servings}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid" th:field="*{servings}"
+                                           type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('servings')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('servings')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('sources')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label>Source:</label>
-                                    <input class="form-control" th:field="*{sources}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid" th:field="*{sources}"
+                                           type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('sources')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('sources')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('url')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label>URL:</label>
-                                    <input class="form-control" th:field="*{url}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid" th:field="*{url}"
+                                           type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('url')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('url')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -127,8 +197,16 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-12 form-group">
-                                    <textarea class="form-control" rows="4" th:field="*{directions}"></textarea>
+                                <div class="col-lg-12 form-group" th:class="${#fields.hasErrors('directions')}
+                                ? 'col-lg-12 form-group text-danger' : 'col-lg-12 form-group'">
+                                    <textarea class="form-control" rows="4" th:errorclass="is-invalid"
+                                              th:field="*{directions}" ></textarea>
+                                    <span class="help-block" th:if="${#fields.hasErrors('directions')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('directions')}"
+                                                th:text="${#strings.capitalize(err)}"></li>
+                                        </ul>
+                                    </span>
                                 </div>
                             </div>
                         </div>

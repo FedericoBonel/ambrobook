@@ -89,7 +89,8 @@ class RecipeControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         // The id won't be generated when the post happens, only after it gets created
                         .param("id", "")
-                        .param("description", anyString()))
+                        .param("description", "This is a description")
+                        .param("directions", "Directions..."))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/1/show"));
     }

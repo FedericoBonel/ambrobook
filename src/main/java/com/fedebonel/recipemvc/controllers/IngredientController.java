@@ -98,7 +98,7 @@ public class IngredientController {
     public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
         log.debug("Updating/Saving recipe with ingredient: " + ingredientCommand.getDescription());
         IngredientCommand savedCommand = ingredientService.saveCommand(ingredientCommand);
-        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredients/";
     }
 
 }

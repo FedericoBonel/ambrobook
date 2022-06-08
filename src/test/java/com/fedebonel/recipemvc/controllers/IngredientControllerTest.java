@@ -118,8 +118,7 @@ class IngredientControllerTest {
                 .andExpect(view()
                         .name("redirect:/recipe/"
                                 + ingredientCommand.getRecipeId()
-                                + "/ingredient/"
-                                + ingredientCommand.getId() + "/show"));
+                                + "/ingredients/"));
     }
 
     @Test
