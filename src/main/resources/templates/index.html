@@ -40,7 +40,7 @@
         <div class="col-lg-9">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title">My Recipes!</h1>
+                    <h1 class="card-title" th:text="#{title.myRecipes}">My Recipes!</h1>
                 </div>
                 <div class="card-body">
                     <!-- If nothing comes up in the model that we receive from the controller don't display anything -->
@@ -49,9 +49,9 @@
                             <thead class="thead-inverse">
                             <tr>
                                 <th>ID</th>
-                                <th>Recipe Description</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th th:text="#{recipe.description}">Recipe Description</th>
+                                <th th:text="#{edit}">Edit</th>
+                                <th th:text="#{delete}">Delete</th>
                             </tr>
                             </thead>
                             <tr th:each="recipe : ${recipes}">

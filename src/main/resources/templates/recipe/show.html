@@ -58,7 +58,7 @@
                         <div class="row" style="margin-top: 4px">
                             <!-- Categories -->
                             <div class="col-lg-3">
-                                <h5>Categories:</h5>
+                                <h5 th:text="#{recipe.categories}">Categories:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <ul>
@@ -71,13 +71,13 @@
                         <!-- Prep time and difficulty -->
                         <div class="row" style="margin-top: 4px">
                             <div class="col-lg-3">
-                                <h5>Preparation time:</h5>
+                                <h5 th:text="#{recipe.prepTime}">Preparation time:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <p th:text="${recipe.prepTime + ' minutes'}">30 minutes</p>
                             </div>
                             <div class="col-lg-3">
-                                <h5>Difficulty:</h5>
+                                <h5 th:text="#{recipe.difficulty}">Difficulty:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <p
@@ -87,13 +87,13 @@
                         <!-- Cooktime and servings -->
                         <div class="row" style="margin-top: 4px">
                             <div class="col-lg-3">
-                                <h5>Cook time:</h5>
+                                <h5 th:text="#{recipe.cookTime}">Cook time:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <p th:text="${recipe.cookTime + ' minutes'}">30 minutes</p>
                             </div>
                             <div class="col-lg-3">
-                                <h5>Servings:</h5>
+                                <h5 th:text="#{recipe.servings}">Servings:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <p th:text="${recipe.servings}">4</p>
@@ -102,13 +102,13 @@
                         <!-- Source -->
                         <div class="row" style="margin-top: 4px">
                             <div class="col-lg-3">
-                                <h5>Source:</h5>
+                                <h5 th:text="#{recipe.sources}">Source:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <p th:text="${recipe.source}">example</p>
                             </div>
                             <div class="col-lg-3">
-                                <h5>URL:</h5>
+                                <h5 th:text="#{recipe.url}">URL:</h5>
                             </div>
                             <div class="col-lg-3">
                                 <p th:text="${recipe.url}">https://www.example.com/</p>
@@ -121,11 +121,13 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-lg-11">
-                                <h1 class="card-title">Ingredients</h1>
+                                <h1 class="card-title"  th:text="#{recipe.ingredients}">Ingredients</h1>
                             </div>
                             <div class="col-lg-1">
                                 <form th:action="@{'/recipe/'+ ${recipe.id} +'/ingredients'}">
-                                    <button class="btn btn-primary" style="margin-top: 10px" type="submit">View</button>
+                                    <button class="btn btn-primary" style="margin-top: 10px" type="submit"
+                                            th:text="#{view}">View
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -146,7 +148,7 @@
                 </div>
                 <div class="card" style="margin-top: 10px">
                     <div class="card-header">
-                        <h1 class="card-title">Directions</h1>
+                        <h1 class="card-title" th:text="#{recipe.directions}">Directions</h1>
                     </div>
                     <div class="card-body">
                         <div class="row" style="margin-top: 4px">
@@ -158,7 +160,7 @@
                 </div>
                 <div class="card" style="margin-top: 10px">
                     <div class="card-header">
-                        <h1 class="card-title">Notes</h1>
+                        <h1 class="card-title" th:text="#{recipe.notes}">Notes</h1>
                     </div>
                     <div class="card-body">
                         <div class="row">

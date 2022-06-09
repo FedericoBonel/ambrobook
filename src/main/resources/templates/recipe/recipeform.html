@@ -46,21 +46,21 @@
 
                 <!-- If there were errors -->
                 <div class="alert alert-danger" th:if="${#fields.hasErrors()}">
-                    <p>Some inputs were incorrect, please fix them below</p>
+                    <p th:text="#{error.inputValidation}">Some inputs were incorrect, please fix them below</p>
                 </div>
 
                 <input th:field="*{id}" type="hidden"/>
                 <div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="card-title">Recipe information</h1>
+                            <h1 class="card-title" th:text="#{title.recipeInformation}">Recipe information</h1>
                         </div>
                         <div class="card-body">
                             <!-- Description -->
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('description')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label>Recipe name:</label>
+                                    <label th:text="#{recipe.description}">Recipe name:</label>
                                     <input class="form-control" th:errorclass="is-invalid"
                                            th:field="*{description}" type="text"/>
                                     <span class="help-block" th:if="${#fields.hasErrors()}">
@@ -74,7 +74,7 @@
                             <!-- categories radio buttons -->
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group">
-                                    <label>Categories:</label>
+                                    <label th:text="#{recipe.categories}">Categories:</label>
                                 </div>
                                 <div class="col-lg-9 form-group">
                                     <div class="radio">
@@ -94,7 +94,7 @@
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('prepTime')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label>Preparation time:</label>
+                                    <label th:text="#{recipe.prepTime}">Preparation time:</label>
                                     <input class="form-control" th:errorclass="is-invalid" th:field="*{prepTime}"
                                            type="text"/>
                                     <span class="help-block" th:if="${#fields.hasErrors('prepTime')}">
@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('cookTime')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label>Cooktime:</label>
+                                    <label th:text="#{recipe.cookTime}">Cooktime:</label>
                                     <input class="form-control" th:errorclass="is-invalid" th:field="*{cookTime}"
                                            type="text"/>
                                     <span class="help-block" th:if="${#fields.hasErrors('cookTime')}">
@@ -117,7 +117,7 @@
                                     </span>
                                 </div>
                                 <div class="col-lg-3 form-group">
-                                    <label>Difficulty:</label>
+                                    <label th:text="#{recipe.difficulty}">Difficulty:</label>
                                     <select class="form-control" th:field="*{difficulty}">
                                         <option th:each="diff : ${T(com.fedebonel.recipemvc.model.Difficulty).values()}"
                                                 th:text="${diff.name().substring(0, 1) + diff.name().substring(1).toLowerCase()}"
@@ -129,7 +129,7 @@
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('servings')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label>Servings:</label>
+                                    <label th:text="#{recipe.servings}">Servings:</label>
                                     <input class="form-control" th:errorclass="is-invalid" th:field="*{servings}"
                                            type="text"/>
                                     <span class="help-block" th:if="${#fields.hasErrors('servings')}">
@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('sources')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label>Source:</label>
+                                    <label th:text="#{recipe.sources}">Source:</label>
                                     <input class="form-control" th:errorclass="is-invalid" th:field="*{sources}"
                                            type="text"/>
                                     <span class="help-block" th:if="${#fields.hasErrors('sources')}">
@@ -153,7 +153,7 @@
                                 </div>
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('url')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label>URL:</label>
+                                    <label th:text="#{recipe.url}">URL:</label>
                                     <input class="form-control" th:errorclass="is-invalid" th:field="*{url}"
                                            type="text"/>
                                     <span class="help-block" th:if="${#fields.hasErrors('url')}">
@@ -170,10 +170,10 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-lg-11">
-                                    <h1 class="card-title">Ingredients</h1>
+                                    <h1 class="card-title" th:text="#{recipe.ingredients}">Ingredients</h1>
                                 </div>
                                 <div class="col-lg-1">
-                                    <a class="btn" href="#" role="button">Edit</a>
+                                    <a class="btn" href="#" role="button" th:text="#{edit}">Edit</a>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@
                     </div>
                     <div class="card" style="margin-top: 10px">
                         <div class="card-header">
-                            <h1 class="card-title">Directions</h1>
+                            <h1 class="card-title" th:text="#{recipe.directions}">Directions</h1>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -214,7 +214,7 @@
                     </div>
                     <div class="card" style="margin-top: 10px">
                         <div class="card-header">
-                            <h1 class="card-title">Notes</h1>
+                            <h1 class="card-title" th:text="#{recipe.notes}">Notes</h1>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -227,7 +227,8 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 10px" type="submit">Submit</button>
+                    <button class="btn btn-primary" style="margin-top: 10px" type="submit" th:text="#{submit}">Submit
+                    </button>
                 </div>
             </form>
         </div>

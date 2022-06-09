@@ -45,20 +45,20 @@
                 <div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="card-title">Ingredient Information</h1>
+                            <h1 class="card-title" th:text="#{title.ingredientInformation}">Ingredient Information</h1>
                         </div>
                         <div class="card-body">
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group">
-                                    <label>Description:</label>
+                                    <label th:text="#{ingredient.description}">Description:</label>
                                     <input class="form-control" th:field="*{description}" type="text"/>
                                 </div>
                                 <div class="col-lg-3 form-group">
-                                    <label>Quantity:</label>
+                                    <label th:text="#{ingredient.amount}">Quantity:</label>
                                     <input class="form-control" th:field="*{amount}" type="text"/>
                                 </div>
                                 <div class="col-lg-3 form-group">
-                                    <label>Unit of measure:</label>
+                                    <label th:text="#{ingredient.uom}">Unit of measure:</label>
                                     <select class="form-control" name="uom.id">
                                         <option th:each="uomEach : ${uomList}"
                                                 th:selected="${uomEach.id == ingredient.uom.id}"
@@ -70,7 +70,8 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 10px" type="submit">Submit</button>
+                    <button class="btn btn-primary" style="margin-top: 10px" type="submit" th:text="#{submit}">Submit
+                    </button>
                 </div>
             </form>
         </div>

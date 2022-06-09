@@ -41,16 +41,17 @@
         <div class="col-lg-9">
             <div class="card">
                 <div class="card-header">
-                    <h1>Uploading new recipe image</h1>
+                    <h1 th:text="#{title.uploadImage}">Uploading new recipe image</h1>
                 </div>
                 <div class="card-body">
                     <div class="row" style="margin-top: 10px">
                         <div class="col-lg-9 form-group">
                             <form method="post" enctype="multipart/form-data"
                                   th:action="@{'/recipe/' + ${recipe.id} + '/image'}">
-                                <label class="form-label">Select file</label>
+                                <label class="form-label" th:text="#{selectFile}">Select file</label>
                                 <input id="imagefile" name="imagefile" type="file" class="form-control"/>
-                                <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit</button>
+                                <button type="submit" class="btn btn-primary" style="margin-top: 10px"
+                                        th:text="#{submit}">Submit</button>
                             </form>
                         </div>
                     </div>
