@@ -52,7 +52,8 @@
                         </div>
                     </div>
                     <!-- Image -->
-                    <img class="card-img-top" style="max-height: 450px; object-fit: cover"
+                    <img class="card-img-top rounded-bottom" style="max-height: 450px; object-fit: cover"
+                         th:if="${not #lists.isEmpty(recipe.image)}"
                          th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}">
                     <div class="card-body">
                         <div class="row" style="margin-top: 4px">

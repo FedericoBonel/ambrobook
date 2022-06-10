@@ -21,53 +21,26 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark"  style="background-color: #8A624A">
     <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/recipe/new">📋 New Recipe</a>
-                </li>
-            </ul>
+        <a class="navbar-brand m-1" href="/">Home</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/recipe/new">📋 New Recipe</a>
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px">
-    <div class="row justify-content-center">
-        <!-- from the 12 column layout get 6 for the content and 3 for the "margins" -->
-        <div class="col-lg-9">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title" th:text="#{title.myRecipes}">My Recipes!</h1>
-                </div>
-                <div class="card-body">
-                    <!-- If nothing comes up in the model that we receive from the controller don't display anything -->
-                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
-                        <table class="table table-hover">
-                            <thead class="thead-inverse">
-                            <tr>
-                                <th>ID</th>
-                                <th th:text="#{recipe.description}">Recipe Description</th>
-                                <th th:text="#{edit}">Edit</th>
-                                <th th:text="#{delete}">Delete</th>
-                            </tr>
-                            </thead>
-                            <tr th:each="recipe : ${recipes}">
-                                <td th:text="${recipe.id}"></td>
-                                <!-- When clicked send it to the endpoint corresponding to that recipe -->
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}"
-                                       th:text="${recipe.description}"></a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Edit</a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <h1 class="m-3" th:text="#{title.myRecipes}">My Recipes!</h1>
+    <hr class="bg-dark border-2 border-top border-dark">
+    <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4"  th:if="${not #lists.isEmpty(recipes)}"
+                     th:each="recipe : ${recipes}"
+                     th:insert="fragments/recipecard :: cardrecipe(recipe=${recipe})"></div>
         </div>
     </div>
-</div>
 </body>
 </html>

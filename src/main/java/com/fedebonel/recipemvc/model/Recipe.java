@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,4 +59,17 @@ public class Recipe {
         this.note = note;
     }
 
+    @Override
+    public String toString() {
+        return "Recipe{"+
+                ", description='" + description + '\'' +
+                ", prepTime=" + prepTime +
+                ", cookTime=" + cookTime +
+                ", servings=" + servings +
+                ", source='" + source + '\'' +
+                ", url='" + url + '\'' +
+                ", directions='" + directions + '\'' +
+                ", difficulty=" + difficulty +
+                '}';
+    }
 }
