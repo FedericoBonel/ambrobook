@@ -4,6 +4,7 @@ import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -20,10 +21,9 @@ public class IndexController {
     }
 
     /**
-     * When a http get request gets done to the server under the localhost:8080 endpoint
-     * return the index page
+     * Handler for main page
      */
-    @RequestMapping({"", "index", "index.html"})
+    @GetMapping({"", "index", "index.html"})
     public String getIndexPage(Model model) {
         log.debug("Getting index page");
         model.addAttribute("recipes", recipeService.getRecipes());

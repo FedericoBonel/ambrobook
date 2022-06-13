@@ -37,7 +37,8 @@
     <h1 class="m-3" th:text="#{title.myRecipes}">My Recipes!</h1>
     <hr class="bg-dark border-2 border-top border-dark">
     <div class="row g-3">
-                <div class="col-12 col-md-6 col-lg-4"  th:if="${not #lists.isEmpty(recipes)}"
+                <div class="col-12 col-md-6 col-lg-4"
+                     th:if="${not #lists.isEmpty(recipes)}"
                      th:each="recipe : ${recipes}"
                      th:insert="fragments/recipecard :: cardrecipe(recipe=${recipe})"></div>
         </div>

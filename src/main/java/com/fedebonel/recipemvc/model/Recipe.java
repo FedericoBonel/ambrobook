@@ -3,7 +3,6 @@ package com.fedebonel.recipemvc.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 

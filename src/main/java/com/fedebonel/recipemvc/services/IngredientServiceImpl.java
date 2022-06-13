@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.services;
 import com.fedebonel.recipemvc.commands.IngredientCommand;
 import com.fedebonel.recipemvc.converters.IngredientCommandToIngredient;
 import com.fedebonel.recipemvc.converters.IngredientToIngredientCommand;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
@@ -30,7 +31,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public IngredientCommand findCommandById(Long recipeId, Long ingredientId) {
         Recipe foundRecipe = recipeRepository.findById(recipeId).orElse(null);
-        if (foundRecipe == null) return null;
+        if (foundRecipe == null) throw new NotFoundException("Recipe with id = " + recipeId + " not found");
         return foundRecipe.getIngredients().stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientId))
                 .map(converterToCommand::convert).findFirst().orElse(null);
@@ -53,8 +54,7 @@ public class IngredientServiceImpl implements IngredientService {
             ingredientFound.setDescription(ingredientCommand.getDescription());
             ingredientFound.setAmount(ingredientCommand.getAmount());
             ingredientFound.setUom(unitOfMeasureRepository.findById(ingredientCommand.getUom().getId())
-                    // todo address this: Show error page
-                    .orElseThrow(() -> new RuntimeException("Unit of measure not found for the ingredient")));
+                    .orElseThrow(() -> new NotFoundException("Unit of measure not found for the ingredient")));
         } else {
             // Create ingredient
             Ingredient ingredient = converterToIngredient.convert(ingredientCommand);
@@ -88,9 +88,8 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
         // Check that the recipe is valid
         if (recipeOptional.isEmpty()) {
-            // TODO Show error page
             log.debug("Recipe " + recipeId + " for ingredient " + ingredientId + " not found while trying to delete ingredient");
-            return;
+            throw new NotFoundException("Recipe with id = " + recipeId + " not found");
         }
         // Get the ingredient, remove it, and save the recipe again
         Recipe recipe = recipeOptional.get();

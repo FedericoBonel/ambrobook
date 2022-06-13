@@ -20,7 +20,7 @@
 <body>
 <div th:fragment="cardrecipe(recipe)" class="card m-3">
         <img th:if="${not #lists.isEmpty(recipe.image)}" class="card-img-top" src="/static/images/placeholder-image.jpeg" alt="recipe image"
-         style="object-fit: cover;" th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}"/>
+         style="object-fit: cover; height: 300px" th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}"/>
         <div class="card-body">
             <a class="card-title text-decoration-none h4" th:text="${recipe.description}" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">
                 Guacamole
