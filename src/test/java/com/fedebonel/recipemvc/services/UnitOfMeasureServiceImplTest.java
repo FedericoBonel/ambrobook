@@ -34,9 +34,9 @@ class UnitOfMeasureServiceImplTest {
     void listAllUOM() {
         Set<UnitOfMeasure> uoms = new HashSet<>();
         UnitOfMeasure uom1 = new UnitOfMeasure();
-        uom1.setId(1L);
+        uom1.setId("1L");
         UnitOfMeasure uom2 = new UnitOfMeasure();
-        uom2.setId(2L);
+        uom2.setId("2L");
         uoms.add(uom1);
         uoms.add(uom2);
 

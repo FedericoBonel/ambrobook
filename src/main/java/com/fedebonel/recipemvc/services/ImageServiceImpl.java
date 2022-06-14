@@ -19,7 +19,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void saveRecipeImage(Long recipeId, MultipartFile image) {
+    public void saveRecipeImage(String recipeId, MultipartFile image) {
         log.debug("Saving image for recipe: " + recipeId);
 
         Recipe recipe = recipeRepository.findById(recipeId).orElse(null);

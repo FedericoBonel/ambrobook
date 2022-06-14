@@ -15,8 +15,8 @@ class IngredientToIngredientCommandTest {
     public static final Recipe RECIPE = new Recipe();
     public static final BigDecimal AMOUNT = new BigDecimal("1");
     public static final String DESCRIPTION = "Cheeseburger";
-    public static final Long UOM_ID = 2L;
-    public static final Long ID_VALUE = 1L;
+    public static final String UOM_ID = "2L";
+    public static final String ID_VALUE = "1L";
 
 
     IngredientToIngredientCommand converter;
@@ -41,7 +41,6 @@ class IngredientToIngredientCommandTest {
         //given
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
-        ingredient.setRecipe(RECIPE);
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
         //when
@@ -59,7 +58,6 @@ class IngredientToIngredientCommandTest {
         //given
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
-        ingredient.setRecipe(RECIPE);
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
 

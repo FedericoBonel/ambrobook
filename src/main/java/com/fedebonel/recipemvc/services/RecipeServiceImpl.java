@@ -41,7 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public Recipe findById(String id) {
         log.debug("Finding recipe by id: " + id);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
 
@@ -53,14 +53,14 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         log.debug("Deleting recipe by id: " + id);
         recipeRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public RecipeCommand findCommandById(Long id) {
+    public RecipeCommand findCommandById(String id) {
         log.debug("Finding command by id: " + id);
         return recipeToRecipeCommand.convert(findById(id));
     }
@@ -71,6 +71,14 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug("Saving recipe command with name: " + recipeCommand.getDescription());
         // Still a pojo not yet in hibernate context, that's why is detached
         Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
+
+        // Make sure the image is being persisted (Command does not contain the image)
+        if (!recipeCommand.getId().isEmpty()) {
+            detachedRecipe.setImage(findById(detachedRecipe.getId()).getImage());
+        } else {
+            detachedRecipe.setId(null);
+        }
+
         // Save it in the database (if exists it will update it where necessary)
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         return recipeToRecipeCommand.convert(savedRecipe);

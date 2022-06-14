@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Recipe repository
  */
 @Repository
-public interface RecipeRepository extends CrudRepository<Recipe, Long> {
+public interface RecipeRepository extends CrudRepository<Recipe, String> {
 }

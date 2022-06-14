@@ -29,12 +29,24 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientCommand findCommandById(Long recipeId, Long ingredientId) {
+    public IngredientCommand findCommandById(String recipeId, String ingredientId) {
         Recipe foundRecipe = recipeRepository.findById(recipeId).orElse(null);
         if (foundRecipe == null) throw new NotFoundException("Recipe with id = " + recipeId + " not found");
-        return foundRecipe.getIngredients().stream()
+
+        Optional<IngredientCommand> optionalIngredient = foundRecipe.getIngredients().stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientId))
-                .map(converterToCommand::convert).findFirst().orElse(null);
+                .map(converterToCommand::convert).findFirst();
+
+        // Make sure the ingredient is there
+        if (optionalIngredient.isEmpty())
+            throw new NotFoundException("Ingredient with id = " + ingredientId + " not found");
+
+        // Update it's recipe id
+        IngredientCommand ingredientCommand = optionalIngredient.get();
+        ingredientCommand.setRecipeId(recipeId);
+
+        // Return it
+        return optionalIngredient.get();
     }
 
     @Override
@@ -46,8 +58,7 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Ingredient> foundIngredient = recipe.getIngredients()
                 .stream().filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
                 .findFirst();
-        // We need to do this because the ingredient could exist with its unique id
-        // If it exists we need to update its stored instance (since it will share the same id)
+
         if (foundIngredient.isPresent()) {
             // Update ingredient
             Ingredient ingredientFound = foundIngredient.get();
@@ -58,7 +69,6 @@ public class IngredientServiceImpl implements IngredientService {
         } else {
             // Create ingredient
             Ingredient ingredient = converterToIngredient.convert(ingredientCommand);
-            ingredient.setRecipe(recipe);
             recipe.addIngredient(ingredient);
         }
 
@@ -79,18 +89,23 @@ public class IngredientServiceImpl implements IngredientService {
                     .findFirst();
         }
 
+        // Make sure the recipe id is getting set in the saved instance
+        IngredientCommand ingredientCommandSaved = converterToCommand.convert(savedIngredient.get());
+        ingredientCommandSaved.setRecipeId(recipe.getId());
+
         // return it
-        return converterToCommand.convert(savedIngredient.get());
+        return ingredientCommandSaved;
     }
 
     @Override
-    public void deleteById(Long recipeId, Long ingredientId) {
+    public void deleteById(String recipeId, String ingredientId) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
         // Check that the recipe is valid
         if (recipeOptional.isEmpty()) {
             log.debug("Recipe " + recipeId + " for ingredient " + ingredientId + " not found while trying to delete ingredient");
             throw new NotFoundException("Recipe with id = " + recipeId + " not found");
         }
+
         // Get the ingredient, remove it, and save the recipe again
         Recipe recipe = recipeOptional.get();
         recipe.getIngredients().stream()

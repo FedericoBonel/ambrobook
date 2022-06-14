@@ -1,6 +1,5 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +12,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,7 +32,7 @@ class ImageServiceImplTest {
     @Test
     void saveRecipeImage() throws IOException {
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1L");
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
                 "Test file".getBytes());
 

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryCommandToCategoryTest {
 
-    public static final Long ID_VALUE = 1L;
+    public static final String ID_VALUE = "1L";
     public static final String NAME = "name";
     CategoryCommandToCategory conveter;
 

@@ -10,6 +10,6 @@ import java.util.Optional;
  * UOM Repository
  */
 @Repository
-public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure, Long> {
+public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure, String> {
     Optional<UnitOfMeasure> findByUnit(String unit);
 }

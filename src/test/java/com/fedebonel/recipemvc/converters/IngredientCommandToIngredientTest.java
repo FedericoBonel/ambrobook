@@ -16,8 +16,8 @@ class IngredientCommandToIngredientTest {
     public static final Recipe RECIPE = new Recipe();
     public static final BigDecimal AMOUNT = new BigDecimal("1");
     public static final String DESCRIPTION = "Cheeseburger";
-    public static final Long ID_VALUE = 1L;
-    public static final Long UOM_ID = 2L;
+    public static final String ID_VALUE = "1L";
+    public static final String UOM_ID = "2L";
 
     IngredientCommandToIngredient converter;
 

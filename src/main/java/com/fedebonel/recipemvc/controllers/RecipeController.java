@@ -1,17 +1,13 @@
 package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.commands.RecipeCommand;
-import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -33,7 +29,7 @@ public class RecipeController {
      * Handles GET methods to view details of recipe
      */
     @GetMapping({"{id}/show"})
-    public String showById(@PathVariable Long id, Model model) {
+    public String showById(@PathVariable String id, Model model) {
         Recipe foundRecipe = recipeService.findById(id);
         model.addAttribute("recipe", foundRecipe);
         return RECIPE_SHOW_PATH;
@@ -52,7 +48,7 @@ public class RecipeController {
      * Handles GET methods to access the recipe form to update an existing recipe
      */
     @GetMapping({"{id}/update"})
-    public String updateRecipe(@PathVariable Long id, Model model) {
+    public String updateRecipe(@PathVariable String id, Model model) {
         model.addAttribute("recipe", recipeService.findCommandById(id));
         return RECIPE_FORM_PATH;
     }
@@ -76,7 +72,7 @@ public class RecipeController {
      * Handles GET methods to delete recipes
      */
     @GetMapping({"{id}/delete"})
-    public String deleteById(@PathVariable Long id) {
+    public String deleteById(@PathVariable String id) {
         log.debug("Deleted recipe: " + id);
         recipeService.deleteById(id);
         return "redirect:/";

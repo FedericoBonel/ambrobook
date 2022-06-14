@@ -22,12 +22,12 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark"  style="background-color: #8A624A">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #8A624A">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a aria-current="page" class="nav-link active" href="/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="/recipe/new">📋 New Recipe</a>
@@ -50,6 +50,7 @@
                 </div>
 
                 <input th:field="*{id}" type="hidden"/>
+
                 <div class="content">
                     <div class="card">
                         <div class="card-header">
@@ -89,6 +90,9 @@
                                             Cat 2
                                         </label>
                                     </div>
+                                </div>
+                                <div th:each="catEach, idx : ${recipe.categories}">
+                                    <input th:field="*{categories[__${idx.index}__].id}" type="hidden"/>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 10px">
@@ -187,6 +191,12 @@
                                         + ' - ' + ingredient.description)}">1 Cup of milk
                                         </li>
                                     </ul>
+                                    <div th:each="ingredientEach, idx : ${recipe.ingredients}">
+                                        <input th:field="*{ingredients[__${idx.index}__].id}" type="hidden"/>
+                                        <input th:field="*{ingredients[__${idx.index}__].description}" type="hidden"/>
+                                        <input th:field="*{ingredients[__${idx.index}__].amount}" type="hidden"/>
+                                        <input th:field="*{ingredients[__${idx.index}__].uom.id}" type="hidden"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -199,9 +209,9 @@
                             <div class="row">
                                 <div class="col-lg-12 form-group" th:class="${#fields.hasErrors('directions')}
                                 ? 'col-lg-12 form-group text-danger' : 'col-lg-12 form-group'">
-                                    <textarea style="white-space: pre-line" class="form-control" rows="4"
+                                    <textarea class="form-control" rows="4" style="white-space: pre-line"
                                               th:errorclass="is-invalid"
-                                              th:field="*{directions}" ></textarea>
+                                              th:field="*{directions}"></textarea>
                                     <span class="help-block" th:if="${#fields.hasErrors('directions')}">
                                         <ul>
                                             <li th:each="err : ${#fields.errors('directions')}"
@@ -219,15 +229,15 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12 form-group">
-                                    <input type="hidden" th:field="*{notes.id}"/>
+                                    <input th:field="*{notes.id}" type="hidden"/>
                                     <!-- Remember the Id of the notes object -->
-                                    <textarea style="white-space: pre-wrap" class="form-control" rows="4"
+                                    <textarea class="form-control" rows="4" style="white-space: pre-wrap"
                                               th:field="*{notes.recipeNotes}"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 10px" type="submit" th:text="#{submit}">Submit
+                    <button class="btn btn-primary" style="margin-top: 10px" th:text="#{submit}" type="submit">Submit
                     </button>
                 </div>
             </form>

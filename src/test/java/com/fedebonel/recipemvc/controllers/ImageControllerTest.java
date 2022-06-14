@@ -12,14 +12,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.http.HttpServletResponse;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,7 +44,7 @@ class ImageControllerTest {
     @Test
     void showUploadImageForm() throws Exception {
         RecipeCommand recipe = new RecipeCommand();
-        recipe.setId(1L);
+        recipe.setId("1L");
 
         when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
 
@@ -61,7 +57,7 @@ class ImageControllerTest {
     @Test
     void uploadImage() throws Exception {
         RecipeCommand recipe = new RecipeCommand();
-        recipe.setId(1L);
+        recipe.setId("1L");
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
                 "Test file".getBytes());
 
@@ -69,13 +65,13 @@ class ImageControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/" + recipe.getId() + "/show"));
 
-        verify(imageService).saveRecipeImage(anyLong(), any());
+        verify(imageService).saveRecipeImage(anyString(), any());
     }
 
     @Test
     void renderRecipeImage() throws Exception {
         RecipeCommand recipe = new RecipeCommand();
-        recipe.setId(1L);
+        recipe.setId("1L");
         String s = "Image text";
 
         Byte[] image = new Byte[s.getBytes().length];
@@ -95,15 +91,5 @@ class ImageControllerTest {
                 .andReturn().getResponse();
 
         assertEquals(s.length(), response.getContentAsByteArray().length);
-    }
-
-    @Test
-    void renderRecipeImageNotExisting() throws Exception {
-        mockMvc.perform(get("/recipe/asd/image/render"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("error/show"));
-
-        verifyNoInteractions(recipeService);
-        verifyNoInteractions(imageService);
     }
 }

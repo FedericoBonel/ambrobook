@@ -1,19 +1,20 @@
 package com.fedebonel.recipemvc.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Unit of measure POJO
  */
-@Data
-@Entity
+@Getter
+@Setter
+@Document
 public class UnitOfMeasure {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String unit;
 
 }

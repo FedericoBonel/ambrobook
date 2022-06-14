@@ -42,25 +42,25 @@ class RecipeServiceImplTest {
     @Test
     void getRecipesById() {
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1L");
 
-        when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findById("1L")).thenReturn(Optional.of(recipe));
 
-        Recipe recipeFound = recipeService.findById(1L);
+        Recipe recipeFound = recipeService.findById("1L");
 
         assertNotNull(recipeFound);
-        assertEquals(1L, recipeFound.getId());
-        verify(recipeRepository).findById(1L);
+        assertEquals("1L", recipeFound.getId());
+        verify(recipeRepository).findById("1L");
     }
 
     @Test
     void getRecipesByIdNotExisting() {
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1L");
 
-        when(recipeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(recipeRepository.findById("1L")).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> recipeService.findById(1L));
+        assertThrows(NotFoundException.class, () -> recipeService.findById("1L"));
     }
 
     @Test
@@ -83,7 +83,7 @@ class RecipeServiceImplTest {
 
     @Test
     void deleteById() {
-        Long idToDelete = 1L;
+        String idToDelete = "1L";
         recipeService.deleteById(idToDelete);
         verify(recipeRepository, times(1)).deleteById(idToDelete);
     }
