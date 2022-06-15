@@ -29,7 +29,11 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         if (source == null) return null;
 
         final Recipe recipe = new Recipe();
-        recipe.setId(source.getId());
+        if (source.getId() == null || source.getId().isEmpty()) {
+            recipe.setId(null);
+        } else {
+            recipe.setId(source.getId());
+        }
         recipe.setSource(source.getSources());
         recipe.setNote(notesCommandToNotes.convert(source.getNotes()));
         recipe.setDifficulty(source.getDifficulty());

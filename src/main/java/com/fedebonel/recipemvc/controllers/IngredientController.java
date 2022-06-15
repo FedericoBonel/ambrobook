@@ -97,7 +97,7 @@ public class IngredientController {
      * Handles POST requests for updating ingredients
      */
     @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@PathVariable String recipeId, @ModelAttribute IngredientCommand ingredientCommand) {
+    public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
         log.debug("Updating/Saving recipe with ingredient: " + ingredientCommand.getDescription());
         IngredientCommand savedCommand = ingredientService.saveCommand(ingredientCommand);
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredients/";

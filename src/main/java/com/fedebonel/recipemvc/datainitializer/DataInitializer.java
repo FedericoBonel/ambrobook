@@ -4,7 +4,11 @@ import com.fedebonel.recipemvc.model.*;
 import com.fedebonel.recipemvc.repositories.CategoryRepository;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
+import com.fedebonel.recipemvc.repositories.reactive.CategoryReactiveRepository;
+import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
+import com.fedebonel.recipemvc.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -64,7 +68,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
         Category cat5 = new Category();
         cat4.setName("Japanese");
-        categoryRepository.save(cat4);
+        categoryRepository.save(cat5);
     }
 
     private void initUom() {
