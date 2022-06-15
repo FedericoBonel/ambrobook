@@ -99,6 +99,7 @@ public class IngredientController {
     @PostMapping("recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
         log.debug("Updating/Saving recipe with ingredient: " + ingredientCommand.getDescription());
+        ingredientCommand.setUom(unitOfMeasureService.findById(ingredientCommand.getUom().getId()).block());
         IngredientCommand savedCommand = ingredientService.saveCommand(ingredientCommand).block();
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredients/";
     }

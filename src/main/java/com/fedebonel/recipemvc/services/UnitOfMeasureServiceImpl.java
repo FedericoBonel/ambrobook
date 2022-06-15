@@ -6,6 +6,7 @@ import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
 import com.fedebonel.recipemvc.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,5 +26,10 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
     @Override
     public Flux<UnitOfMeasureCommand> listAllUOM() {
         return unitOfMeasureRepository.findAll().map(converter::convert);
+    }
+
+    @Override
+    public Mono<UnitOfMeasureCommand> findById(String id) {
+        return unitOfMeasureRepository.findById(id).map(converter::convert);
     }
 }

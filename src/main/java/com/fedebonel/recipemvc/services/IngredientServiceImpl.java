@@ -36,14 +36,15 @@ public class IngredientServiceImpl implements IngredientService {
         return recipeRepository
                 // Find recipe as single (mono) data stream
                 .findById(recipeId)
-                // Once recipe gets in stream execute this and return it as a data stream (get its ingredients)
+                // Once recipe gets in stream execute this / transform it and return it as a multi/flux data stream
+                // (get its ingredients)
                 .flatMapIterable(Recipe::getIngredients)
                 // Filter from the data stream the ingredient that we need
                 .filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
-                // Make sure we only are getting one ingredient (Otherwise throw an error)
+                // Make sure we are getting ONE ingredient (Otherwise throw an error) and return it as a mono
                 .single()
                 // Map it to command and set its recipe id since it won't store it in the database document and
-                // return it insideof a mono
+                // return it inside of a mono
                 .map(ingredient -> {
                     IngredientCommand ingredientCommand = converterToCommand.convert(ingredient);
                     ingredientCommand.setRecipeId(recipeId);
