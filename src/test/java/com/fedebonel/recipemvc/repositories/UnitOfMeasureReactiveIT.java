@@ -34,6 +34,6 @@ public class UnitOfMeasureReactiveIT {
         unitOfMeasureReactiveRepository.save(uom).block();
 
         assertEquals(1, unitOfMeasureReactiveRepository.count().block());
-        assertEquals(UNIT, unitOfMeasureReactiveRepository.findAll().blockFirst().getUnit());
+        assertEquals(UNIT, unitOfMeasureReactiveRepository.findByUnit(UNIT).block().getUnit());
     }
 }
