@@ -1,10 +1,11 @@
 package com.fedebonel.recipemvc.services;
 
 import com.fedebonel.recipemvc.model.Recipe;
-import com.fedebonel.recipemvc.repositories.RecipeRepository;
+import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 
@@ -12,20 +13,20 @@ import java.io.IOException;
 @Slf4j
 public class ImageServiceImpl implements ImageService {
 
-    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeRepository;
 
-    public ImageServiceImpl(RecipeRepository recipeRepository) {
+    public ImageServiceImpl(RecipeReactiveRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
     }
 
     @Override
-    public void saveRecipeImage(String recipeId, MultipartFile image) {
+    public Mono<Recipe> saveRecipeImage(String recipeId, MultipartFile image) {
         log.debug("Saving image for recipe: " + recipeId);
 
-        Recipe recipe = recipeRepository.findById(recipeId).orElse(null);
+        Recipe recipe = recipeRepository.findById(recipeId).block();
         if (recipe == null) {
             log.debug("Non existing recipe with id: " + recipeId);
-            return;
+            return Mono.empty();
         }
 
         // Transform the image to a byte array, assign it to the recipe, and save it
@@ -38,12 +39,13 @@ public class ImageServiceImpl implements ImageService {
             }
 
             recipe.setImage(imageInBytes);
-            recipeRepository.save(recipe);
+            return recipeRepository.save(recipe);
 
         } catch (IOException e) {
             // TODO show error page
             log.debug("Exception: " + e.getMessage());
             e.printStackTrace();
+            return Mono.empty();
         }
     }
 }

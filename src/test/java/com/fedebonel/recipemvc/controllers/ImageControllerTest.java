@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,10 +58,12 @@ class ImageControllerTest {
 
     @Test
     void uploadImage() throws Exception {
-        RecipeCommand recipe = new RecipeCommand();
+        Recipe recipe = new Recipe();
         recipe.setId("1L");
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
                 "Test file".getBytes());
+
+        when(imageService.saveRecipeImage(anyString(), any())).thenReturn(Mono.just(recipe));
 
         mockMvc.perform(multipart("/recipe/" + recipe.getId() + "/image").file(multipartFile))
                 .andExpect(status().is3xxRedirection())

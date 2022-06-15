@@ -2,24 +2,27 @@ package com.fedebonel.recipemvc.services;
 
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
+import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ImageServiceImplTest {
 
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeReactiveRepository recipeRepository;
 
     ImageServiceImpl imageService;
 
@@ -36,9 +39,10 @@ class ImageServiceImplTest {
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
                 "Test file".getBytes());
 
-        when(recipeRepository.findById(recipe.getId())).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findById(recipe.getId())).thenReturn(Mono.just(recipe));
+        when(recipeRepository.save(recipe)).thenReturn(Mono.just(recipe));
 
-        imageService.saveRecipeImage(recipe.getId(), multipartFile);
+        imageService.saveRecipeImage(recipe.getId(), multipartFile).block();
 
         ArgumentCaptor<Recipe> recipeCaptor = ArgumentCaptor.forClass(Recipe.class);
 

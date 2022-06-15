@@ -1,7 +1,9 @@
 package com.fedebonel.recipemvc.services;
 
+import com.fedebonel.recipemvc.model.Recipe;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 public interface ImageService {
-    void saveRecipeImage(String recipeId, MultipartFile image);
+    Mono<Recipe> saveRecipeImage(String recipeId, MultipartFile image);
 }
