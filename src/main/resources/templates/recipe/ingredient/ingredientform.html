@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label th:text="#{ingredient.uom}">Unit of measure:</label>
-                                    <select class="form-control" name="uom.id">
+                                    <select class="form-control" th:field="*{uom.id}">
                                         <option th:each="uomEach : ${uomList}"
                                                 th:selected="${uomEach.id == ingredient.uom.id}"
                                                 th:text="${uomEach.unit}"

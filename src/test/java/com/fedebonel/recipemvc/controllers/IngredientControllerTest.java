@@ -5,6 +5,7 @@ import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
+import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import com.fedebonel.recipemvc.services.IngredientService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import com.fedebonel.recipemvc.services.UnitOfMeasureService;
@@ -111,9 +112,13 @@ class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setId("1L");
         ingredientCommand.setRecipeId("2L");
+        UnitOfMeasureCommand unitOfMeasure = new UnitOfMeasureCommand();
+
+        when(unitOfMeasureService.findById(anyString())).thenReturn(Mono.just(unitOfMeasure));
         when(ingredientService.saveCommand(any())).thenReturn(Mono.just(ingredientCommand));
 
-        mockMvc.perform(post("/recipe/" + ingredientCommand.getRecipeId() + "/ingredient"))
+        mockMvc.perform(post("/recipe/" + ingredientCommand.getRecipeId() + "/ingredient")
+                        .param("uom.id", "uom!id"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view()
                         .name("redirect:/recipe/"
