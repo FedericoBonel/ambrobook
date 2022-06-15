@@ -3,16 +3,13 @@ package com.fedebonel.recipemvc.services;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.converters.RecipeCommandToRecipe;
 import com.fedebonel.recipemvc.converters.RecipeToRecipeCommand;
-import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
-import com.fedebonel.recipemvc.repositories.RecipeRepository;
+import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Recipe Service Implementation
@@ -20,11 +17,11 @@ import java.util.Set;
 @Slf4j
 @Service
 public class RecipeServiceImpl implements RecipeService {
-    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeRepository;
     private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository,
+    public RecipeServiceImpl(RecipeReactiveRepository recipeRepository,
                              RecipeCommandToRecipe recipeCommandToRecipe,
                              RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
@@ -33,52 +30,45 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Set<Recipe> getRecipes() {
+    public Flux<Recipe> getRecipes() {
         log.debug("Getting recipes");
-        HashSet<Recipe> recipes = new HashSet<>();
-        recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
-        return recipes;
+        return recipeRepository.findAll();
     }
 
     @Override
-    public Recipe findById(String id) {
+    public Mono<Recipe> findById(String id) {
         log.debug("Finding recipe by id: " + id);
-        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
-
-        if (optionalRecipe.isEmpty()) {
-            throw new NotFoundException("Recipe with id = " + id + " not found");
-        }
-
-        return optionalRecipe.orElse(null);
+        return recipeRepository.findById(id);
     }
 
     @Override
-    public void deleteById(String id) {
+    public Mono<Void> deleteById(String id) {
         log.debug("Deleting recipe by id: " + id);
-        recipeRepository.deleteById(id);
+        return recipeRepository.deleteById(id);
     }
 
     @Override
-    @Transactional
-    public RecipeCommand findCommandById(String id) {
+    public Mono<RecipeCommand> findCommandById(String id) {
         log.debug("Finding command by id: " + id);
-        return recipeToRecipeCommand.convert(findById(id));
+        return recipeRepository.findById(id).map(recipe -> {
+            RecipeCommand recipeCommand = recipeToRecipeCommand.convert(recipe);
+            recipeCommand.getIngredients().forEach(ingredientCommand -> ingredientCommand.setRecipeId(recipeCommand.getId()));
+            return recipeCommand;
+        });
     }
 
     @Override
-    @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
+    public Mono<RecipeCommand> saveRecipeCommand(RecipeCommand recipeCommand) {
         log.debug("Saving recipe command with name: " + recipeCommand.getDescription());
-        // Still a pojo not yet in hibernate context, that's why is detached
+
         Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
 
         // Make sure the image is being persisted (Command does not contain the image)
         if (detachedRecipe.getId() != null) {
-            detachedRecipe.setImage(findById(detachedRecipe.getId()).getImage());
+            detachedRecipe.setImage(recipeRepository.findById(detachedRecipe.getId()).block().getImage());
         }
 
         // Save it in the database (if exists it will update it where necessary)
-        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
-        return recipeToRecipeCommand.convert(savedRecipe);
+        return recipeRepository.save(detachedRecipe).map(recipeToRecipeCommand::convert);
     }
 }

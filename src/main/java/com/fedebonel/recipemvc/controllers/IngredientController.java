@@ -35,7 +35,7 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model) {
         log.debug("Getting list of Ingredients for recipe: " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
         return "recipe/ingredient/list";
     }
 
@@ -58,7 +58,7 @@ public class IngredientController {
 
         // Find the recipe, check it exists, create the commmand and asign it to the recipe so that it can be handled
         // by the saveOrUpdate correctly in the service
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
         if (recipeCommand == null) throw new NotFoundException("Recipe with id = " + recipeId + " not found");
 
         IngredientCommand ingredientCommand = new IngredientCommand();

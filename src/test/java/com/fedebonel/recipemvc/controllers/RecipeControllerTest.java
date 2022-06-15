@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -44,7 +45,7 @@ class RecipeControllerTest {
     void getRecipe() throws Exception {
         Recipe recipe = new Recipe();
         recipe.setId("1L");
-        when(recipeService.findById("1L")).thenReturn(recipe);
+        when(recipeService.findById("1L")).thenReturn(Mono.just(recipe));
 
         mockMvc.perform(get("/recipe/1L/show"))
                 .andExpect(status().isOk())
@@ -75,7 +76,7 @@ class RecipeControllerTest {
     void postRecipeForm() throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId("1L");
-        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+        when(recipeService.saveRecipeCommand(any())).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -91,7 +92,7 @@ class RecipeControllerTest {
     void getUpdateView() throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId("1L");
-        when(recipeService.findCommandById(command.getId())).thenReturn(command);
+        when(recipeService.findCommandById(command.getId())).thenReturn(Mono.just(command));
 
         mockMvc.perform(get("/recipe/" + command.getId() + "/update"))
                 .andExpect(status().isOk())
@@ -102,6 +103,9 @@ class RecipeControllerTest {
     @Test
     void deleteAction() throws Exception {
         long id = 1L;
+
+        when(recipeService.deleteById(anyString())).thenReturn(Mono.empty());
+
         mockMvc.perform(get("/recipe/" + id + "/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));

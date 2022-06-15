@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +47,7 @@ class ImageControllerTest {
         RecipeCommand recipe = new RecipeCommand();
         recipe.setId("1L");
 
-        when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
+        when(recipeService.findCommandById(recipe.getId())).thenReturn(Mono.just(recipe));
 
         mockMvc.perform(get("/recipe/" + recipe.getId() + "/image"))
                 .andExpect(status().isOk())
@@ -83,7 +84,7 @@ class ImageControllerTest {
 
         recipe.setImage(image);
 
-        when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
+        when(recipeService.findCommandById(recipe.getId())).thenReturn(Mono.just(recipe));
 
         // Emulate the response to check that the length of the "image" is the same as the original recipe
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/" + recipe.getId() + "/image/render"))

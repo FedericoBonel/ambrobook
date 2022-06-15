@@ -10,8 +10,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import reactor.core.publisher.Flux;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +43,8 @@ class IndexControllerTest {
     void testoMockMVC() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
+        when(recipeService.getRecipes()).thenReturn(Flux.just(new Recipe()));
+
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
@@ -51,11 +55,11 @@ class IndexControllerTest {
         // Given
         String expectedViewName = "index";
 
-        HashSet<Recipe> expectedSet = new HashSet<>();
-        expectedSet.add(new Recipe());
-        when(recipeService.getRecipes()).thenReturn(expectedSet);
+        Flux<Recipe> expectedFlux = Flux.just(new Recipe());
 
-        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        when(recipeService.getRecipes()).thenReturn(expectedFlux);
+
+        ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         // When
         String actualViewName = indexController.getIndexPage(model);
@@ -68,6 +72,6 @@ class IndexControllerTest {
         // Verify specifically that the model has a string that is equal (eq) to "recipes" and the
         // recipes set that we have set for the recipes service at the beginning of the test
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        assertEquals(expectedSet.size(), argumentCaptor.getValue().size());
+        assertEquals(expectedFlux.count().block(), argumentCaptor.getValue().size());
     }
 }

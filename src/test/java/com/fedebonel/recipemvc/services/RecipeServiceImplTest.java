@@ -4,13 +4,17 @@ import com.fedebonel.recipemvc.converters.*;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
+import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,7 +27,7 @@ class RecipeServiceImplTest {
 
     // Create a mock implementation for the recipe
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeReactiveRepository recipeRepository;
 
     @BeforeEach
     void setUp() {
@@ -44,9 +48,9 @@ class RecipeServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setId("1L");
 
-        when(recipeRepository.findById("1L")).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findById("1L")).thenReturn(Mono.just(recipe));
 
-        Recipe recipeFound = recipeService.findById("1L");
+        Recipe recipeFound = recipeService.findById("1L").block();
 
         assertNotNull(recipeFound);
         assertEquals("1L", recipeFound.getId());
@@ -58,24 +62,24 @@ class RecipeServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setId("1L");
 
-        when(recipeRepository.findById("1L")).thenReturn(Optional.empty());
+        when(recipeRepository.findById("1L")).thenReturn(Mono.empty());
 
-        assertThrows(NotFoundException.class, () -> recipeService.findById("1L"));
+        assertEquals(Mono.empty().block(), recipeService.findById("1L").block());
     }
 
     @Test
     void getRecipes() {
         Recipe recipe = new Recipe();
-        HashSet<Recipe> recipesData = new HashSet<>();
-        recipesData.add(recipe);
+        Flux<Recipe> recipesData = Flux.just(recipe);
 
         // When the find all gets called in the mock, return the recipesdata
         // If recipes service works fine, this should be whats returned
         when(recipeRepository.findAll()).thenReturn(recipesData);
 
-        Set<Recipe> recipes = recipeService.getRecipes();
+        List<Recipe> recipes = recipeService.getRecipes().collectList().block();
 
-        assertEquals(recipes.size(), recipesData.size());
+        assertNotNull(recipes);
+        assertEquals(recipes.size(), 1);
         // Make sure that the recipes repository findAll only got called ONCE
         // (i.e. when the recipeService.getRecipes() gets called)
         verify(recipeRepository, Mockito.times(1)).findAll();
@@ -84,7 +88,8 @@ class RecipeServiceImplTest {
     @Test
     void deleteById() {
         String idToDelete = "1L";
-        recipeService.deleteById(idToDelete);
+        when(recipeRepository.deleteById(idToDelete)).thenReturn(Mono.empty());
+        recipeService.deleteById(idToDelete).block();
         verify(recipeRepository, times(1)).deleteById(idToDelete);
     }
 }
