@@ -4,7 +4,6 @@ import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +34,7 @@ public class ImageController {
     @GetMapping("/recipe/{recipeId}/image")
     public String showUploadImageForm(@PathVariable String recipeId, Model model) {
         log.debug("Showing image form for recipe: " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId).share().block());
         return "recipe/imageform";
     }
 
@@ -46,32 +44,33 @@ public class ImageController {
     @PostMapping("/recipe/{recipeId}/image")
     public String uploadImage(@PathVariable String recipeId, @RequestParam("imagefile") MultipartFile image) {
         log.debug("Uploading an image for recipe: " + recipeId);
-        imageService.saveRecipeImage(recipeId, image).block();
+        imageService.saveRecipeImage(recipeId, image).share().block();
         return "redirect:/recipe/" + recipeId + "/show";
     }
 
-    /**
-     * Handles GET requests to render the recipe image
-     */
-    @GetMapping("/recipe/{recipeId}/image/render")
-    public void renderRecipeImage(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
-
-        byte[] finalImage = {};
-
-        if (recipeCommand.getImage() != null) {
-            // Transform the Byte array to a byte array
-            finalImage = new byte[recipeCommand.getImage().length];
-            int currByte = 0;
-            for (Byte imageByte : recipeCommand.getImage()) {
-                finalImage[currByte++] = imageByte;
-            }
-        }
-
-        response.setContentType("image/jpeg");
-
-        // Return it through the output stream of the response
-        InputStream is = new ByteArrayInputStream(finalImage);
-        IOUtils.copy(is, response.getOutputStream());
-    }
+    // TODO refactor this
+//    /**
+//     * Handles GET requests to render the recipe image
+//     */
+//    @GetMapping("/recipe/{recipeId}/image/render")
+//    public void renderRecipeImage(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
+//        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
+//
+//        byte[] finalImage = {};
+//
+//        if (recipeCommand.getImage() != null) {
+//            // Transform the Byte array to a byte array
+//            finalImage = new byte[recipeCommand.getImage().length];
+//            int currByte = 0;
+//            for (Byte imageByte : recipeCommand.getImage()) {
+//                finalImage[currByte++] = imageByte;
+//            }
+//        }
+//
+//        response.setContentType("image/jpeg");
+//
+//        // Return it through the output stream of the response
+//        InputStream is = new ByteArrayInputStream(finalImage);
+//        IOUtils.copy(is, response.getOutputStream());
+//    }
 }

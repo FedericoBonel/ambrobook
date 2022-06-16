@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,8 +22,18 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
+    private WebDataBinder webDataBinder;
+
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
+    }
+
+    /**
+     * Gets the data binder to validate binding and or anything related to it
+     */
+    @InitBinder
+    public void initDataBinder(WebDataBinder webDataBinder) {
+        this.webDataBinder = webDataBinder;
     }
 
     /**
@@ -30,8 +41,7 @@ public class RecipeController {
      */
     @GetMapping({"{id}/show"})
     public String showById(@PathVariable String id, Model model) {
-        Recipe foundRecipe = recipeService.findById(id).block();
-        model.addAttribute("recipe", foundRecipe);
+        model.addAttribute("recipe", recipeService.findById(id));
         return RECIPE_SHOW_PATH;
     }
 
@@ -49,7 +59,7 @@ public class RecipeController {
      */
     @GetMapping({"{id}/update"})
     public String updateRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id).block());
+        model.addAttribute("recipe", recipeService.findCommandById(id).share().block());
         return RECIPE_FORM_PATH;
     }
 
@@ -57,14 +67,18 @@ public class RecipeController {
      * Handles POST methods to update or save a recipe
      */
     @PostMapping
-    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand, BindingResult result) {
+    public String saveOrUpdate(@ModelAttribute("recipe") RecipeCommand recipeCommand) {
+
+        // Validate every constrain
+        webDataBinder.validate();
+        BindingResult result = webDataBinder.getBindingResult();
 
         if (result.hasErrors()) {
             result.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
             return RECIPE_FORM_PATH;
         }
 
-        RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand).block();
+        RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand).share().block();
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 
@@ -74,7 +88,7 @@ public class RecipeController {
     @GetMapping({"{id}/delete"})
     public String deleteById(@PathVariable String id) {
         log.debug("Deleted recipe: " + id);
-        recipeService.deleteById(id).block();
+        recipeService.deleteById(id).share().block();
         return "redirect:/";
     }
 }

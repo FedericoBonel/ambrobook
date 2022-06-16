@@ -65,7 +65,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         // Make sure the image is being persisted (Command does not contain the image)
         if (detachedRecipe.getId() != null) {
-            detachedRecipe.setImage(recipeRepository.findById(detachedRecipe.getId()).block().getImage());
+            detachedRecipe.setImage(recipeRepository.findById(detachedRecipe.getId()).share().block().getImage());
         }
 
         // Save it in the database (if exists it will update it where necessary)

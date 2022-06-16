@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
     public Mono<Recipe> saveRecipeImage(String recipeId, MultipartFile image) {
         log.debug("Saving image for recipe: " + recipeId);
 
-        Recipe recipe = recipeRepository.findById(recipeId).block();
+        Recipe recipe = recipeRepository.findById(recipeId).share().block();
         if (recipe == null) {
             log.debug("Non existing recipe with id: " + recipeId);
             return Mono.empty();

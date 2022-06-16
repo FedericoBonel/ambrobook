@@ -1,7 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.commands.IngredientCommand;
-import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.services.IngredientService;
@@ -14,11 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
 public class IngredientController {
 
+    public static final String INGREDIENT_FORM_PATH = "recipe/ingredient/ingredientform";
+    public static final String INGREDIENT_SHOW_PATH = "recipe/ingredient/show";
     private final RecipeService recipeService;
     private final IngredientService ingredientService;
     private final UnitOfMeasureService unitOfMeasureService;
@@ -35,7 +39,7 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model) {
         log.debug("Getting list of Ingredients for recipe: " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return "recipe/ingredient/list";
     }
 
@@ -45,30 +49,31 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/show")
     public String showIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
         log.debug("Getting the ingredient: " + ingredientId);
-        model.addAttribute("ingredient", ingredientService.findCommandById(recipeId, ingredientId).block());
-        return "recipe/ingredient/show";
+        model.addAttribute("ingredient", ingredientService.findCommandById(recipeId, ingredientId));
+        return INGREDIENT_SHOW_PATH;
     }
 
     /**
      * Handles GET requests for viewing the ingredient form to create ingredients
      */
     @GetMapping("/recipe/{recipeId}/ingredient/new")
-    public String createRecipeIngredient(@PathVariable String recipeId, Model model) {
+    public Mono<String> createRecipeIngredient(@PathVariable String recipeId, Model model) {
         log.debug("Getting creation form for ingredients for the recipe: " + recipeId);
 
-        // Find the recipe, check it exists, create the commmand and asign it to the recipe so that it can be handled
-        // by the saveOrUpdate correctly in the service
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
-        if (recipeCommand == null) throw new NotFoundException("Recipe with id = " + recipeId + " not found");
+        // Find the recipe, check it exists, create the command and assign it to the recipe so that it can be handled
+        // by the form correctly and the saveupdate as well
+        return recipeService.findCommandById(recipeId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Recipe with id " + recipeId + " not found")))
+                .map(recipe -> {
+                    IngredientCommand ingredientCommand = new IngredientCommand();
+                    ingredientCommand.setRecipeId(recipeId);
+                    ingredientCommand.setUom(new UnitOfMeasureCommand());
 
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(recipeId);
-        // Init the unit of measure for the new ingredient (So that it can be "displayed" in the form)
-        ingredientCommand.setUom(new UnitOfMeasureCommand());
+                    model.addAttribute("ingredient", ingredientCommand);
+                    model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
 
-        model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("uomList", unitOfMeasureService.listAllUOM().collectList().block());
-        return "recipe/ingredient/ingredientform";
+                    return recipe;
+                }).thenReturn(INGREDIENT_FORM_PATH);
     }
 
     /**
@@ -78,30 +83,37 @@ public class IngredientController {
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId,
                                          Model model) {
         log.debug("Getting update form for ingredient with id: " + ingredientId);
-        model.addAttribute("ingredient", ingredientService.findCommandById(recipeId, ingredientId).block());
-        model.addAttribute("uomList", unitOfMeasureService.listAllUOM().collectList().block());
-        return "recipe/ingredient/ingredientform";
+        model.addAttribute("ingredient", ingredientService.findCommandById(recipeId, ingredientId));
+        model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
+        return INGREDIENT_FORM_PATH;
     }
 
     /**
      * Handles GET requests for deleting ingredients from recipes
      */
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
-    public String deleteRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId) {
+    public Mono<String> deleteRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId) {
         log.debug("Deleting from recipe " + recipeId + " - ingredient: " + ingredientId);
-        ingredientService.deleteById(recipeId, ingredientId).block();
-        return "redirect:/recipe/" + recipeId + "/ingredients";
+        return ingredientService.deleteById(recipeId, ingredientId)
+                .thenReturn("redirect:/recipe/" + recipeId + "/ingredients");
     }
 
     /**
      * Handles POST requests for updating ingredients
      */
     @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
-        log.debug("Updating/Saving recipe with ingredient: " + ingredientCommand.getDescription());
-        ingredientCommand.setUom(unitOfMeasureService.findById(ingredientCommand.getUom().getId()).block());
-        IngredientCommand savedCommand = ingredientService.saveCommand(ingredientCommand).block();
-        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredients/";
+    public Mono<String> saveOrUpdate(@ModelAttribute("ingredient") @Valid Mono<IngredientCommand> ingredientCommand,
+                                     @PathVariable String recipeId, Model model) {
+
+        return ingredientCommand.map(ingredient -> ingredient)
+                .doOnNext(ingredient -> log.debug("Updating/Saving recipe with ingredient: " + ingredient.getDescription()))
+                .flatMap(ingredientService::saveCommand)
+                .thenReturn("redirect:/recipe/" + recipeId + "/ingredients/")
+                .onErrorResume(throwable -> {
+                    model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
+                    ((IngredientCommand) model.getAttribute("ingredient")).setRecipeId(recipeId);
+                    return Mono.just(INGREDIENT_FORM_PATH);
+                }).doOnError(thr -> log.debug("Error while saving ingredient"));
     }
 
 }

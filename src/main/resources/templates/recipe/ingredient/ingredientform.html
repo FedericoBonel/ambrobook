@@ -41,6 +41,12 @@
         <div class="col-lg-9">
             <form method="post" th:action="@{'/recipe/' + ${ingredient.getRecipeId()} + '/ingredient'}"
                   th:object="${ingredient}">
+
+                <!-- If there were errors -->
+                <div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+                    <p th:text="#{error.inputValidation}">Some inputs were incorrect, please fix them below</p>
+                </div>
+
                 <input th:field="*{id}" type="hidden"/>
                 <div class="content">
                     <div class="card">
@@ -49,24 +55,52 @@
                         </div>
                         <div class="card-body">
                             <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group">
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('description')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label th:text="#{ingredient.description}">Description:</label>
-                                    <input class="form-control" th:field="*{description}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid"
+                                           th:field="*{description}" type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors()}">
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('description')}"
+                                            th:text="${#strings.capitalize(err)}"></li>
+                                    </ul>
+                                    </span>
                                 </div>
-                                <div class="col-lg-3 form-group">
+
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('amount')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label th:text="#{ingredient.amount}">Quantity:</label>
-                                    <input class="form-control" th:field="*{amount}" type="text"/>
+                                    <input class="form-control" th:errorclass="is-invalid"
+                                           th:field="*{amount}" type="text"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors()}">
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('amount')}"
+                                            th:text="${#strings.capitalize(err)}"></li>
+                                    </ul>
+                                    </span>
                                 </div>
-                                <div class="col-lg-3 form-group">
+
+                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('uom.id')}
+                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
                                     <label th:text="#{ingredient.uom}">Unit of measure:</label>
-                                    <select class="form-control" th:field="*{uom.id}">
+                                    <select class="form-control" th:errorclass="is-invalid"
+                                            th:field="*{uom.id}">
                                         <option th:each="uomEach : ${uomList}"
                                                 th:selected="${uomEach.id == ingredient.uom.id}"
                                                 th:text="${uomEach.unit}"
                                                 th:value="${uomEach.id}">Each
                                         </option>
                                     </select>
+                                    <span class="help-block" th:if="${#fields.hasErrors()}">
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('uom.id')}"
+                                            th:text="${#strings.capitalize(err)}"></li>
+                                    </ul>
+                                    </span>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>

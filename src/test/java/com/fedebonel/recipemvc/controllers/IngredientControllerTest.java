@@ -9,7 +9,9 @@ import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import com.fedebonel.recipemvc.services.IngredientService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import com.fedebonel.recipemvc.services.UnitOfMeasureService;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Disabled
 class IngredientControllerTest {
 
     @Mock

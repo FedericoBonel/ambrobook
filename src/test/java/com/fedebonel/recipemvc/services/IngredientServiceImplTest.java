@@ -1,12 +1,14 @@
 package com.fedebonel.recipemvc.services;
 
 import com.fedebonel.recipemvc.commands.IngredientCommand;
+import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
 import com.fedebonel.recipemvc.converters.IngredientCommandToIngredient;
 import com.fedebonel.recipemvc.converters.IngredientToIngredientCommand;
 import com.fedebonel.recipemvc.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import com.fedebonel.recipemvc.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
+import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
 import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
@@ -74,9 +76,13 @@ class IngredientServiceImplTest {
         ingredientCommand.setRecipeId("2L");
         Recipe recipe = new Recipe();
         recipe.addIngredient(converter.convert(ingredientCommand));
+        UnitOfMeasureCommand uom = new UnitOfMeasureCommand();
+        uom.setId("3L");
+        ingredientCommand.setUom(uom);
 
         when(recipeRepository.findById(anyString())).thenReturn(recipeMono);
         when(recipeRepository.save(any())).thenReturn(Mono.just(recipe));
+        when(unitOfMeasureRepository.findById(anyString())).thenReturn(Mono.just(new UnitOfMeasure()));
 
         IngredientCommand savedIngredient = ingredientService.saveCommand(ingredientCommand).block();
 

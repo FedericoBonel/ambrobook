@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -37,7 +38,7 @@ public class Recipe {
     }
 
     public void removeIngredient(Ingredient ingredient) {
-        ingredients.remove(ingredient);
+        ingredients.removeIf(ingredientToDelete -> ingredientToDelete.getId().equals(ingredient.getId()));
     }
 
     public void setNote(Notes note) {
