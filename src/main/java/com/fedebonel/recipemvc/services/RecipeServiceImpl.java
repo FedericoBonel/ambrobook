@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.services;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.converters.RecipeCommandToRecipe;
 import com.fedebonel.recipemvc.converters.RecipeToRecipeCommand;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -63,12 +64,13 @@ public class RecipeServiceImpl implements RecipeService {
 
         Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
 
-        // Make sure the image is being persisted (Command does not contain the image)
-        if (detachedRecipe.getId() != null) {
-            detachedRecipe.setImage(recipeRepository.findById(detachedRecipe.getId()).share().block().getImage());
-        }
-
-        // Save it in the database (if exists it will update it where necessary)
-        return recipeRepository.save(detachedRecipe).map(recipeToRecipeCommand::convert);
+        return recipeRepository.findById(recipeCommand.getId())
+                .defaultIfEmpty(detachedRecipe)
+                .map(recipe -> {
+                    detachedRecipe.setImage(recipe.getImage());
+                    return detachedRecipe;
+                })
+                .flatMap(recipeRepository::save)
+                .mapNotNull(recipeToRecipeCommand::convert);
     }
 }

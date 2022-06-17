@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
@@ -22,18 +23,8 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
-    private WebDataBinder webDataBinder;
-
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
-    }
-
-    /**
-     * Gets the data binder to validate binding and or anything related to it
-     */
-    @InitBinder
-    public void initDataBinder(WebDataBinder webDataBinder) {
-        this.webDataBinder = webDataBinder;
     }
 
     /**
@@ -59,7 +50,7 @@ public class RecipeController {
      */
     @GetMapping({"{id}/update"})
     public String updateRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id).share().block());
+        model.addAttribute("recipe", recipeService.findCommandById(id));
         return RECIPE_FORM_PATH;
     }
 
@@ -67,28 +58,20 @@ public class RecipeController {
      * Handles POST methods to update or save a recipe
      */
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute("recipe") RecipeCommand recipeCommand) {
-
-        // Validate every constrain
-        webDataBinder.validate();
-        BindingResult result = webDataBinder.getBindingResult();
-
-        if (result.hasErrors()) {
-            result.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
-            return RECIPE_FORM_PATH;
-        }
-
-        RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand).share().block();
-        return "redirect:/recipe/" + savedCommand.getId() + "/show";
+    public Mono<String> saveOrUpdate(@Valid @ModelAttribute("recipe") Mono<RecipeCommand> recipeCommand) {
+        return recipeCommand.map(recipe -> recipe)
+                .flatMap(recipeService::saveRecipeCommand)
+                .map(savedRecipe -> "redirect:/recipe/" + savedRecipe.getId() + "/show")
+                .onErrorResume(throwable -> Mono.just(RECIPE_FORM_PATH))
+                .doOnError(throwable -> log.debug("Error while saving recipe"));
     }
 
     /**
      * Handles GET methods to delete recipes
      */
     @GetMapping({"{id}/delete"})
-    public String deleteById(@PathVariable String id) {
+    public Mono<String> deleteById(@PathVariable String id) {
         log.debug("Deleted recipe: " + id);
-        recipeService.deleteById(id).share().block();
-        return "redirect:/";
+        return recipeService.deleteById(id).thenReturn("redirect:/");
     }
 }

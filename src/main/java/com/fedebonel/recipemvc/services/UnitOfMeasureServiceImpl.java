@@ -25,11 +25,11 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 
     @Override
     public Flux<UnitOfMeasureCommand> listAllUOM() {
-        return unitOfMeasureRepository.findAll().map(converter::convert);
+        return unitOfMeasureRepository.findAll().mapNotNull(converter::convert);
     }
 
     @Override
     public Mono<UnitOfMeasureCommand> findById(String id) {
-        return unitOfMeasureRepository.findById(id).map(converter::convert);
+        return unitOfMeasureRepository.findById(id).mapNotNull(converter::convert);
     }
 }
