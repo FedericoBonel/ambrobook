@@ -1,20 +1,21 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.springframework.web.bind.annotation.RequestPart;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Controller
@@ -34,7 +35,7 @@ public class ImageController {
     @GetMapping("/recipe/{recipeId}/image")
     public String showUploadImageForm(@PathVariable String recipeId, Model model) {
         log.debug("Showing image form for recipe: " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).share().block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return "recipe/imageform";
     }
 
@@ -42,35 +43,25 @@ public class ImageController {
      * Handles POST requests to upload new recipe images
      */
     @PostMapping("/recipe/{recipeId}/image")
-    public String uploadImage(@PathVariable String recipeId, @RequestParam("imagefile") MultipartFile image) {
+    public Mono<String> uploadImage(@PathVariable String recipeId,
+                                    @RequestPart("imagefile") Mono<FilePart> image) {
+
         log.debug("Uploading an image for recipe: " + recipeId);
-        imageService.saveRecipeImage(recipeId, image).share().block();
-        return "redirect:/recipe/" + recipeId + "/show";
+
+        return image.map(imageToSave -> imageToSave)
+                .flatMap(imageToSave -> imageService.saveRecipeImage(recipeId, imageToSave))
+                .thenReturn("redirect:/recipe/" + recipeId + "/show");
     }
 
-    // TODO refactor this
-//    /**
-//     * Handles GET requests to render the recipe image
-//     */
-//    @GetMapping("/recipe/{recipeId}/image/render")
-//    public void renderRecipeImage(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
-//        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
-//
-//        byte[] finalImage = {};
-//
-//        if (recipeCommand.getImage() != null) {
-//            // Transform the Byte array to a byte array
-//            finalImage = new byte[recipeCommand.getImage().length];
-//            int currByte = 0;
-//            for (Byte imageByte : recipeCommand.getImage()) {
-//                finalImage[currByte++] = imageByte;
-//            }
-//        }
-//
-//        response.setContentType("image/jpeg");
-//
-//        // Return it through the output stream of the response
-//        InputStream is = new ByteArrayInputStream(finalImage);
-//        IOUtils.copy(is, response.getOutputStream());
-//    }
+    /**
+     * Handles GET requests to render the recipe image
+     */
+    @GetMapping(value = "/recipe/{recipeId}/image/render", produces = MediaType.IMAGE_JPEG_VALUE)
+    public Mono<Void> renderRecipeImage(@PathVariable String recipeId, ServerHttpResponse response) {
+
+        return recipeService.findById(recipeId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Recipe not found in database!")))
+                .map(recipe -> response.bufferFactory().wrap(ArrayUtils.toPrimitive(recipe.getImage())))
+                .flatMap(image -> response.writeWith(Flux.just(image)));
+    }
 }

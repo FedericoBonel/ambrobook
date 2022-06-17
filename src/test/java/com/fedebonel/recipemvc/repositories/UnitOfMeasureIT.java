@@ -2,7 +2,6 @@ package com.fedebonel.recipemvc.repositories;
 
 import com.fedebonel.recipemvc.datainitializer.DataInitializer;
 import com.fedebonel.recipemvc.model.UnitOfMeasure;
-import com.fedebonel.recipemvc.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

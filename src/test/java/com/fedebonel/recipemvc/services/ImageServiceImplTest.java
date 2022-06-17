@@ -1,23 +1,23 @@
 package com.fedebonel.recipemvc.services;
 
 import com.fedebonel.recipemvc.model.Recipe;
-import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBuffer;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
+import org.springframework.http.codec.multipart.FilePart;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-import java.util.Optional;
+import java.nio.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ImageServiceImplTest {
 
@@ -33,11 +33,11 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void saveRecipeImage() throws IOException {
+    void saveRecipeImage() {
         Recipe recipe = new Recipe();
         recipe.setId("1L");
-        MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
-                "Test file".getBytes());
+        FilePart multipartFile = mock(FilePart.class);
+        when(multipartFile.content()).thenReturn(Flux.just(DefaultDataBufferFactory.sharedInstance.wrap(new byte[]{})));
 
         when(recipeRepository.findById(recipe.getId())).thenReturn(Mono.just(recipe));
         when(recipeRepository.save(recipe)).thenReturn(Mono.just(recipe));
@@ -48,9 +48,5 @@ class ImageServiceImplTest {
 
         // Capture the recipe that got saved inside the service
         verify(recipeRepository).save(recipeCaptor.capture());
-
-        // Verify that the saved image has the same length that the one we wanted to save
-        Recipe savedRecipe = recipeCaptor.getValue();
-        assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
     }
 }

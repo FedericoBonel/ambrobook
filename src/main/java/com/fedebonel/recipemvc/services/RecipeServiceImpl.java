@@ -3,12 +3,10 @@ package com.fedebonel.recipemvc.services;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.converters.RecipeCommandToRecipe;
 import com.fedebonel.recipemvc.converters.RecipeToRecipeCommand;
-import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
