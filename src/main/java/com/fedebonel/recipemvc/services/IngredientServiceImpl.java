@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -79,20 +77,13 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Mono<Void> deleteById(String recipeId, String ingredientId) {
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId).share().blockOptional();
-        // Check that the recipe is valid
-        if (recipeOptional.isEmpty()) {
-            log.debug("Recipe " + recipeId + " for ingredient " + ingredientId + " not found while trying to delete ingredient");
-            throw new NotFoundException("Recipe with id = " + recipeId + " not found");
-        }
+    public Mono<Recipe> deleteById(String recipeId, String ingredientId) {
 
-        // Get the ingredient, remove it, and save the recipe again
-        Recipe recipe = recipeOptional.get();
-        recipe.getIngredients().removeIf(ingredient -> ingredient.getId().equals(ingredientId));
-
-        recipeRepository.save(recipe).share().block();
-
-        return Mono.empty();
+        return recipeRepository.findById(recipeId)
+                .switchIfEmpty(Mono.error(new NotFoundException()))
+                .flatMap(recipe -> {
+                    recipe.getIngredients().removeIf(ingredient -> ingredient.getId().equals(ingredientId));
+                    return recipeRepository.save(recipe);
+                });
     }
 }

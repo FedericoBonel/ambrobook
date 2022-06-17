@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.services;
 
 import com.fedebonel.recipemvc.commands.IngredientCommand;
+import com.fedebonel.recipemvc.model.Recipe;
 import reactor.core.publisher.Mono;
 
 public interface IngredientService {
@@ -8,5 +9,5 @@ public interface IngredientService {
 
     Mono<IngredientCommand> saveCommand(IngredientCommand ingredientCommand);
 
-    Mono<Void> deleteById(String recipeId, String ingredientId);
+    Mono<Recipe> deleteById(String recipeId, String ingredientId);
 }
