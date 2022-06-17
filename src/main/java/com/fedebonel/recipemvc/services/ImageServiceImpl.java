@@ -20,6 +20,9 @@ public class ImageServiceImpl implements ImageService {
         this.recipeRepository = recipeRepository;
     }
 
+    /**
+     * Assigns the image to the recipe and persists it in database
+     */
     @Override
     public Mono<Recipe> saveRecipeImage(String recipeId, FilePart image) {
         log.debug("Saving image for recipe: " + recipeId);

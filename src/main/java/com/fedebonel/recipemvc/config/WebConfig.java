@@ -11,9 +11,15 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 
+/**
+ * Routes RestAPI requests
+ */
 @Configuration
 public class WebConfig {
 
+    /**
+     * Routes requests to provide all recipes as JSON
+     */
     @Bean
     public RouterFunction<?> routeRecipes(RecipeService recipeService) {
         return RouterFunctions.route(GET("/api/recipes"),
