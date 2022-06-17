@@ -21,20 +21,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #8A624A">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a aria-current="page" class="nav-link active" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/recipe/new">📋 New Recipe</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+
+<nav th:replace="fragments/navbar :: navbar()"></nav>
 
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row justify-content-center">
@@ -49,13 +37,11 @@
                             <table class="table table-hover">
                                 <thead class="table-header">
                                 <tr>
-                                    <th>ID</th>
                                     <th th:text="#{ingredient.uom}">Unit of Measure</th>
                                     <th th:text="#{ingredient.amount}">Amount</th>
                                 </tr>
                                 </thead>
                                 <tr>
-                                    <td th:text="${ingredient.id}"></td>
                                     <td th:text="${ingredient.uom.unit}"></td>
                                     <td th:text="${ingredient.amount}"></td>
                                 </tr>
