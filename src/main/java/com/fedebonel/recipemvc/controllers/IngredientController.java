@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -31,6 +32,11 @@ public class IngredientController {
         this.recipeService = recipeService;
         this.ingredientService = ingredientService;
         this.unitOfMeasureService = unitOfMeasureService;
+    }
+
+    @ModelAttribute("uomList")
+    public Flux<UnitOfMeasureCommand> populateUnitOfMeasures() {
+        return unitOfMeasureService.listAllUOM();
     }
 
     /**
@@ -70,7 +76,6 @@ public class IngredientController {
                     ingredientCommand.setUom(new UnitOfMeasureCommand());
 
                     model.addAttribute("ingredient", ingredientCommand);
-                    model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
 
                     return recipe;
                 }).thenReturn(INGREDIENT_FORM_PATH);
@@ -84,7 +89,6 @@ public class IngredientController {
                                          Model model) {
         log.debug("Getting update form for ingredient with id: " + ingredientId);
         model.addAttribute("ingredient", ingredientService.findCommandById(recipeId, ingredientId));
-        model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
         return INGREDIENT_FORM_PATH;
     }
 
@@ -110,7 +114,6 @@ public class IngredientController {
                 .flatMap(ingredientService::saveCommand)
                 .thenReturn("redirect:/recipe/" + recipeId + "/ingredients/")
                 .onErrorResume(throwable -> {
-                    model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
                     ((IngredientCommand) model.getAttribute("ingredient")).setRecipeId(recipeId);
                     return Mono.just(INGREDIENT_FORM_PATH);
                 }).doOnError(thr -> log.debug("Error while saving ingredient"));
