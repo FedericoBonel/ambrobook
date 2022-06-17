@@ -36,13 +36,13 @@ class ImageServiceImplTest {
     void saveRecipeImage() {
         Recipe recipe = new Recipe();
         recipe.setId("1L");
-        FilePart multipartFile = mock(FilePart.class);
-        when(multipartFile.content()).thenReturn(Flux.just(DefaultDataBufferFactory.sharedInstance.wrap(new byte[]{})));
+        FilePart filePart = mock(FilePart.class);
+        when(filePart.content()).thenReturn(Flux.just(DefaultDataBufferFactory.sharedInstance.wrap(new byte[]{})));
 
         when(recipeRepository.findById(recipe.getId())).thenReturn(Mono.just(recipe));
         when(recipeRepository.save(recipe)).thenReturn(Mono.just(recipe));
 
-        imageService.saveRecipeImage(recipe.getId(), multipartFile).block();
+        imageService.saveRecipeImage(recipe.getId(), filePart).block();
 
         ArgumentCaptor<Recipe> recipeCaptor = ArgumentCaptor.forClass(Recipe.class);
 
