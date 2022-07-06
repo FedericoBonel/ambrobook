@@ -60,7 +60,7 @@ public class Recipe {
 
     @Override
     public String toString() {
-        return "Recipe{"+
+        return "Recipe{" +
                 ", description='" + description + '\'' +
                 ", prepTime=" + prepTime +
                 ", cookTime=" + cookTime +

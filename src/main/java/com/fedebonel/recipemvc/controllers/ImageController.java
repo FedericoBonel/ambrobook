@@ -1,7 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.commands.RecipeCommand;
-import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +34,7 @@ public class ImageController {
      * Handles GET requests to show the image form to upload new recipe images
      */
     @GetMapping
-    public String showUploadImageForm(@PathVariable Long recipeId, Model model){
+    public String showUploadImageForm(@PathVariable Long recipeId, Model model) {
         log.debug("Showing image form for recipe: " + recipeId);
         model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         return RECIPE_IMAGEFORM_PATH;
@@ -45,7 +44,7 @@ public class ImageController {
      * Handles POST requests to upload new recipe images
      */
     @PostMapping
-    public String uploadImage(@PathVariable Long recipeId, @RequestParam("imagefile") MultipartFile image){
+    public String uploadImage(@PathVariable Long recipeId, @RequestParam("imagefile") MultipartFile image) {
         log.debug("Uploading an image for recipe: " + recipeId);
         imageService.saveRecipeImage(recipeId, image);
         return "redirect:/recipe/" + recipeId + "/show";

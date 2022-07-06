@@ -23,7 +23,7 @@ public class RecipeCommand {
     private Long id;
 
     @NotBlank
-    @Size(min=5, max=200)
+    @Size(min = 5, max = 200)
     private String description;
 
     @Min(0)

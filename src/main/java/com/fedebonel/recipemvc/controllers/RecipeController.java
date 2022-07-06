@@ -1,6 +1,5 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.CategoryCommand;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.CategoryService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Controller

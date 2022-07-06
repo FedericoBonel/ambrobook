@@ -21,12 +21,12 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark"  style="background-color: #8A624A">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #8A624A">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a aria-current="page" class="nav-link active" href="/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/recipe/new">📋 New Recipe</a>
@@ -46,12 +46,13 @@
                 <div class="card-body">
                     <div class="row" style="margin-top: 10px">
                         <div class="col-lg-9 form-group">
-                            <form method="post" enctype="multipart/form-data"
+                            <form enctype="multipart/form-data" method="post"
                                   th:action="@{'/recipe/' + ${recipe.id} + '/image'}">
                                 <label class="form-label" th:text="#{selectFile}">Select file</label>
-                                <input id="imagefile" name="imagefile" type="file" class="form-control"/>
-                                <button type="submit" class="btn btn-primary" style="margin-top: 10px"
-                                        th:text="#{submit}">Submit</button>
+                                <input class="form-control" id="imagefile" name="imagefile" type="file"/>
+                                <button class="btn btn-primary" style="margin-top: 10px" th:text="#{submit}"
+                                        type="submit">Submit
+                                </button>
                             </form>
                         </div>
                     </div>
