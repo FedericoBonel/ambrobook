@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +18,11 @@ import java.io.InputStream;
 
 @Slf4j
 @Controller
+@RequestMapping(ImageController.RECIPE_IMAGE_URI)
 public class ImageController {
 
+    public static final String RECIPE_IMAGE_URI = "/recipe/{recipeId}/image";
+    public static final String RECIPE_IMAGEFORM_PATH = "recipe/imageform";
     private final RecipeService recipeService;
     private final ImageService imageService;
 
@@ -34,17 +34,17 @@ public class ImageController {
     /**
      * Handles GET requests to show the image form to upload new recipe images
      */
-    @GetMapping("/recipe/{recipeId}/image")
+    @GetMapping
     public String showUploadImageForm(@PathVariable Long recipeId, Model model){
         log.debug("Showing image form for recipe: " + recipeId);
         model.addAttribute("recipe", recipeService.findCommandById(recipeId));
-        return "recipe/imageform";
+        return RECIPE_IMAGEFORM_PATH;
     }
 
     /**
      * Handles POST requests to upload new recipe images
      */
-    @PostMapping("/recipe/{recipeId}/image")
+    @PostMapping
     public String uploadImage(@PathVariable Long recipeId, @RequestParam("imagefile") MultipartFile image){
         log.debug("Uploading an image for recipe: " + recipeId);
         imageService.saveRecipeImage(recipeId, image);
@@ -54,7 +54,7 @@ public class ImageController {
     /**
      * Handles GET requests to render the recipe image
      */
-    @GetMapping("/recipe/{recipeId}/image/render")
+    @GetMapping("/render")
     public void renderRecipeImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
         RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
 

@@ -17,9 +17,10 @@ import javax.validation.Valid;
 
 @Slf4j
 @Controller
-@RequestMapping("/recipe")
+@RequestMapping(RecipeController.RECIPE_URI)
 public class RecipeController {
 
+    public static final String RECIPE_URI = "/recipe";
     public final static String RECIPE_SHOW_PATH = "recipe/show";
     public final static String RECIPE_FORM_PATH = "recipe/recipeform";
 
@@ -32,7 +33,7 @@ public class RecipeController {
     /**
      * Handles GET methods to view details of recipe
      */
-    @GetMapping({"{id}/show"})
+    @GetMapping({"/{id}/show"})
     public String showById(@PathVariable Long id, Model model) {
         Recipe foundRecipe = recipeService.findById(id);
         model.addAttribute("recipe", foundRecipe);
@@ -51,7 +52,7 @@ public class RecipeController {
     /**
      * Handles GET methods to access the recipe form to update an existing recipe
      */
-    @GetMapping({"{id}/update"})
+    @GetMapping({"/{id}/update"})
     public String updateRecipe(@PathVariable Long id, Model model) {
         model.addAttribute("recipe", recipeService.findCommandById(id));
         return RECIPE_FORM_PATH;

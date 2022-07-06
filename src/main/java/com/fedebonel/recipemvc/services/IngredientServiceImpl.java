@@ -41,10 +41,11 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientCommand saveCommand(IngredientCommand ingredientCommand) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
         if (recipeOptional.isEmpty()) return new IngredientCommand();
-
         Recipe recipe = recipeOptional.get();
+
         Optional<Ingredient> foundIngredient = recipe.getIngredients()
-                .stream().filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
                 .findFirst();
         // We need to do this because the ingredient could exist with its unique id
         // If it exists we need to update its stored instance (since it will share the same id)
@@ -58,7 +59,6 @@ public class IngredientServiceImpl implements IngredientService {
         } else {
             // Create ingredient
             Ingredient ingredient = converterToIngredient.convert(ingredientCommand);
-            ingredient.setRecipe(recipe);
             recipe.addIngredient(ingredient);
         }
 
@@ -67,7 +67,8 @@ public class IngredientServiceImpl implements IngredientService {
 
         // Look for the saved ingredient
         Optional<Ingredient> savedIngredient = savedRecipe.getIngredients()
-                .stream().filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
                 .findFirst();
 
         // If it doesn't have an id assigned yet
