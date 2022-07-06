@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -50,4 +51,11 @@ public class RecipeCommand {
     private NotesCommand notes;
     private List<CategoryCommand> categories = new ArrayList<>();
     private Byte[] image;
+
+    public List<Long> getCategoriesIds() {
+        return categories
+                .stream()
+                .map(CategoryCommand::getId)
+                .collect(Collectors.toList());
+    }
 }

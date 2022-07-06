@@ -1,19 +1,20 @@
 package com.fedebonel.recipemvc.controllers;
 
+import com.fedebonel.recipemvc.commands.CategoryCommand;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
-import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
+import com.fedebonel.recipemvc.services.CategoryService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -25,9 +26,11 @@ public class RecipeController {
     public final static String RECIPE_FORM_PATH = "recipe/recipeform";
 
     private final RecipeService recipeService;
+    private final CategoryService categoryService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, CategoryService categoryService) {
         this.recipeService = recipeService;
+        this.categoryService = categoryService;
     }
 
     /**
@@ -46,6 +49,8 @@ public class RecipeController {
     @GetMapping({"/new"})
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
+        model.addAttribute("allCategories", categoryService.findAllCommands());
+        model.addAttribute("selectedCategories", new ArrayList<>());
         return RECIPE_FORM_PATH;
     }
 
@@ -54,7 +59,10 @@ public class RecipeController {
      */
     @GetMapping({"/{id}/update"})
     public String updateRecipe(@PathVariable Long id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(id));
+        RecipeCommand recipe = recipeService.findCommandById(id);
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("allCategories", categoryService.findAllCommands());
+        model.addAttribute("selectedCategories", recipe.getCategoriesIds());
         return RECIPE_FORM_PATH;
     }
 
@@ -62,11 +70,21 @@ public class RecipeController {
      * Handles POST methods to update or save a recipe
      */
     @PostMapping
-    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand, BindingResult result) {
+    public String saveOrUpdate(@RequestParam(value = "checkedCategories", required = false) List<Long> checkedCategories,
+                               @Valid @ModelAttribute("recipe") RecipeCommand recipeCommand,
+                               BindingResult result,
+                               Model model) {
 
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
+            model.addAttribute("allCategories", categoryService.findAllCommands());
+            model.addAttribute("selectedCategories", checkedCategories);
             return RECIPE_FORM_PATH;
+        }
+
+        if (checkedCategories != null) {
+            for (Long categoryId : checkedCategories) {
+                recipeCommand.getCategories().add(categoryService.findCommandById(categoryId));
+            }
         }
 
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand);

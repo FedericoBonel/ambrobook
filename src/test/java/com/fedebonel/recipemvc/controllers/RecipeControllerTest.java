@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.controllers;
 import com.fedebonel.recipemvc.commands.RecipeCommand;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
+import com.fedebonel.recipemvc.services.CategoryService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RecipeControllerTest {
 
     @Mock
+    CategoryService categoryService;
+
+    @Mock
     RecipeService recipeService;
 
     RecipeController recipeController;
@@ -30,7 +34,7 @@ class RecipeControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        recipeController = new RecipeController(recipeService);
+        recipeController = new RecipeController(recipeService, categoryService);
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(recipeController)

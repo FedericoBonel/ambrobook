@@ -42,10 +42,13 @@
         <div class="col-lg-9">
             <!-- This makes sure to make a post request against host:8080/recipe with the object recipe received from
             the controller -->
-            <form method="post" th:action="@{/recipe/}" th:object="${recipe}">
+            <form method="post"
+                  th:action="@{/recipe/}"
+                  th:object="${recipe}">
 
                 <!-- If there were errors -->
-                <div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+                <div class="alert alert-danger"
+                     th:if="${#fields.hasErrors()}">
                     <p th:text="#{error.inputValidation}">Some inputs were incorrect, please fix them below</p>
                 </div>
 
@@ -53,17 +56,27 @@
                 <div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="card-title" th:text="#{title.recipeInformation}">Recipe information</h1>
+                            <h1 class="card-title"
+                                th:text="#{title.recipeInformation}">
+                                Recipe information
+                            </h1>
                         </div>
                         <div class="card-body">
                             <!-- Description -->
                             <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('description')}
+                                <div class="col-lg-3 form-group"
+                                     th:class="${#fields.hasErrors('description')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
-                                    <label th:text="#{recipe.description}">Recipe name:</label>
-                                    <input class="form-control" th:errorclass="is-invalid"
-                                           th:field="*{description}" type="text"/>
-                                    <span class="help-block" th:if="${#fields.hasErrors()}">
+                                    <label
+                                            th:text="#{recipe.description}">
+                                        Recipe name:
+                                    </label>
+                                    <input class="form-control"
+                                           th:errorclass="is-invalid"
+                                           th:field="*{description}"
+                                           type="text"/>
+                                    <span class="help-block"
+                                          th:if="${#fields.hasErrors()}">
                                         <ul>
                                             <li th:each="err : ${#fields.errors('description')}"
                                                 th:text="${#strings.capitalize(err)}"></li>
@@ -73,25 +86,23 @@
                             </div>
                             <!-- categories radio buttons -->
                             <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group">
-                                    <label th:text="#{recipe.categories}">Categories:</label>
+                                <div class="form-group col-lg-3">
+                                    <label th:text="#{recipe.categories}">
+                                        Categories:
+                                    </label>
                                 </div>
-                                <div class="col-lg-9 form-group">
-                                    <div class="radio">
-                                        <label>
-                                            <input type="checkbox" value=""/>
-                                            Cat 1
+                                <div class="form-check col-lg-9 m-3 m-lg-0">
+                                    <div class="radio" th:each="category : ${allCategories}">
+                                        <label class="form-check-label"
+                                               th:text="${category.name}">
+                                            Category 1
                                         </label>
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               name="checkedCategories"
+                                               th:value="${category.id}"
+                                               th:checked="${selectedCategories.contains(category.id)}"/>
                                     </div>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="checkbox" value=""/>
-                                            Cat 2
-                                        </label>
-                                    </div>
-                                </div>
-                                <div th:each="catEach, idx : ${recipe.categories}">
-                                    <input th:field="*{categories[__${idx.index}__].id}" type="hidden"/>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 10px">

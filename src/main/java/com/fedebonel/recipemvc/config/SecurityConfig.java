@@ -28,8 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Authorization configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/", "/recipe/**/show").permitAll()
                 .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
