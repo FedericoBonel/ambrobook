@@ -1,10 +1,10 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.IngredientCommand;
-import com.fedebonel.recipemvc.converters.IngredientCommandToIngredient;
-import com.fedebonel.recipemvc.converters.IngredientToIngredientCommand;
-import com.fedebonel.recipemvc.converters.UnitOfMeasureCommandToUnitOfMeasure;
-import com.fedebonel.recipemvc.converters.UnitOfMeasureToUnitOfMeasureCommand;
+import com.fedebonel.recipemvc.datatransferobjects.IngredientDto;
+import com.fedebonel.recipemvc.mappers.IngredientDtoToIngredient;
+import com.fedebonel.recipemvc.mappers.IngredientToIngredientDto;
+import com.fedebonel.recipemvc.mappers.UnitOfMeasureDtoToUnitOfMeasure;
+import com.fedebonel.recipemvc.mappers.UnitOfMeasureToUnitOfMeasureDto;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
@@ -26,18 +26,18 @@ class IngredientServiceImplTest {
     @Mock
     UnitOfMeasureRepository unitOfMeasureRepository;
 
-    IngredientCommandToIngredient converter;
+    IngredientDtoToIngredient converter;
     IngredientServiceImpl ingredientService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        converter = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
+        converter = new IngredientDtoToIngredient(new UnitOfMeasureDtoToUnitOfMeasure());
         ingredientService = new IngredientServiceImpl(recipeRepository,
-                new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                new IngredientToIngredientDto(new UnitOfMeasureToUnitOfMeasureDto()),
                 unitOfMeasureRepository,
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()));
+                new IngredientDtoToIngredient(new UnitOfMeasureDtoToUnitOfMeasure()));
     }
 
     @Test
@@ -56,7 +56,7 @@ class IngredientServiceImplTest {
         recipe.addIngredient(ingredient3);
 
         when(recipeRepository.findById(recipe.getId())).thenReturn(Optional.of(recipe));
-        IngredientCommand command1 = ingredientService.findCommandById(recipe.getId(), ingredient1.getId());
+        IngredientDto command1 = ingredientService.findCommandById(recipe.getId(), ingredient1.getId());
 
         assertEquals(ingredient1.getId(), command1.getId());
         assertEquals(recipe.getId(), command1.getRecipeId());
@@ -66,18 +66,18 @@ class IngredientServiceImplTest {
     @Test
     void updateCommand() {
         Optional<Recipe> recipeOptional = Optional.of(new Recipe());
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(1L);
-        ingredientCommand.setRecipeId(2L);
+        IngredientDto ingredientDto = new IngredientDto();
+        ingredientDto.setId(1L);
+        ingredientDto.setRecipeId(2L);
         Recipe recipe = new Recipe();
-        recipe.addIngredient(converter.convert(ingredientCommand));
+        recipe.addIngredient(converter.convert(ingredientDto));
 
         when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
         when(recipeRepository.save(any())).thenReturn(recipe);
 
-        IngredientCommand savedIngredient = ingredientService.saveCommand(ingredientCommand);
+        IngredientDto savedIngredient = ingredientService.saveCommand(ingredientDto);
 
-        assertEquals(ingredientCommand.getId(), savedIngredient.getId());
+        assertEquals(ingredientDto.getId(), savedIngredient.getId());
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any());
     }

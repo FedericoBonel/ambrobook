@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.CategoryService;
@@ -86,7 +86,7 @@ class RecipeControllerTest {
 
     @Test
     void postRecipeForm() throws Exception {
-        RecipeCommand command = new RecipeCommand();
+        RecipeDto command = new RecipeDto();
         command.setId(1L);
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
@@ -102,7 +102,7 @@ class RecipeControllerTest {
 
     @Test
     void getUpdateView() throws Exception {
-        RecipeCommand command = new RecipeCommand();
+        RecipeDto command = new RecipeDto();
         command.setId(1L);
         when(recipeService.findCommandById(command.getId())).thenReturn(command);
 

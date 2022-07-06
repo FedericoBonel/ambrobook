@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.converters.*;
+import com.fedebonel.recipemvc.mappers.*;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
@@ -29,14 +29,14 @@ class RecipeServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         recipeService = new RecipeServiceImpl(recipeRepository,
-                new RecipeCommandToRecipe(
-                        new CategoryCommandToCategory(),
-                        new NotesCommandToNotes(),
-                        new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure())),
-                new RecipeToRecipeCommand(
-                        new CategoryToCategoryCommand(),
-                        new NotesToNotesCommand(),
-                        new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand())));
+                new RecipeDtoToRecipe(
+                        new CategoryDtoToCategory(),
+                        new NotesDtoToNotes(),
+                        new IngredientDtoToIngredient(new UnitOfMeasureDtoToUnitOfMeasure())),
+                new RecipeToRecipeDto(
+                        new CategoryToCategoryDto(),
+                        new NotesToNotesDto(),
+                        new IngredientToIngredientDto(new UnitOfMeasureToUnitOfMeasureDto())));
     }
 
     @Test

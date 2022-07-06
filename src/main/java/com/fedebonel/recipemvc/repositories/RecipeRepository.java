@@ -4,6 +4,8 @@ import com.fedebonel.recipemvc.model.Recipe;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Recipe repository
  */

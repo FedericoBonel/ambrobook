@@ -1,7 +1,7 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
-import com.fedebonel.recipemvc.converters.UnitOfMeasureToUnitOfMeasureCommand;
+import com.fedebonel.recipemvc.datatransferobjects.UnitOfMeasureDto;
+import com.fedebonel.recipemvc.mappers.UnitOfMeasureToUnitOfMeasureDto;
 import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 class UnitOfMeasureServiceImplTest {
 
-    UnitOfMeasureToUnitOfMeasureCommand converterToCommand;
+    UnitOfMeasureToUnitOfMeasureDto converterToCommand;
     UnitOfMeasureService service;
 
     @Mock
@@ -26,7 +26,7 @@ class UnitOfMeasureServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        converterToCommand = new UnitOfMeasureToUnitOfMeasureCommand();
+        converterToCommand = new UnitOfMeasureToUnitOfMeasureDto();
         service = new UnitOfMeasureServiceImpl(repository, converterToCommand);
     }
 
@@ -41,7 +41,7 @@ class UnitOfMeasureServiceImplTest {
         uoms.add(uom2);
 
         when(repository.findAll()).thenReturn(uoms);
-        Set<UnitOfMeasureCommand> uomsFound = service.listAllUOM();
+        Set<UnitOfMeasureDto> uomsFound = service.listAllUOM();
 
         assertEquals(uoms.size(), uomsFound.size());
         verify(repository, times(1)).findAll();

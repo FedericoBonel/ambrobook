@@ -1,8 +1,8 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
-import com.fedebonel.recipemvc.converters.RecipeCommandToRecipe;
-import com.fedebonel.recipemvc.converters.RecipeToRecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
+import com.fedebonel.recipemvc.mappers.RecipeDtoToRecipe;
+import com.fedebonel.recipemvc.mappers.RecipeToRecipeDto;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
@@ -21,15 +21,15 @@ import java.util.Set;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
-    private final RecipeCommandToRecipe recipeCommandToRecipe;
-    private final RecipeToRecipeCommand recipeToRecipeCommand;
+    private final RecipeDtoToRecipe recipeDtoToRecipe;
+    private final RecipeToRecipeDto recipeToRecipeDto;
 
     public RecipeServiceImpl(RecipeRepository recipeRepository,
-                             RecipeCommandToRecipe recipeCommandToRecipe,
-                             RecipeToRecipeCommand recipeToRecipeCommand) {
+                             RecipeDtoToRecipe recipeDtoToRecipe,
+                             RecipeToRecipeDto recipeToRecipeDto) {
         this.recipeRepository = recipeRepository;
-        this.recipeCommandToRecipe = recipeCommandToRecipe;
-        this.recipeToRecipeCommand = recipeToRecipeCommand;
+        this.recipeDtoToRecipe = recipeDtoToRecipe;
+        this.recipeToRecipeDto = recipeToRecipeDto;
     }
 
     @Override
@@ -63,16 +63,16 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public RecipeCommand findCommandById(Long id) {
+    public RecipeDto findCommandById(Long id) {
         log.debug("Finding command by id: " + id);
-        return recipeToRecipeCommand.convert(findById(id));
+        return recipeToRecipeDto.convert(findById(id));
     }
 
     @Override
     @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
-        log.debug("Saving recipe command with name: " + recipeCommand.getDescription());
-        Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
+    public RecipeDto saveRecipeCommand(RecipeDto recipeDto) {
+        log.debug("Saving recipe command with name: " + recipeDto.getDescription());
+        Recipe detachedRecipe = recipeDtoToRecipe.convert(recipeDto);
 
         if (detachedRecipe.getId() != null) {
             recipeRepository.findById(detachedRecipe.getId())
@@ -82,6 +82,6 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
-        return recipeToRecipeCommand.convert(savedRecipe);
+        return recipeToRecipeDto.convert(savedRecipe);
     }
 }

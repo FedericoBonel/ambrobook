@@ -1,20 +1,20 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.NotesCommand;
+import com.fedebonel.recipemvc.datatransferobjects.NotesDto;
 import com.fedebonel.recipemvc.model.Notes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NotesCommandToNotesTest {
+class NotesDtoToNotesTest {
     public static final Long ID_VALUE = 1L;
     public static final String RECIPE_NOTES = "Notes";
-    NotesCommandToNotes converter;
+    NotesDtoToNotes converter;
 
     @BeforeEach
     public void setUp() throws Exception {
-        converter = new NotesCommandToNotes();
+        converter = new NotesDtoToNotes();
 
     }
 
@@ -25,18 +25,18 @@ class NotesCommandToNotesTest {
 
     @Test
     public void testEmptyObject() {
-        assertNotNull(converter.convert(new NotesCommand()));
+        assertNotNull(converter.convert(new NotesDto()));
     }
 
     @Test
     public void convert() throws Exception {
         //given
-        NotesCommand notesCommand = new NotesCommand();
-        notesCommand.setId(ID_VALUE);
-        notesCommand.setRecipeNotes(RECIPE_NOTES);
+        NotesDto notesDto = new NotesDto();
+        notesDto.setId(ID_VALUE);
+        notesDto.setRecipeNotes(RECIPE_NOTES);
 
         //when
-        Notes notes = converter.convert(notesCommand);
+        Notes notes = converter.convert(notesDto);
 
         //then
         assertNotNull(notes);

@@ -1,8 +1,8 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
-import com.fedebonel.recipemvc.converters.RecipeCommandToRecipe;
-import com.fedebonel.recipemvc.converters.RecipeToRecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
+import com.fedebonel.recipemvc.mappers.RecipeDtoToRecipe;
+import com.fedebonel.recipemvc.mappers.RecipeToRecipeDto;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import org.junit.jupiter.api.Test;
@@ -28,10 +28,10 @@ public class RecipeServiceIT {
     RecipeRepository recipeRepository;
 
     @Autowired
-    RecipeCommandToRecipe recipeCommandToRecipe;
+    RecipeDtoToRecipe recipeDtoToRecipe;
 
     @Autowired
-    RecipeToRecipeCommand recipeToRecipeCommand;
+    RecipeToRecipeDto recipeToRecipeDto;
 
     @Transactional
     @Test
@@ -39,16 +39,16 @@ public class RecipeServiceIT {
         //given
         Iterable<Recipe> recipes = recipeRepository.findAll();
         Recipe testRecipe = recipes.iterator().next();
-        RecipeCommand testRecipeCommand = recipeToRecipeCommand.convert(testRecipe);
+        RecipeDto testRecipeDto = recipeToRecipeDto.convert(testRecipe);
 
         //when
-        testRecipeCommand.setDescription(NEW_DESCRIPTION);
-        RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(testRecipeCommand);
+        testRecipeDto.setDescription(NEW_DESCRIPTION);
+        RecipeDto savedRecipeDto = recipeService.saveRecipeCommand(testRecipeDto);
 
         //then
-        assertEquals(NEW_DESCRIPTION, savedRecipeCommand.getDescription());
-        assertEquals(testRecipe.getId(), savedRecipeCommand.getId());
-        assertEquals(testRecipe.getCategories().size(), savedRecipeCommand.getCategories().size());
-        assertEquals(testRecipe.getIngredients().size(), savedRecipeCommand.getIngredients().size());
+        assertEquals(NEW_DESCRIPTION, savedRecipeDto.getDescription());
+        assertEquals(testRecipe.getId(), savedRecipeDto.getId());
+        assertEquals(testRecipe.getCategories().size(), savedRecipeDto.getCategories().size());
+        assertEquals(testRecipe.getIngredients().size(), savedRecipeDto.getIngredients().size());
     }
 }

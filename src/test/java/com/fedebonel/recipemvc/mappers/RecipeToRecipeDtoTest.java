@@ -1,13 +1,13 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RecipeToRecipeCommandTest {
+class RecipeToRecipeDtoTest {
     public static final Long RECIPE_ID = 1L;
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
@@ -22,14 +22,14 @@ class RecipeToRecipeCommandTest {
     public static final Long INGRED_ID_1 = 3L;
     public static final Long INGRED_ID_2 = 4L;
     public static final Long NOTES_ID = 9L;
-    RecipeToRecipeCommand converter;
+    RecipeToRecipeDto converter;
 
     @BeforeEach
     public void setUp() throws Exception {
-        converter = new RecipeToRecipeCommand(
-                new CategoryToCategoryCommand(),
-                new NotesToNotesCommand(),
-                new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()));
+        converter = new RecipeToRecipeDto(
+                new CategoryToCategoryDto(),
+                new NotesToNotesDto(),
+                new IngredientToIngredientDto(new UnitOfMeasureToUnitOfMeasureDto()));
     }
 
     @Test
@@ -80,7 +80,7 @@ class RecipeToRecipeCommandTest {
         recipe.getIngredients().add(ingredient2);
 
         //when
-        RecipeCommand command = converter.convert(recipe);
+        RecipeDto command = converter.convert(recipe);
 
         //then
         assertNotNull(command);

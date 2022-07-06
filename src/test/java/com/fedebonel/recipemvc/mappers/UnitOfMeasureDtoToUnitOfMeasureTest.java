@@ -1,22 +1,22 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
+import com.fedebonel.recipemvc.datatransferobjects.UnitOfMeasureDto;
 import com.fedebonel.recipemvc.model.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UnitOfMeasureCommandToUnitOfMeasureTest {
+class UnitOfMeasureDtoToUnitOfMeasureTest {
 
     public static final String UNIT = "unit";
     public static final Long LONG_VALUE = 1L;
 
-    UnitOfMeasureCommandToUnitOfMeasure converter;
+    UnitOfMeasureDtoToUnitOfMeasure converter;
 
     @BeforeEach
     public void setUp() throws Exception {
-        converter = new UnitOfMeasureCommandToUnitOfMeasure();
+        converter = new UnitOfMeasureDtoToUnitOfMeasure();
 
     }
 
@@ -27,13 +27,13 @@ class UnitOfMeasureCommandToUnitOfMeasureTest {
 
     @Test
     public void testEmptyObject() {
-        assertNotNull(converter.convert(new UnitOfMeasureCommand()));
+        assertNotNull(converter.convert(new UnitOfMeasureDto()));
     }
 
     @Test
     public void convert() throws Exception {
         //given
-        UnitOfMeasureCommand command = new UnitOfMeasureCommand();
+        UnitOfMeasureDto command = new UnitOfMeasureDto();
         command.setId(LONG_VALUE);
         command.setUnit(UNIT);
 

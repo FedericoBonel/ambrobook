@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,15 +55,15 @@ public class ImageController {
      */
     @GetMapping("/render")
     public void renderRecipeImage(@PathVariable Long recipeId, HttpServletResponse response) throws IOException {
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+        RecipeDto recipeDto = recipeService.findCommandById(recipeId);
 
         byte[] finalImage = {};
 
-        if (recipeCommand.getImage() != null) {
+        if (recipeDto.getImage() != null) {
             // Transform the Byte array to a byte array
-            finalImage = new byte[recipeCommand.getImage().length];
+            finalImage = new byte[recipeDto.getImage().length];
             int currByte = 0;
-            for (Byte imageByte : recipeCommand.getImage()) {
+            for (Byte imageByte : recipeDto.getImage()) {
                 finalImage[currByte++] = imageByte;
             }
         }

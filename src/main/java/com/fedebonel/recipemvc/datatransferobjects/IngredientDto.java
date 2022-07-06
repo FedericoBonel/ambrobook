@@ -1,4 +1,4 @@
-package com.fedebonel.recipemvc.commands;
+package com.fedebonel.recipemvc.datatransferobjects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class IngredientCommand {
+public class IngredientDto {
     private Long id;
     private Long recipeId;
     private String description;
     private BigDecimal amount;
-    private UnitOfMeasureCommand uom;
+    private UnitOfMeasureDto uom;
 }

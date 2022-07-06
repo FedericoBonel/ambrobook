@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.CategoryService;
 import com.fedebonel.recipemvc.services.RecipeService;
@@ -46,7 +46,7 @@ public class RecipeController {
      */
     @GetMapping({"/new"})
     public String newRecipe(Model model) {
-        model.addAttribute("recipe", new RecipeCommand());
+        model.addAttribute("recipe", new RecipeDto());
         model.addAttribute("allCategories", categoryService.findAllCommands());
         model.addAttribute("selectedCategories", new ArrayList<>());
         return RECIPE_FORM_PATH;
@@ -57,7 +57,7 @@ public class RecipeController {
      */
     @GetMapping({"/{id}/update"})
     public String updateRecipe(@PathVariable Long id, Model model) {
-        RecipeCommand recipe = recipeService.findCommandById(id);
+        RecipeDto recipe = recipeService.findCommandById(id);
         model.addAttribute("recipe", recipe);
         model.addAttribute("allCategories", categoryService.findAllCommands());
         model.addAttribute("selectedCategories", recipe.getCategoriesIds());
@@ -69,23 +69,27 @@ public class RecipeController {
      */
     @PostMapping
     public String saveOrUpdate(@RequestParam(value = "checkedCategories", required = false) List<Long> checkedCategories,
-                               @Valid @ModelAttribute("recipe") RecipeCommand recipeCommand,
+                               @Valid @ModelAttribute("recipe") RecipeDto recipeDto,
                                BindingResult result,
                                Model model) {
 
         if (result.hasErrors()) {
             model.addAttribute("allCategories", categoryService.findAllCommands());
-            model.addAttribute("selectedCategories", checkedCategories);
+            if(checkedCategories != null ) {
+                model.addAttribute("selectedCategories", checkedCategories);
+            } else {
+                model.addAttribute("selectedCategories", new ArrayList<>());
+            }
             return RECIPE_FORM_PATH;
         }
 
         if (checkedCategories != null) {
             for (Long categoryId : checkedCategories) {
-                recipeCommand.getCategories().add(categoryService.findCommandById(categoryId));
+                recipeDto.getCategories().add(categoryService.findCommandById(categoryId));
             }
         }
 
-        RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand);
+        RecipeDto savedCommand = recipeService.saveRecipeCommand(recipeDto);
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 

@@ -1,4 +1,4 @@
-package com.fedebonel.recipemvc.commands;
+package com.fedebonel.recipemvc.datatransferobjects;
 
 import com.fedebonel.recipemvc.model.Difficulty;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RecipeCommand {
+public class RecipeDto {
     private Long id;
 
     @NotBlank
@@ -46,16 +46,16 @@ public class RecipeCommand {
     @NotBlank
     private String directions;
 
-    private Set<IngredientCommand> ingredients = new HashSet<>();
+    private Set<IngredientDto> ingredients = new HashSet<>();
     private Difficulty difficulty;
-    private NotesCommand notes;
-    private List<CategoryCommand> categories = new ArrayList<>();
+    private NotesDto notes;
+    private List<CategoryDto> categories = new ArrayList<>();
     private Byte[] image;
 
     public List<Long> getCategoriesIds() {
         return categories
                 .stream()
-                .map(CategoryCommand::getId)
+                .map(CategoryDto::getId)
                 .collect(Collectors.toList());
     }
 }

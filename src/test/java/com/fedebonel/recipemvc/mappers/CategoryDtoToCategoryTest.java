@@ -1,21 +1,21 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.CategoryCommand;
+import com.fedebonel.recipemvc.datatransferobjects.CategoryDto;
 import com.fedebonel.recipemvc.model.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CategoryCommandToCategoryTest {
+class CategoryDtoToCategoryTest {
 
     public static final Long ID_VALUE = 1L;
     public static final String NAME = "name";
-    CategoryCommandToCategory conveter;
+    CategoryDtoToCategory conveter;
 
     @BeforeEach
     public void setUp() {
-        conveter = new CategoryCommandToCategory();
+        conveter = new CategoryDtoToCategory();
     }
 
     @Test
@@ -25,18 +25,18 @@ class CategoryCommandToCategoryTest {
 
     @Test
     public void testEmptyObject() {
-        assertNotNull(conveter.convert(new CategoryCommand()));
+        assertNotNull(conveter.convert(new CategoryDto()));
     }
 
     @Test
     public void convert() throws Exception {
         //given
-        CategoryCommand categoryCommand = new CategoryCommand();
-        categoryCommand.setId(ID_VALUE);
-        categoryCommand.setName(NAME);
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setId(ID_VALUE);
+        categoryDto.setName(NAME);
 
         //when
-        Category category = conveter.convert(categoryCommand);
+        Category category = conveter.convert(categoryDto);
 
         //then
         assertEquals(ID_VALUE, category.getId());

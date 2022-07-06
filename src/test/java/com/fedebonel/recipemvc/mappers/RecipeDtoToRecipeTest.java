@@ -1,9 +1,9 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.CategoryCommand;
-import com.fedebonel.recipemvc.commands.IngredientCommand;
-import com.fedebonel.recipemvc.commands.NotesCommand;
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.CategoryDto;
+import com.fedebonel.recipemvc.datatransferobjects.IngredientDto;
+import com.fedebonel.recipemvc.datatransferobjects.NotesDto;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.model.Difficulty;
 import com.fedebonel.recipemvc.model.Recipe;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RecipeCommandToRecipeTest {
+class RecipeDtoToRecipeTest {
     public static final Long RECIPE_ID = 1L;
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
@@ -27,14 +27,14 @@ class RecipeCommandToRecipeTest {
     public static final Long INGRED_ID_2 = 4L;
     public static final Long NOTES_ID = 9L;
 
-    RecipeCommandToRecipe converter;
+    RecipeDtoToRecipe converter;
 
 
     @BeforeEach
     public void setUp() throws Exception {
-        converter = new RecipeCommandToRecipe(new CategoryCommandToCategory(),
-                new NotesCommandToNotes(),
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()));
+        converter = new RecipeDtoToRecipe(new CategoryDtoToCategory(),
+                new NotesDtoToNotes(),
+                new IngredientDtoToIngredient(new UnitOfMeasureDtoToUnitOfMeasure()));
     }
 
     @Test
@@ -44,48 +44,48 @@ class RecipeCommandToRecipeTest {
 
     @Test
     public void testEmptyObject() {
-        assertNotNull(converter.convert(new RecipeCommand()));
+        assertNotNull(converter.convert(new RecipeDto()));
     }
 
     @Test
     public void convert() throws Exception {
         //given
-        RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(RECIPE_ID);
-        recipeCommand.setCookTime(COOK_TIME);
-        recipeCommand.setPrepTime(PREP_TIME);
-        recipeCommand.setDescription(DESCRIPTION);
-        recipeCommand.setDifficulty(DIFFICULTY);
-        recipeCommand.setDirections(DIRECTIONS);
-        recipeCommand.setServings(SERVINGS);
-        recipeCommand.setSources(SOURCE);
-        recipeCommand.setUrl(URL);
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(RECIPE_ID);
+        recipeDto.setCookTime(COOK_TIME);
+        recipeDto.setPrepTime(PREP_TIME);
+        recipeDto.setDescription(DESCRIPTION);
+        recipeDto.setDifficulty(DIFFICULTY);
+        recipeDto.setDirections(DIRECTIONS);
+        recipeDto.setServings(SERVINGS);
+        recipeDto.setSources(SOURCE);
+        recipeDto.setUrl(URL);
 
-        NotesCommand notes = new NotesCommand();
+        NotesDto notes = new NotesDto();
         notes.setId(NOTES_ID);
 
-        recipeCommand.setNotes(notes);
+        recipeDto.setNotes(notes);
 
-        CategoryCommand category = new CategoryCommand();
+        CategoryDto category = new CategoryDto();
         category.setId(CAT_ID_1);
 
-        CategoryCommand category2 = new CategoryCommand();
+        CategoryDto category2 = new CategoryDto();
         category2.setId(CAT_ID2);
 
-        recipeCommand.getCategories().add(category);
-        recipeCommand.getCategories().add(category2);
+        recipeDto.getCategories().add(category);
+        recipeDto.getCategories().add(category2);
 
-        IngredientCommand ingredient = new IngredientCommand();
+        IngredientDto ingredient = new IngredientDto();
         ingredient.setId(INGRED_ID_1);
 
-        IngredientCommand ingredient2 = new IngredientCommand();
+        IngredientDto ingredient2 = new IngredientDto();
         ingredient2.setId(INGRED_ID_2);
 
-        recipeCommand.getIngredients().add(ingredient);
-        recipeCommand.getIngredients().add(ingredient2);
+        recipeDto.getIngredients().add(ingredient);
+        recipeDto.getIngredients().add(ingredient2);
 
         //when
-        Recipe recipe = converter.convert(recipeCommand);
+        Recipe recipe = converter.convert(recipeDto);
 
         assertNotNull(recipe);
         assertEquals(RECIPE_ID, recipe.getId());

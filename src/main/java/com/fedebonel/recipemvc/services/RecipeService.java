@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.model.Recipe;
 
 import java.util.Set;
@@ -15,7 +15,7 @@ public interface RecipeService {
 
     void deleteById(Long id);
 
-    RecipeCommand findCommandById(Long id);
+    RecipeDto findCommandById(Long id);
 
-    RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
+    RecipeDto saveRecipeCommand(RecipeDto recipeDto);
 }

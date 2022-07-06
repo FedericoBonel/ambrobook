@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/recipe/**/show").permitAll()
+                .antMatchers("/", "/recipe/**/show", "/recipe/**/image/render").permitAll()
                 .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
                 .formLogin();
@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/webjars/**");
+                .antMatchers("/resources/**", "/static/**", "/webjars/**", "/images/hero.jpg", "/css/**");
     }
 
     @Bean

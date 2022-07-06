@@ -1,20 +1,20 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.CategoryCommand;
+import com.fedebonel.recipemvc.datatransferobjects.CategoryDto;
 import com.fedebonel.recipemvc.model.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CategoryToCategoryCommandTest {
+class CategoryToCategoryDtoTest {
     public static final Long ID_VALUE = 1L;
     public static final String NAME = "name";
-    CategoryToCategoryCommand converter;
+    CategoryToCategoryDto converter;
 
     @BeforeEach
     public void setUp() throws Exception {
-        converter = new CategoryToCategoryCommand();
+        converter = new CategoryToCategoryDto();
     }
 
     @Test
@@ -35,11 +35,11 @@ class CategoryToCategoryCommandTest {
         category.setName(NAME);
 
         //when
-        CategoryCommand categoryCommand = converter.convert(category);
+        CategoryDto categoryDto = converter.convert(category);
 
         //then
-        assertEquals(ID_VALUE, categoryCommand.getId());
-        assertEquals(NAME, categoryCommand.getName());
+        assertEquals(ID_VALUE, categoryDto.getId());
+        assertEquals(NAME, categoryDto.getName());
 
     }
 }

@@ -1,4 +1,4 @@
-package com.fedebonel.recipemvc.commands;
+package com.fedebonel.recipemvc.datatransferobjects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UnitOfMeasureCommand {
+public class UnitOfMeasureDto {
     private Long id;
     private String unit;
 }

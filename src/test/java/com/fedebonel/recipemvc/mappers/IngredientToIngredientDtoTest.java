@@ -1,6 +1,6 @@
-package com.fedebonel.recipemvc.converters;
+package com.fedebonel.recipemvc.mappers;
 
-import com.fedebonel.recipemvc.commands.IngredientCommand;
+import com.fedebonel.recipemvc.datatransferobjects.IngredientDto;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.model.UnitOfMeasure;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class IngredientToIngredientCommandTest {
+class IngredientToIngredientDtoTest {
     public static final Recipe RECIPE = new Recipe();
     public static final BigDecimal AMOUNT = new BigDecimal("1");
     public static final String DESCRIPTION = "Cheeseburger";
@@ -19,11 +19,11 @@ class IngredientToIngredientCommandTest {
     public static final Long ID_VALUE = 1L;
 
 
-    IngredientToIngredientCommand converter;
+    IngredientToIngredientDto converter;
 
     @BeforeEach
     public void setUp() throws Exception {
-        converter = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+        converter = new IngredientToIngredientDto(new UnitOfMeasureToUnitOfMeasureDto());
     }
 
     @Test
@@ -45,13 +45,13 @@ class IngredientToIngredientCommandTest {
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
         //when
-        IngredientCommand ingredientCommand = converter.convert(ingredient);
+        IngredientDto ingredientDto = converter.convert(ingredient);
         //then
-        assertNull(ingredientCommand.getUom());
-        assertEquals(ID_VALUE, ingredientCommand.getId());
+        assertNull(ingredientDto.getUom());
+        assertEquals(ID_VALUE, ingredientDto.getId());
         // assertEquals(RECIPE, ingredientCommand.get);
-        assertEquals(AMOUNT, ingredientCommand.getAmount());
-        assertEquals(DESCRIPTION, ingredientCommand.getDescription());
+        assertEquals(AMOUNT, ingredientDto.getAmount());
+        assertEquals(DESCRIPTION, ingredientDto.getDescription());
     }
 
     @Test
@@ -68,12 +68,12 @@ class IngredientToIngredientCommandTest {
 
         ingredient.setUom(uom);
         //when
-        IngredientCommand ingredientCommand = converter.convert(ingredient);
+        IngredientDto ingredientDto = converter.convert(ingredient);
         //then
-        assertEquals(ID_VALUE, ingredientCommand.getId());
-        assertNotNull(ingredientCommand.getUom());
-        assertEquals(UOM_ID, ingredientCommand.getUom().getId());
-        assertEquals(AMOUNT, ingredientCommand.getAmount());
-        assertEquals(DESCRIPTION, ingredientCommand.getDescription());
+        assertEquals(ID_VALUE, ingredientDto.getId());
+        assertNotNull(ingredientDto.getUom());
+        assertEquals(UOM_ID, ingredientDto.getUom().getId());
+        assertEquals(AMOUNT, ingredientDto.getAmount());
+        assertEquals(DESCRIPTION, ingredientDto.getDescription());
     }
 }

@@ -1,7 +1,7 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.IngredientCommand;
-import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
+import com.fedebonel.recipemvc.datatransferobjects.IngredientDto;
+import com.fedebonel.recipemvc.datatransferobjects.UnitOfMeasureDto;
 import com.fedebonel.recipemvc.services.IngredientService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import com.fedebonel.recipemvc.services.UnitOfMeasureService;
@@ -55,11 +55,11 @@ public class IngredientController {
     public String createRecipeIngredient(@PathVariable Long recipeId, Model model) {
         log.debug("Getting creation form for ingredients for the recipe: " + recipeId);
 
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(recipeId);
-        ingredientCommand.setUom(new UnitOfMeasureCommand());
+        IngredientDto ingredientDto = new IngredientDto();
+        ingredientDto.setRecipeId(recipeId);
+        ingredientDto.setUom(new UnitOfMeasureDto());
 
-        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("ingredient", ingredientDto);
         model.addAttribute("uomList", unitOfMeasureService.listAllUOM());
         return RECIPE_INGREDIENT_INGREDIENTFORM_PATH;
     }
@@ -89,9 +89,9 @@ public class IngredientController {
      * Handles POST requests for updating ingredients
      */
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
-        log.debug("Updating/Saving recipe with ingredient: " + ingredientCommand.getDescription());
-        IngredientCommand savedCommand = ingredientService.saveCommand(ingredientCommand);
+    public String saveOrUpdate(@ModelAttribute IngredientDto ingredientDto) {
+        log.debug("Updating/Saving recipe with ingredient: " + ingredientDto.getDescription());
+        IngredientDto savedCommand = ingredientService.saveCommand(ingredientDto);
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient";
     }
 

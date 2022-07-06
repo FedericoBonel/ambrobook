@@ -133,7 +133,7 @@ public class DataInitializerH2 implements ApplicationListener<ContextRefreshedEv
         guacamole.addIngredient(new Ingredient("freshly ground black pepper", BigDecimal.valueOf(1), pinch));
         guacamole.addIngredient(new Ingredient("ripe tomato, chopped", BigDecimal.valueOf(0.5), each));
         guacamole.setSource("Simply Recipes");
-        guacamole.setUrl("www.simplyrecipes.com");
+        guacamole.setUrl("https://www.simplyrecipes.com");
 
         Recipe tacos = new Recipe();
         tacos.setDescription("Spicy Grilled Chicken Tacos");
@@ -174,7 +174,7 @@ public class DataInitializerH2 implements ApplicationListener<ContextRefreshedEv
         tacos.addIngredient(new Ingredient("olive oil", BigDecimal.valueOf(3), tblspoon));
         tacos.addIngredient(new Ingredient("boneless chicken things", BigDecimal.valueOf(5), each));
         tacos.setSource("Simply Recipes");
-        tacos.setUrl("www.simplyrecipes.com");
+        tacos.setUrl("https://www.simplyrecipes.com");
 
 
         // Store the data

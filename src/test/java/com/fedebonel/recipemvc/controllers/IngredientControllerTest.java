@@ -1,8 +1,8 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.IngredientCommand;
-import com.fedebonel.recipemvc.commands.RecipeCommand;
-import com.fedebonel.recipemvc.commands.UnitOfMeasureCommand;
+import com.fedebonel.recipemvc.datatransferobjects.IngredientDto;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
+import com.fedebonel.recipemvc.datatransferobjects.UnitOfMeasureDto;
 import com.fedebonel.recipemvc.model.Ingredient;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.IngredientService;
@@ -50,11 +50,11 @@ class IngredientControllerTest {
 
     @Test
     void testListIngredients() throws Exception {
-        RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
-        when(recipeService.findCommandById(recipeCommand.getId())).thenReturn(recipeCommand);
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+        when(recipeService.findCommandById(recipeDto.getId())).thenReturn(recipeDto);
 
-        mockMvc.perform(get("/recipe/" + recipeCommand.getId() + "/ingredient"))
+        mockMvc.perform(get("/recipe/" + recipeDto.getId() + "/ingredient"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/list"))
                 .andExpect(model().attributeExists("recipe"));
@@ -62,7 +62,7 @@ class IngredientControllerTest {
 
     @Test
     void showIngredient() throws Exception {
-        IngredientCommand command = new IngredientCommand();
+        IngredientDto command = new IngredientDto();
         command.setId(1L);
         when(ingredientService.findCommandById(anyLong(), anyLong())).thenReturn(command);
 
@@ -74,7 +74,7 @@ class IngredientControllerTest {
 
     @Test
     void createRecipeIngredientForm() throws Exception {
-        RecipeCommand recipe = new RecipeCommand();
+        RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
 
         when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
@@ -90,11 +90,11 @@ class IngredientControllerTest {
 
     @Test
     void updateRecipeIngredientForm() throws Exception {
-        IngredientCommand command = new IngredientCommand();
+        IngredientDto command = new IngredientDto();
         command.setId(1L);
-        UnitOfMeasureCommand uom1 = new UnitOfMeasureCommand();
+        UnitOfMeasureDto uom1 = new UnitOfMeasureDto();
         uom1.setId(2L);
-        Set<UnitOfMeasureCommand> uoms = new HashSet<>();
+        Set<UnitOfMeasureDto> uoms = new HashSet<>();
         uoms.add(uom1);
         when(ingredientService.findCommandById(anyLong(), anyLong())).thenReturn(command);
         when(unitOfMeasureService.listAllUOM()).thenReturn(uoms);
@@ -107,16 +107,16 @@ class IngredientControllerTest {
 
     @Test
     void saveOrUpdate() throws Exception {
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(1L);
-        ingredientCommand.setRecipeId(2L);
-        when(ingredientService.saveCommand(any())).thenReturn(ingredientCommand);
+        IngredientDto ingredientDto = new IngredientDto();
+        ingredientDto.setId(1L);
+        ingredientDto.setRecipeId(2L);
+        when(ingredientService.saveCommand(any())).thenReturn(ingredientDto);
 
-        mockMvc.perform(post("/recipe/" + ingredientCommand.getRecipeId() + "/ingredient"))
+        mockMvc.perform(post("/recipe/" + ingredientDto.getRecipeId() + "/ingredient"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view()
                         .name("redirect:/recipe/"
-                                + ingredientCommand.getRecipeId()
+                                + ingredientDto.getRecipeId()
                                 + "/ingredient"));
     }
 

@@ -1,11 +1,11 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.CategoryCommand;
+import com.fedebonel.recipemvc.datatransferobjects.CategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryCommand> findAllCommands();
+    List<CategoryDto> findAllCommands();
 
-    CategoryCommand findCommandById(Long id);
+    CategoryDto findCommandById(Long id);
 }

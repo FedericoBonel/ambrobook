@@ -1,11 +1,11 @@
 package com.fedebonel.recipemvc.services;
 
-import com.fedebonel.recipemvc.commands.IngredientCommand;
+import com.fedebonel.recipemvc.datatransferobjects.IngredientDto;
 
 public interface IngredientService {
-    IngredientCommand findCommandById(Long recipeId, Long IngredientId);
+    IngredientDto findCommandById(Long recipeId, Long IngredientId);
 
-    IngredientCommand saveCommand(IngredientCommand ingredientCommand);
+    IngredientDto saveCommand(IngredientDto ingredientDto);
 
     void deleteById(Long recipeId, Long ingredientId);
 }

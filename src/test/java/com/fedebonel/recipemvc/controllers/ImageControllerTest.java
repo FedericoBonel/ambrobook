@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.commands.RecipeCommand;
+import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.services.ImageService;
 import com.fedebonel.recipemvc.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +44,7 @@ class ImageControllerTest {
 
     @Test
     void showUploadImageForm() throws Exception {
-        RecipeCommand recipe = new RecipeCommand();
+        RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
 
         when(recipeService.findCommandById(recipe.getId())).thenReturn(recipe);
@@ -57,7 +57,7 @@ class ImageControllerTest {
 
     @Test
     void uploadImage() throws Exception {
-        RecipeCommand recipe = new RecipeCommand();
+        RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile", "test.txt", "text/plain",
                 "Test file".getBytes());
@@ -71,7 +71,7 @@ class ImageControllerTest {
 
     @Test
     void renderRecipeImage() throws Exception {
-        RecipeCommand recipe = new RecipeCommand();
+        RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
         String s = "Image text";
 
