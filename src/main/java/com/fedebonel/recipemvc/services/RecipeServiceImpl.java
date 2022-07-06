@@ -33,6 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public Set<Recipe> getRecipes() {
         log.debug("Getting recipes");
         HashSet<Recipe> recipes = new HashSet<>();
@@ -41,6 +42,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public Recipe findById(Long id) {
         log.debug("Finding recipe by id: " + id);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
@@ -53,6 +55,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         log.debug("Deleting recipe by id: " + id);
         recipeRepository.deleteById(id);
@@ -69,9 +72,15 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
         log.debug("Saving recipe command with name: " + recipeCommand.getDescription());
-        // Still a pojo not yet in hibernate context, that's why is detached
         Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
-        // Save it in the database (if exists it will update it where necessary)
+
+        if (detachedRecipe.getId() != null) {
+            recipeRepository.findById(detachedRecipe.getId())
+                    .ifPresent(recipe -> {
+                        detachedRecipe.setImage(recipe.getImage());
+                    });
+        }
+
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         return recipeToRecipeCommand.convert(savedRecipe);
     }

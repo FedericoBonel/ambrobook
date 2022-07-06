@@ -90,6 +90,9 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div th:each="catEach, idx : ${recipe.categories}">
+                                    <input th:field="*{categories[__${idx.index}__].id}" type="hidden"/>
+                                </div>
                             </div>
                             <div class="row" style="margin-top: 10px">
                                 <div class="col-lg-3 form-group" th:class="${#fields.hasErrors('prepTime')}
