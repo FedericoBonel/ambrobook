@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,14 +25,17 @@ public class RecipeDto {
 
     @Min(0)
     @Max(3000)
+    @NotNull
     private Integer prepTime;
 
     @Min(0)
     @Max(3000)
+    @NotNull
     private Integer cookTime;
 
     @Min(1)
-    @Max(10)
+    @Max(50)
+    @NotNull
     private Integer servings;
 
     private String sources;

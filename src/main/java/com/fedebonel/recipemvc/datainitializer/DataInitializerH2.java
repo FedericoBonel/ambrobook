@@ -82,9 +82,13 @@ public class DataInitializerH2 implements ApplicationListener<ContextRefreshedEv
         UnitOfMeasure each = eachOptional.get();
 
         log.debug("Loading categories");
-        Optional<Category> mexicanOptional = categoryRepository.findByName("Mexican");
-        if (mexicanOptional.isEmpty()) throw new RuntimeException("Category not found");
-        Category mexican = mexicanOptional.get();
+        Category mexican = categoryRepository
+                .findByName("Mexican")
+                .orElseThrow(RuntimeException::new);
+
+        Category argentine = categoryRepository
+                .findByName("Argentine")
+                .orElseThrow(RuntimeException::new);
 
         log.debug("Creating and saving recipes");
         Recipe guacamole = new Recipe();
@@ -176,10 +180,68 @@ public class DataInitializerH2 implements ApplicationListener<ContextRefreshedEv
         tacos.setSource("Simply Recipes");
         tacos.setUrl("https://www.simplyrecipes.com");
 
+        Recipe empanadas = new Recipe();
+        empanadas.setDescription("Empanadas Salteñas");
+        empanadas.setPrepTime(30);
+        empanadas.setCookTime(30);
+        empanadas.setServings(12);
+        empanadas.setDifficulty(Difficulty.MEDIUM);
+        empanadas.getCategories().add(argentine);
+        empanadas.setDirections("""
+                Step 1
+                Combine water and salt in a small saucepan over medium heat and warm through, stirring until salt is dissolved. Remove from heat and let cool for 2 to 3 minutes.
+                
+                Step 2
+                Combine sifted flour and melted margarine in the bowl of a food processor; pulse until crumbly. Add salt water gradually to the food processor and pulse until a soft dough ball forms that easily separates from the edge of the bowl. Add more water, 1 teaspoon at a time, only if needed. Press dough into a ball and wrap tightly with plastic wrap. Refrigerate for at least 30 minutes.
+                
+                Step 3
+                Preheat the oven to 425 degrees F (220 degrees C). Cover a baking sheet with aluminum foil and grease with vegetable oil. Set aside.
+                
+                Step 4
+                Bring a saucepan of water to a boil. Add cubed potatoes and cook until soft, 8 to 10 minutes.
+                
+                Step 5
+                Meanwhile, melt butter in a skillet over medium heat. Cook and stir onions and green onions until soft and translucent, about 5 minutes. Add red peppers and cook for 5 more minutes. Add ground beef and stir with a wooden spoon until fully browned, about 5 minutes. Season with salt, cayenne pepper, cumin, and paprika. Remove from heat.
+                
+                Step 6
+                Drain potatoes and add to the filling. Toss in chopped eggs and let filling cool down for a few minutes.
+                
+                Step 7
+                Remove pastry from the fridge and knead gently on a floured surface. Divide dough in half and roll out each piece to 1/8-inch thickness.
+                
+                Step 8
+                Cut out 3-inch circles with a pastry cutter or sharp knife and wet the edges lightly with water. Add 1 large tablespoon of filling in the center of each disc. Fold the pastry over, press edges together, and seal with a fork. Transfer empanadas to the prepared baking sheet.
+                
+                Step 9
+                Bake in the preheated oven until golden brown, 10 to 15 minutes. Remove from the oven and allow to cool just a little before serving.
+                """);
+        Notes empanadasNotes = new Notes();
+        empanadasNotes.setRecipeNotes("""
+                These are truly traditional beef empanadas from Salta, one of the Northern Provinces in Argentina. Made with ground beef, potatoes, hard-boiled eggs, and a fluffy homemade empanada pastry, these are just to die for!
+                """);
+        empanadas.setNote(empanadasNotes);
+
+        empanadas.addIngredient(new Ingredient("water", BigDecimal.valueOf(1), tblspoon));
+        empanadas.addIngredient(new Ingredient("kosher salt", BigDecimal.valueOf(1.5), tspoon));
+        empanadas.addIngredient(new Ingredient("all-porpoise flour sifted", BigDecimal.valueOf(2), cup));
+        empanadas.addIngredient(new Ingredient("lard, melted", BigDecimal.valueOf(0.24), cup));
+        empanadas.addIngredient(new Ingredient("vegetable oil", BigDecimal.valueOf(1), tspoon));
+        empanadas.addIngredient(new Ingredient("potatoes, peeled and cubed", BigDecimal.valueOf(2), each));
+        empanadas.addIngredient(new Ingredient("onions, chopped", BigDecimal.valueOf(2), each));
+        empanadas.addIngredient(new Ingredient("stalks green onions, finely chopped", BigDecimal.valueOf(2), each));
+        empanadas.addIngredient(new Ingredient("medium bell peppers, seeded and chopped", BigDecimal.valueOf(2), each));
+        empanadas.addIngredient(new Ingredient("ground beef", BigDecimal.valueOf(0.66), pound));
+        empanadas.addIngredient(new Ingredient("cayenne pepper", BigDecimal.valueOf(0.5), tspoon));
+        empanadas.addIngredient(new Ingredient("ground cumin", BigDecimal.valueOf(1), tspoon));
+        empanadas.addIngredient(new Ingredient("paprika", BigDecimal.valueOf(1), tspoon));
+        empanadas.addIngredient(new Ingredient("large boiled eggs, peeled and chopped", BigDecimal.valueOf(2), each));
+        empanadas.setSource("All recipes");
+        empanadas.setUrl("https://www.allrecipes.com/recipe/282433/empanadas-saltenas/");
 
         // Store the data
         result.add(guacamole);
         result.add(tacos);
+        result.add(empanadas);
 
         return result;
     }

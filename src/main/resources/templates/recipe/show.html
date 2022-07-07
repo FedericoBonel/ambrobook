@@ -95,8 +95,11 @@
                         <h5 th:text="#{recipe.url}">URL:</h5>
                     </div>
                     <div class="col-lg-3">
-                        <a class="text-decoration-none" th:href="@{${recipe.url}}" th:text="${recipe.url}">https://www
-                            .example.com/</a>
+                        <a class="text-decoration-none d-block text-truncate"
+                           th:href="@{${recipe.url}}"
+                           th:text="${recipe.url}">
+                            https://www.example.com/
+                        </a>
                     </div>
                 </div>
             </div>
