@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.services;
 import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.model.Recipe;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,4 +19,6 @@ public interface RecipeService {
     RecipeDto findCommandById(Long id);
 
     RecipeDto saveRecipeCommand(RecipeDto recipeDto);
+
+    List<Recipe> findByQuery(String query);
 }

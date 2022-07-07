@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -83,5 +84,10 @@ public class RecipeServiceImpl implements RecipeService {
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         return recipeToRecipeDto.convert(savedRecipe);
+    }
+
+    @Override
+    public List<Recipe> findByQuery(String query) {
+        return recipeRepository.findByDescriptionContainingIgnoreCaseOrCategories_nameContainingIgnoreCase(query, query);
     }
 }

@@ -27,8 +27,6 @@ class IndexControllerTest {
 
     @Mock
     RecipeService recipeService;
-    @Mock
-    Model model;
 
     @BeforeEach
     void setUp() {
@@ -41,33 +39,14 @@ class IndexControllerTest {
     void testoMockMVC() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
-    }
-
-    @Test
-    void getIndexPage() {
-        // Given
-        String expectedViewName = "index";
-
         HashSet<Recipe> expectedSet = new HashSet<>();
         expectedSet.add(new Recipe());
         when(recipeService.getRecipes()).thenReturn(expectedSet);
 
-        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"));
 
-        // When
-        String actualViewName = indexController.getIndexPage(model);
-
-        // Then
-        assertEquals(expectedViewName, actualViewName);
-
-        // Verify interactions in the mocks only happens ONCE
         verify(recipeService, times(1)).getRecipes();
-        // Verify specifically that the model has a string that is equal (eq) to "recipes" and the
-        // recipes set that we have set for the recipes service at the beginning of the test
-        verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        assertEquals(expectedSet.size(), argumentCaptor.getValue().size());
     }
 }
