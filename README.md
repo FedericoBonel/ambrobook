@@ -8,7 +8,7 @@ lot in the past and I always enjoy sharing what I know with others, so I decided
 web application that allows you to share your recipes with anyone!
 This is a fullstack website that you can download and run to have your own, out of the box, responsive recipes website.
 
-![AmbroBook](https://media.giphy.com/media/XvPWRj9OWcOhOXg6Sc/giphy.gif)
+<img src="src/main/resources/static/images/AmbroBook.gif" width="700px">
 
 ## What do I need to do to run it and start sharing my recipes?
 Not too much, you just need maven. Once you have that, all you have to do is download this source code, go to its root 
