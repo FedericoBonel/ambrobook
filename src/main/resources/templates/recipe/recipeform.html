@@ -24,7 +24,7 @@
 
 <nav th:replace="fragments/navbar :: navbar(false)"></nav>
 
-<div class="container" style="margin-top: 20px; margin-bottom: 20px">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-9">
             <!-- This makes sure to make a post request against host:8080/recipe with the object recipe received from
@@ -47,11 +47,10 @@
                             </h1>
                     <hr class="bg-dark border-2 border-top border-dark">
                         <div class="card-body">
-                            <!-- Description -->
-                            <div class="row" style="margin-top: 10px">
-                                <div class="col-lg-3 form-group"
+                            <!-- Name -->
+                                <div class="form-group"
                                      th:class="${#fields.hasErrors('description')}
-                                ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
+                                ? 'col-lg-12 form-group text-danger' : 'col-lg-12 form-group'">
                                     <label
                                             th:text="#{recipe.description}">
                                         Recipe name:
@@ -68,9 +67,8 @@
                                         </ul>
                                     </span>
                                 </div>
-                            </div>
                             <!-- categories radio buttons -->
-                            <div class="row" style="margin-top: 10px">
+                            <div class="row mt-2">
                                 <div class="form-group col-lg-3">
                                     <label th:text="#{recipe.categories}">
                                         Categories:
@@ -90,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="margin-top: 10px">
+                            <div class="row mt-2 justify-content-lg-between">
                                 <div class="col-lg-3 form-group"
                                      th:class="${#fields.hasErrors('prepTime')}
                                 ? 'col-lg-3 form-group text-danger' : 'col-lg-3 form-group'">
@@ -143,7 +141,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row" style="margin-top: 10px">
+                            <div class="row mt-2 justify-content-lg-between">
                                 <div class="col-lg-3 form-group"
                                      th:class="${#fields.hasErrors('servings')} ?
                                      'col-lg-3 form-group text-danger'
@@ -238,9 +236,8 @@
                                      'col-lg-12 form-group text-danger'
                                      :
                                      'col-lg-12 form-group'">
-                                    <textarea class="form-control"
+                                    <textarea class="form-control maintain-whitespaces"
                                               rows="4"
-                                              style="white-space: pre-line"
                                               th:errorclass="is-invalid"
                                               th:field="*{directions}">
                                     </textarea>
@@ -266,15 +263,14 @@
                                     <input th:field="*{notes.id}"
                                            type="hidden"/>
                                     <!-- Remember the Id of the notes object -->
-                                    <textarea class="form-control"
+                                    <textarea class="form-control maintain-whitespaces"
                                               rows="4"
-                                              style="white-space: pre-wrap"
                                               th:field="*{notes.recipeNotes}">
                                     </textarea>
                                 </div>
                             </div>
                         </div>
-                    <button class="btn btn-primary" style="margin-top: 10px"
+                    <button class="btn btn-primary"
                             th:text="#{submit}"
                             type="submit">
                         Submit

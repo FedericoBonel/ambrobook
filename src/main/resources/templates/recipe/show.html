@@ -24,7 +24,7 @@
 
 <nav th:replace="fragments/navbar :: navbar(false)"></nav>
 
-<div class="container" style="margin-top: 20px">
+<div class="container">
     <div class="row">
         <div class="col-12 col-lg-9 mx-auto">
             <!-- Recipe name -->
@@ -35,12 +35,12 @@
                     Upload Image</a>
             </div>
             <!-- Image -->
-            <img class="card-img-top rounded-bottom" src="/static/images/placeholder-image.jpeg"
-                 style="max-height: 500px; object-fit: cover"
+            <img class="card-img-top recipe-page-img rounded-bottom"
+                 src="/static/images/placeholder-image.jpeg"
                  th:if="${not #lists.isEmpty(recipe.image)}"
                  th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}">
             <div class="card-body">
-                <div class="row" style="margin-top: 4px">
+                <div class="row mt-2">
                     <!-- Categories -->
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.categories}">Categories:</h5>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <!-- Prep time and difficulty -->
-                <div class="row" style="margin-top: 4px">
+                <div class="row mt-2">
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.prepTime}">Preparation time:</h5>
                     </div>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <!-- Cooktime and servings -->
-                <div class="row" style="margin-top: 4px">
+                <div class="row mt-2">
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.cookTime}">Cook time:</h5>
                     </div>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <!-- Source -->
-                <div class="row" style="margin-top: 4px">
+                <div class="row mt-2">
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.sources}">Source:</h5>
                     </div>
@@ -107,13 +107,13 @@
                     <h2 class="card-title" th:text="#{recipe.ingredients}">Ingredients</h2>
                 </div>
                 <div class="col-lg-1" sec:authorize="hasRole('ADMIN')">
-                    <a class="btn btn-primary" style="margin-top: 10px" th:href="@{'/recipe/'+ ${recipe.id} +'/ingredient'}" th:text="#{edit}"
+                    <a class="btn btn-primary" th:href="@{'/recipe/'+ ${recipe.id} +'/ingredient'}" th:text="#{edit}"
                        type="submit">Edit
                     </a>
                 </div>
             </div>
             <div class="card-body">
-                <div class="row" style="margin-top: 4px">
+                <div class="row mt-2">
                     <div class="col-lg-12">
                         <ul>
                             <li th:each="ingredient : ${recipe.ingredients}"
@@ -126,9 +126,9 @@
             <hr class="bg-dark border-2 border-top border-dark">
             <h2 class="card-title" th:text="#{recipe.directions}">Directions</h2>
             <div class="card-body">
-                <div class="row" style="margin-top: 4px">
+                <div class="row mt-2">
                     <div class="col-lg-12">
-                        <p style="white-space: pre-wrap" th:text="${recipe.directions}"></p>
+                        <p class="maintain-whitespaces" th:text="${recipe.directions}"></p>
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <p style="white-space: pre-wrap" th:text="${recipe.note.recipeNotes}"></p>
+                        <p class="maintain-whitespaces" th:text="${recipe.note.recipeNotes}"></p>
                     </div>
                 </div>
             </div>

@@ -1,3 +1,31 @@
 body {
     padding-top: 75px;
 }
+
+.card {
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.navbar {
+    background: #8A624A;
+}
+
+.card-img-top {
+    object-fit: cover;
+}
+
+.recipe-card-img {
+    height: 300px;
+}
+
+.recipe-page-img {
+    max-height: 500px;
+}
+
+.maintain-whitespaces {
+    white-space: pre-wrap;
+}

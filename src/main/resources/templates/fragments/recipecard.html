@@ -22,9 +22,8 @@
 <div class="card m-3" th:fragment="cardrecipe(recipe)">
     <a th:href="@{'/recipe/' + ${recipe.id} + '/show'}"
        th:if="${not #lists.isEmpty(recipe.image)}">
-        <img alt="recipe image" class="card-img-top"
+        <img alt="recipe image" class="card-img-top recipe-card-img"
              src="/static/images/placeholder-image.jpeg"
-             style="object-fit: cover; height: 300px"
              th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}"/>
     </a>
     <div class="card-body">

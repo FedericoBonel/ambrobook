@@ -24,7 +24,7 @@
 
 <nav th:replace="fragments/navbar :: navbar(false)"></nav>
 
-<div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px">
+<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-9">
             <div class="card">
@@ -32,13 +32,13 @@
                     <h1 th:text="#{title.uploadImage}">Uploading new recipe image</h1>
                 </div>
                 <div class="card-body">
-                    <div class="row" style="margin-top: 10px">
+                    <div class="row">
                         <div class="col-lg-9 form-group">
                             <form enctype="multipart/form-data" method="post"
                                   th:action="@{'/recipe/' + ${recipe.id} + '/image'}">
                                 <label class="form-label" th:text="#{selectFile}">Select file</label>
                                 <input class="form-control" id="imagefile" name="imagefile" type="file"/>
-                                <button class="btn btn-primary" style="margin-top: 10px" th:text="#{submit}"
+                                <button class="btn btn-primary my-2" th:text="#{submit}"
                                         type="submit">Submit
                                 </button>
                             </form>
