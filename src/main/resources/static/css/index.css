@@ -29,3 +29,15 @@ body {
 .maintain-whitespaces {
     white-space: pre-wrap;
 }
+
+.white-filter {
+    opacity: 1;
+}
+
+.white-filter:hover {
+    opacity: 0.5;
+}
+
+.white-filter:active {
+    transform: scale(1.05);
+}
