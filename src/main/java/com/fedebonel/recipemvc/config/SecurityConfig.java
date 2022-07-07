@@ -32,13 +32,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/recipe/**/show", "/recipe/**/image/render").permitAll()
                 .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
-                .formLogin();
+                .formLogin()
+                .and()
+                .logout().logoutSuccessUrl("/");
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/webjars/**", "/images/hero.jpg", "/css/**");
+                .antMatchers("/resources/**", "/static/**", "/webjars/**", "/images/**", "/css/**");
     }
 
     @Bean
