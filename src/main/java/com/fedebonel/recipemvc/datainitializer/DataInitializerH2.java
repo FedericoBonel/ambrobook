@@ -1,13 +1,16 @@
 package com.fedebonel.recipemvc.datainitializer;
 
+import com.fedebonel.recipemvc.config.Roles;
 import com.fedebonel.recipemvc.model.*;
 import com.fedebonel.recipemvc.repositories.CategoryRepository;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
 import com.fedebonel.recipemvc.repositories.UnitOfMeasureRepository;
+import com.fedebonel.recipemvc.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,18 +32,50 @@ public class DataInitializerH2 implements ApplicationListener<ContextRefreshedEv
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository uomRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataInitializerH2(RecipeRepository recipeRepository, UnitOfMeasureRepository uomRepository, CategoryRepository categoryRepository) {
+    public DataInitializerH2(RecipeRepository recipeRepository,
+                             UnitOfMeasureRepository uomRepository,
+                             CategoryRepository categoryRepository,
+                             UserRepository userRepository,
+                             PasswordEncoder passwordEncoder) {
         this.recipeRepository = recipeRepository;
         this.uomRepository = uomRepository;
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        initializeUsers();
         log.debug("Initialized data");
+    }
+
+    private void initializeUsers() {
+        User adminSample = new User();
+        adminSample.setUsername("admin");
+        adminSample.setPassword(passwordEncoder.encode("pass"));
+        adminSample.setActive(true);
+        UserRole adminRole = new UserRole();
+        adminRole.setRole("ROLE_" + Roles.ADMIN);
+        adminRole.setUser(adminSample);
+        adminSample.setUserRoles(List.of(adminRole));
+
+
+        User userSample = new User();
+        userSample.setUsername("user");
+        userSample.setPassword(passwordEncoder.encode("pass"));
+        userSample.setActive(true);
+        UserRole userRole = new UserRole();
+        userRole.setRole("ROLE_" + Roles.USER);
+        userRole.setUser(userSample);
+        userSample.setUserRoles(List.of(userRole));
+
+        userRepository.saveAll(List.of(adminSample, userSample));
     }
 
     private List<Recipe> getRecipes() {

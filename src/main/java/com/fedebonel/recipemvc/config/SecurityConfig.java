@@ -6,41 +6,43 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+
     // Authentication configuration
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("fede_bonel")
-                .password(new BCryptPasswordEncoder().encode("password!@#$"))
-                .roles(Roles.ADMIN.toString())
-                .and()
-                .withUser("user")
-                .password(new BCryptPasswordEncoder().encode("user"))
-                .roles(Roles.USER.toString());
+        auth.userDetailsService(userDetailsService);
     }
 
     // Authorization configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/recipe/**/show", "/recipe/**/image/render").permitAll()
-                .antMatchers("/**").hasRole(Roles.ADMIN.toString())
+                .antMatchers("/",
+                        "/recipe/**/show",
+                        "/recipe/**/image/render",
+                        "/resources/**",
+                        "/static/**",
+                        "/webjars/**",
+                        "/images/**",
+                        "/css/**").permitAll()
+                .antMatchers("/**", "/h2-console/**").hasRole(Roles.ADMIN.toString())
                 .and()
                 .formLogin()
                 .and()
                 .logout().logoutSuccessUrl("/");
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/webjars/**", "/images/**", "/css/**");
     }
 
     @Bean
