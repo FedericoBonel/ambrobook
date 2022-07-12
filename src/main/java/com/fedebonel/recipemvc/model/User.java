@@ -19,6 +19,9 @@ public class User {
 
     private String password;
 
+    @Column(length = 64)
+    private String verificationCode;
+
     private Boolean active;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)

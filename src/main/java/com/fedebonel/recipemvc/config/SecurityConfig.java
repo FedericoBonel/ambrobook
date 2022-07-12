@@ -38,7 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "/images/**",
                         "/css/**").permitAll()
-                .antMatchers("/user/signup", "/user").anonymous()
+                .antMatchers("/user",
+                        "/user/signup",
+                        "/user/verify").anonymous()
                 .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
                 .formLogin()

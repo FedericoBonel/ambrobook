@@ -36,7 +36,7 @@
         </div>
         <div class="row justify-content-center mb-3">
             <div class="col-12"
-                 th:class="${#fields.hasErrors() ? 'col-12 text-danger' : 'col-12'}">
+                 th:class="${#fields.hasErrors('email') ? 'col-12 text-danger' : 'col-12'}">
                 <label class="form-label"
                        for="user-email-field">Email address</label>
                 <input aria-describedby="email-helper"
@@ -60,7 +60,7 @@
         </div>
         <div class="row justify-content-center mb-3">
             <div class="col-12"
-                 th:class="${#fields.hasErrors() ? 'col-12 text-danger' : 'col-12'}">
+                 th:class="${#fields.hasErrors('username') ? 'col-12 text-danger' : 'col-12'}">
                 <label class="form-label"
                        for="user-username-field">Username</label>
                 <input aria-describedby="username-helper"
@@ -84,7 +84,7 @@
         </div>
         <div class="row justify-content-center mb-3">
             <div class="col-12"
-                 th:class="${#fields.hasErrors() ? 'col-12 text-danger' : 'col-12'}">
+                 th:class="${#fields.hasErrors('password') ? 'col-12 text-danger' : 'col-12'}">
                 <label class="form-label"
                        for="user-password-field">Password</label>
                 <input class="form-control"

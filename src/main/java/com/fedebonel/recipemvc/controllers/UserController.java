@@ -9,11 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -24,6 +22,7 @@ public class UserController {
 
     public static final String USER_URI = "/user";
     public static final String REGISTRATION_FORM_PATH = "user/registrationform";
+    public static final String VERIFICATION_CONFIRMED_PATH = "user/verificationconfirmed";
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -39,16 +38,44 @@ public class UserController {
     }
 
     @PostMapping
-    public String registerUserPost(Model model,
+    public String registerUserPost(Model model, HttpServletRequest request,
                                    @Valid @ModelAttribute("user") UserDto user,
                                    BindingResult result) {
+
+        if (userService.findByUsername(user.getUsername()) != null) {
+            result.rejectValue("username",
+                    "error.user",
+                    "An account already exists with this username.");
+        }
+
+        if (userService.findByEmail(user.getEmail()) != null) {
+            result.rejectValue("email",
+                    "error.user",
+                    "An account already exists for this email.");
+        }
+
         if (result.hasErrors()) {
             return REGISTRATION_FORM_PATH;
         }
         user.setUserRoles(List.of(buildUserRole()));
-        model.addAttribute("user", userService.save(user));
+        model.addAttribute("user", userService.save(user, getSiteURL(request)));
 
         return "redirect:/";
+    }
+
+    @GetMapping("/verify")
+    private String verifyAccount(Model model, @RequestParam(name = "code") String code) {
+        UserDto userToVerify = userService.findByVerification(code);
+        userToVerify.setActive(true);
+        userService.verify(userToVerify);
+
+        model.addAttribute("user", userToVerify);
+        return VERIFICATION_CONFIRMED_PATH;
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String requestUrl = request.getRequestURL().toString();
+        return requestUrl.replace(request.getServletPath(),  "");
     }
 
     private UserRole buildUserRole() {
