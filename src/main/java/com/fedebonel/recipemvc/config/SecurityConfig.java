@@ -38,11 +38,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "/images/**",
                         "/css/**").permitAll()
-                .antMatchers("/**", "/h2-console/**").hasRole(Roles.ADMIN.toString())
+                .antMatchers("/user/signup", "/user").anonymous()
+                .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
                 .formLogin()
                 .and()
                 .logout().logoutSuccessUrl("/");
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/h2-console/**");
     }
 
     @Bean

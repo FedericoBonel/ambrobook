@@ -41,3 +41,10 @@ body {
 .white-filter:active {
     transform: scale(1.05);
 }
+
+.vertical-center {
+    min-height: 100%;
+
+    display: flex;
+    align-items: center;
+}

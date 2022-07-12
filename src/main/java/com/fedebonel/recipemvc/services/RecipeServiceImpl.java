@@ -77,9 +77,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         if (detachedRecipe.getId() != null) {
             recipeRepository.findById(detachedRecipe.getId())
-                    .ifPresent(recipe -> {
-                        detachedRecipe.setImage(recipe.getImage());
-                    });
+                    .ifPresent(recipe -> detachedRecipe.setImage(recipe.getImage()));
         }
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);

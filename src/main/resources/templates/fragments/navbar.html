@@ -81,6 +81,12 @@
                            th:text="'Sign in'">
                             Sign out
                         </a>
+                        <a class="dropdown-item"
+                           sec:authorize="!isAuthenticated()"
+                           th:href="@{/user/signup}"
+                           th:text="'Sign Up'">
+                            Sign out
+                        </a>
                     </li>
                 </ul>
             </div>
