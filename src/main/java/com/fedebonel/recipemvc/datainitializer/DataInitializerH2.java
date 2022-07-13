@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.datainitializer;
 
-import com.fedebonel.recipemvc.config.Roles;
+import com.fedebonel.recipemvc.model.Roles;
 import com.fedebonel.recipemvc.model.*;
 import com.fedebonel.recipemvc.repositories.CategoryRepository;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;

@@ -1,5 +1,7 @@
 package com.fedebonel.recipemvc.config;
 
+import com.fedebonel.recipemvc.controllers.UserController;
+import com.fedebonel.recipemvc.model.Roles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String LOGIN_URL = UserController.USER_URI + "/signin";
+    public static final String AUTHENTICATION_FAILURE_URL = UserController.USER_URI + "/signin?error";
+    public static final String LOGOUT_URL = UserController.USER_URI + "/signout";
     private final UserDetailsService userDetailsService;
 
     public SecurityConfig(UserDetailsService userDetailsService) {
@@ -44,8 +49,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
                 .formLogin()
+                    .loginPage(LOGIN_URL)
+                    .loginProcessingUrl(LOGIN_URL)
+                    .defaultSuccessUrl("/")
+                    .failureUrl(AUTHENTICATION_FAILURE_URL).permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/");
+                .logout()
+                    .logoutUrl(LOGOUT_URL)
+                    .logoutSuccessUrl("/")
+                    .deleteCookies("JSESSIONID")
+                    .invalidateHttpSession(true).permitAll()
+                .and();
     }
 
     @Override

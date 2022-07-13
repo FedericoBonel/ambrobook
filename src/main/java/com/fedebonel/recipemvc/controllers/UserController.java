@@ -1,6 +1,6 @@
 package com.fedebonel.recipemvc.controllers;
 
-import com.fedebonel.recipemvc.config.Roles;
+import com.fedebonel.recipemvc.model.Roles;
 import com.fedebonel.recipemvc.datatransferobjects.UserDto;
 import com.fedebonel.recipemvc.model.User;
 import com.fedebonel.recipemvc.model.UserRole;
@@ -29,6 +29,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/signin")
+    public String loginUserForm() {
+        log.debug("Showing user sign in form");
+
+        return "user/loginform";
+    }
+
     @GetMapping("/signup")
     public String registerUserForm(Model model) {
         log.debug("Showing user registration form");
@@ -41,6 +48,8 @@ public class UserController {
     public String registerUserPost(Model model, HttpServletRequest request,
                                    @Valid @ModelAttribute("user") UserDto user,
                                    BindingResult result) {
+
+        log.debug("Registering user with username: " + user.getUsername());
 
         if (userService.findByUsername(user.getUsername()) != null) {
             result.rejectValue("username",
@@ -58,9 +67,9 @@ public class UserController {
             return REGISTRATION_FORM_PATH;
         }
         user.setUserRoles(List.of(buildUserRole()));
-        model.addAttribute("user", userService.save(user, getSiteURL(request)));
+        model.addAttribute("user", userService.save(user, getSiteURLFrom(request)));
 
-        return "redirect:/";
+        return "user/verificationnotification";
     }
 
     @GetMapping("/verify")
@@ -73,7 +82,7 @@ public class UserController {
         return VERIFICATION_CONFIRMED_PATH;
     }
 
-    private String getSiteURL(HttpServletRequest request) {
+    private String getSiteURLFrom(HttpServletRequest request) {
         String requestUrl = request.getRequestURL().toString();
         return requestUrl.replace(request.getServletPath(),  "");
     }

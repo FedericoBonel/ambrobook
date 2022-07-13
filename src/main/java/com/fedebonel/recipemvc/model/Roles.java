@@ -1,4 +1,4 @@
-package com.fedebonel.recipemvc.config;
+package com.fedebonel.recipemvc.model;
 
 public enum Roles {
     USER, ROLE_USER,

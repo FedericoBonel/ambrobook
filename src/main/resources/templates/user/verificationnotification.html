@@ -24,11 +24,13 @@
     <div class="row justify-content-center">
         <main class="col-12 col-lg-6 text-center"
               role="main">
-            <img class="verify-img"
-                 src="/images/at.png"
-                 alt="at-image">
-            <h3>Congratulations, your account has been verified</h3>
-            <a href="/login" class="text-decoration-none">Click here to login</a>
+            <img alt="confirm-image"
+                 class="verify-img"
+                 src="/images/confirm.png">
+            <h3>You are almost there!</h3>
+            <p class="lead"
+               th:text="|We have sent you an email to ${user.email} to verify your email address and activate your account.|">We've
+                sent you an email to</p>
         </main>
     </div>
 </div>

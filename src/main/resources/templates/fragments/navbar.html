@@ -22,77 +22,81 @@
 </head>
 <body>
 <div class="d-flex flex-wrap justify-content-center justify-content-lg-start align-items-center">
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top"
-     id="navbar-myrecipes"
-     th:fragment="navbar">
-    <div class="container-fluid">
-        <a class="navbar-brand m-1" href="/">AmbroBook</a>
-        <button class="navbar-toggler" data-bs-target="#navbarCollapse" data-bs-toggle="collapse" type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item" th:if="${isIndex}">
-                    <a class="nav-link" href="#" th:text="|🏠 #{home}|">🏠 Home</a>
-                </li>
-                <li class="nav-item" th:if="${isIndex}">
-                    <a class="nav-link" href="#myrecipes" th:text="#{recipes}">Recipes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/recipe/new"
-                       sec:authorize="hasRole('ADMIN')"
-                       th:text="|📋 #{recipes.new}|">
-                        📋 New Recipe
-                    </a>
-                </li>
-            </ul>
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
-                  method="get"
-                  th:action="@{/}">
-                <input aria-label="Search"
-                       class="form-control"
-                       data-ms-editor="true"
-                       name="q"
-                       placeholder="Search recipes..."
-                       spellcheck="false"
-                       th:value="${q} ? ${q}"
-                       type="search">
-            </form>
-            <div class="dropdown text-start text-lg-end">
-                <a aria-expanded="false"
-                   class="d-block link-dark text-decoration-none dropdown-toggle"
-                   data-bs-toggle="dropdown"
-                   href="#" id="dropdownUser1">
-                    <img alt="mdo" class="rounded-circle white-filter" height="32" src="/images/user-icon.png" width="32">
-                </a>
-                <ul aria-labelledby="dropdownUser1"
-                    class="dropdown-menu dropdown-menu-lg-end text-small"
-                    style="">
-                    <li>
-                        <a class="dropdown-item"
-                           sec:authorize="isAuthenticated()"
-                           th:href="@{/logout}"
-                           th:text="'Sign out'">
-                            Sign out
-                        </a>
-                        <a class="dropdown-item"
-                           sec:authorize="!isAuthenticated()"
-                           th:href="@{/login}"
-                           th:text="'Sign in'">
-                            Sign out
-                        </a>
-                        <a class="dropdown-item"
-                           sec:authorize="!isAuthenticated()"
-                           th:href="@{/user/signup}"
-                           th:text="'Sign Up'">
-                            Sign out
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top"
+         id="navbar-myrecipes"
+         th:fragment="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand m-1" href="/">AmbroBook</a>
+            <button class="navbar-toggler" data-bs-target="#navbarCollapse" data-bs-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item" th:if="${isIndex}">
+                        <a class="nav-link" href="#" th:text="|🏠 #{home}|">🏠 Home</a>
+                    </li>
+                    <li class="nav-item" th:if="${isIndex}">
+                        <a class="nav-link" href="#myrecipes" th:text="#{recipes}">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recipe/new"
+                           sec:authorize="hasRole('ADMIN')"
+                           th:text="|📋 #{recipes.new}|">
+                            📋 New Recipe
                         </a>
                     </li>
                 </ul>
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+                      method="get"
+                      th:action="@{/}">
+                    <input aria-label="Search"
+                           class="form-control"
+                           data-ms-editor="true"
+                           name="q"
+                           placeholder="Search recipes..."
+                           spellcheck="false"
+                           th:value="${q} ? ${q}"
+                           type="search">
+                </form>
+                <div class="dropdown text-start text-lg-end">
+                    <a aria-expanded="false"
+                       class="d-block link-light text-decoration-none dropdown-toggle"
+                       data-bs-toggle="dropdown"
+                       href="#" id="dropdownUser1">
+                        <img alt="mdo" class="rounded-circle white-filter" height="32" src="/images/user-icon.png"
+                             width="32">
+                    </a>
+                    <ul aria-labelledby="dropdownUser1"
+                        class="dropdown-menu dropdown-menu-lg-end text-small"
+                        style="">
+                        <li>
+                            <form method="post" sec:authorize="isAuthenticated()" th:action="@{/user/signout}">
+                                <button class="dropdown-item" th:text="'Sign out'" type="submit">
+                                    Sign out
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               sec:authorize="!isAuthenticated()"
+                               th:href="@{/user/signin}"
+                               th:text="'Sign in'">
+                                Sign in
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               sec:authorize="!isAuthenticated()"
+                               th:href="@{/user/signup}"
+                               th:text="'Sign Up'">
+                                Sign up
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </div>
 </body>
 </html>

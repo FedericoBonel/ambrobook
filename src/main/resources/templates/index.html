@@ -20,22 +20,25 @@
 <body>
 <nav th:replace="fragments/navbar :: navbar(isIndex = true, q=${query})"></nav>
 <div class="container">
-    <header sec:authorize="!isAuthenticated()" th:replace="fragments/hero :: hero"></header>
-    <header class="text-center"
-            sec:authorize="isAuthenticated()">
-        <h1 class="display-6 py-5"
-            th:text="${'👋 Welcome back ' + #authentication.name + '!'}">
-            Welcome back!
-        </h1>
-        <hr class="bg-dark border-2 border border-dark">
-    </header>
+    <th:block th:if="${query == null}">
+        <header sec:authorize="!isAuthenticated()"
+                th:replace="fragments/hero :: hero"></header>
+        <header class="text-center"
+                sec:authorize="isAuthenticated()">
+            <h1 class="display-6 py-5"
+                th:text="${'👋 Welcome back ' + #authentication.name + '!'}">
+                Welcome back!
+            </h1>
+            <hr class="bg-dark border-2 border border-dark">
+        </header>
+    </th:block>
     <h1 class="m-3"
         id="myrecipes"
         th:text="#{title.myRecipes}">
         My Recipes!
     </h1>
     <hr class="bg-dark border-2 border-top border-dark">
-    <div class="row g-3">
+    <main role="main" class="row g-3">
         <div th:if="${query != null}"
              th:text="|#{query.leading}: ${query}|">
             Searching for
@@ -48,7 +51,7 @@
              th:each="recipe : ${recipes}"
              th:if="${not #lists.isEmpty(recipes)}"
              th:insert="fragments/recipecard :: cardrecipe(recipe=${recipe})"></div>
-    </div>
+    </main>
 </div>
 <div th:insert="fragments/footer :: footer"></div>
 </body>

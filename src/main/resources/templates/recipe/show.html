@@ -24,11 +24,15 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-12 col-lg-9 mx-auto">
+        <main role="main"
+              class="col-12 col-lg-9 mx-auto">
             <!-- Recipe name -->
-            <h1 class="card-title mb-4" th:text="${recipe.description}">Recipe name heading</h1>
-            <div class="row justify-content-lg-end mx-auto" sec:authorize="hasRole('ADMIN')">
-                <a class="btn btn-primary mb-4 col-lg-2" th:href="@{'/recipe/' + ${recipe.id} + '/image'}"
+            <h1 class="card-title mb-4"
+                th:text="${recipe.description}">Recipe name heading</h1>
+            <div class="row justify-content-lg-end mx-auto"
+                 sec:authorize="hasRole('ADMIN')">
+                <a class="btn btn-primary mb-4 col-lg-2"
+                   th:href="@{'/recipe/' + ${recipe.id} + '/image'}"
                    type="submit">
                     Upload Image</a>
             </div>
@@ -37,8 +41,7 @@
                  src="/static/images/placeholder-image.jpeg"
                  th:if="${not #lists.isEmpty(recipe.image)}"
                  th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}">
-            <div class="card-body">
-                <div class="row mt-2">
+                <section class="row mt-3">
                     <!-- Categories -->
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.categories}">Categories:</h5>
@@ -50,9 +53,9 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </section>
                 <!-- Prep time and difficulty -->
-                <div class="row mt-2">
+                <section class="row mt-2">
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.prepTime}">Preparation time:</h5>
                     </div>
@@ -65,9 +68,9 @@
                     <div class="col-lg-3">
                         <p th:text="${recipe.difficulty.name().substring(0, 1) + recipe.difficulty.name().substring(1).toLowerCase()}"></p>
                     </div>
-                </div>
+                </section>
                 <!-- Cooktime and servings -->
-                <div class="row mt-2">
+                <section class="row mt-2">
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.cookTime}">Cook time:</h5>
                     </div>
@@ -80,9 +83,9 @@
                     <div class="col-lg-3">
                         <p th:text="${recipe.servings}">4</p>
                     </div>
-                </div>
+                </section>
                 <!-- Source -->
-                <div class="row mt-2">
+                <section class="row mt-2">
                     <div class="col-lg-3">
                         <h5 th:text="#{recipe.sources}">Source:</h5>
                     </div>
@@ -99,8 +102,7 @@
                             https://www.example.com/
                         </a>
                     </div>
-                </div>
-            </div>
+                </section>
             <hr class="bg-dark border-2 border-top border-dark">
             <!-- Ingredients -->
             <div class="row">
@@ -142,7 +144,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
 <div th:insert="fragments/footer :: footer"></div>
