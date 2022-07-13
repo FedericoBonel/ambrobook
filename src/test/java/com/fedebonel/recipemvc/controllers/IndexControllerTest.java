@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -18,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@SpringBootTest
 class IndexControllerTest {
 
     // IndexController to test
@@ -35,9 +38,9 @@ class IndexControllerTest {
         indexController = new IndexController(recipeService, userService);
     }
 
-    /* Controller test with HTTP GET request with MockMvcVuilders */
+    @WithMockUser
     @Test
-    void testoMockMVC() throws Exception {
+    void getAllRecipes() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
         HashSet<Recipe> expectedSet = new HashSet<>();

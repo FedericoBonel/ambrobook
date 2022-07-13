@@ -10,7 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -45,18 +48,6 @@ class RecipeControllerTest {
                 .standaloneSetup(recipeController)
                 .setControllerAdvice(ControllerExceptionHandler.class)
                 .build();
-    }
-
-    @Test
-    void getRecipe() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
-        when(recipeService.findById(1L)).thenReturn(recipe);
-
-        mockMvc.perform(get("/recipe/1/show"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("recipe/show"))
-                .andExpect(model().attributeExists("recipe"));
     }
 
     @Test
