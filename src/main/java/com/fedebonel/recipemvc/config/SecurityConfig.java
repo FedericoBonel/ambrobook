@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user",
                         "/user/signup",
                         "/user/verify").anonymous()
+                .antMatchers("/recipe/**/user/like").hasAnyRole(Roles.USER.toString(), Roles.ADMIN.toString())
                 .antMatchers("/**").hasRole(Roles.ADMIN.toString())
                 .and()
                 .formLogin()

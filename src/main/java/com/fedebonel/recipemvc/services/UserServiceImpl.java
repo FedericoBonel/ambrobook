@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto save(UserDto userDto, String serverUrl) {
+    public UserDto create(UserDto userDto, String serverUrl) {
         User user = toUser.convert(userDto);
         user.getUserRoles().forEach(role -> role.setUser(user));
         user.setActive(false);

@@ -21,4 +21,6 @@ public interface RecipeService {
     RecipeDto saveRecipeCommand(RecipeDto recipeDto);
 
     List<Recipe> findByQuery(String query);
+
+    void saveRecipeLike(Long id);
 }

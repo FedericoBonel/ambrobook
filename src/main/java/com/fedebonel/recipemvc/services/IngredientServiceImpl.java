@@ -92,7 +92,7 @@ public class IngredientServiceImpl implements IngredientService {
             log.debug("Recipe " + recipeId + " for ingredient " + ingredientId + " not found while trying to delete ingredient");
             throw new NotFoundException("Recipe with id = " + recipeId + " not found");
         }
-        // Get the ingredient, remove it, and save the recipe again
+        // Get the ingredient, remove it, and create the recipe again
         Recipe recipe = recipeOptional.get();
         recipe.getIngredients().stream()
                 .filter(recipeIngredient -> recipeIngredient.getId().equals(ingredientId))

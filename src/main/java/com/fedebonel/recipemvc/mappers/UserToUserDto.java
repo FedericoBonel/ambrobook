@@ -20,6 +20,7 @@ public class UserToUserDto implements Converter<User, UserDto> {
         userDto.setEmail(source.getEmail());
         userDto.setPassword(source.getPassword());
         userDto.setUserRoles(source.getUserRoles());
+        userDto.setLikedRecipes(source.getLikedRecipes());
 
         return userDto;
     }

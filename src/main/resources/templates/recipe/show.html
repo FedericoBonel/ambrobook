@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipe</title>
-    <link rel="stylesheet" href="/css/index.css">
-    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="/css/index.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
           th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}">
 
     <script
@@ -18,93 +19,104 @@
             th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
 </head>
 <body>
-
-
 <nav th:replace="fragments/navbar :: navbar"></nav>
-
 <div class="container">
     <div class="row">
-        <main role="main"
-              class="col-12 col-lg-9 mx-auto">
-            <!-- Recipe name -->
-            <h1 class="card-title mb-4"
-                th:text="${recipe.description}">Recipe name heading</h1>
-            <div class="row justify-content-lg-end mx-auto"
-                 sec:authorize="hasRole('ADMIN')">
-                <a class="btn btn-primary mb-4 col-lg-2"
-                   th:href="@{'/recipe/' + ${recipe.id} + '/image'}"
-                   type="submit">
-                    Upload Image</a>
-            </div>
-            <!-- Image -->
-            <img class="card-img-top recipe-page-img rounded-bottom"
-                 src="/static/images/placeholder-image.jpeg"
-                 th:if="${not #lists.isEmpty(recipe.image)}"
-                 th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}">
-                <section class="row mt-3">
-                    <!-- Categories -->
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.categories}">Categories:</h5>
-                    </div>
-                    <div class="col-lg-9">
-                        <ul>
-                            <li th:each="category : ${recipe.categories}" th:text="${category.name}">
-                                Category
-                            </li>
-                        </ul>
-                    </div>
-                </section>
-                <!-- Prep time and difficulty -->
-                <section class="row mt-2">
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.prepTime}">Preparation time:</h5>
-                    </div>
-                    <div class="col-lg-3">
-                        <p th:text="${recipe.prepTime + ' minutes'}">30 minutes</p>
-                    </div>
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.difficulty}">Difficulty:</h5>
-                    </div>
-                    <div class="col-lg-3">
-                        <p th:text="${recipe.difficulty.name().substring(0, 1) + recipe.difficulty.name().substring(1).toLowerCase()}"></p>
-                    </div>
-                </section>
-                <!-- Cooktime and servings -->
-                <section class="row mt-2">
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.cookTime}">Cook time:</h5>
-                    </div>
-                    <div class="col-lg-3">
-                        <p th:text="${recipe.cookTime + ' minutes'}">30 minutes</p>
-                    </div>
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.servings}">Servings:</h5>
-                    </div>
-                    <div class="col-lg-3">
-                        <p th:text="${recipe.servings}">4</p>
-                    </div>
-                </section>
-                <!-- Source -->
-                <section class="row mt-2">
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.sources}">Source:</h5>
-                    </div>
-                    <div class="col-lg-3">
-                        <p th:text="${recipe.source}">example</p>
-                    </div>
-                    <div class="col-lg-3">
-                        <h5 th:text="#{recipe.url}">URL:</h5>
-                    </div>
-                    <div class="col-lg-3">
-                        <a class="text-decoration-none d-block text-truncate"
-                           th:href="@{${recipe.url}}"
-                           th:text="${recipe.url}">
-                            https://www.example.com/
-                        </a>
-                    </div>
-                </section>
+        <main class="col-12 col-lg-9 mx-auto"
+              role="main">
+            <section class="row mx-auto">
+                <h1 class="card-title px-0 mb-4 col-10"
+                    th:text="${recipe.description}">Recipe name heading</h1>
+                <form class="col-2 my-2 mx-0 px-0 text-end"
+                      method="post"
+                      th:action="@{|/recipe/${recipe.id}/user/like|}">
+                    <button class="btn btn-outline-danger"
+                            th:class="${#lists.contains(user.likedRecipes, recipe) ? 'btn btn-danger' : 'btn btn-outline-danger'}"
+                            th:text="${#lists.contains(user.likedRecipes, recipe) ? 'Liked' : 'Like️'}"
+                            type="submit">
+                        Like
+                    </button>
+                </form>
+            </section>
+            <section class="position-relative"
+                 th:class="${#lists.isEmpty(recipe.image)? 'd-flex justify-content-end'  : 'position-relative'}">
+                <img class="card-img-top recipe-page-img rounded-bottom"
+                     src="/static/images/placeholder-image.jpeg"
+                     th:if="${not #lists.isEmpty(recipe.image)}"
+                     th:src="@{|/recipe/${recipe.id}/image/render|}">
+
+                <a class="btn btn-primary position-absolute top-0 end-0 my-1 mx-1 p-2"
+                   data-bs-toggle="tooltip"
+                   sec:authorize="hasRole('ADMIN')"
+                   th:class="${#lists.isEmpty(recipe.image) ?
+                   'btn btn-primary' : 'btn btn-primary position-absolute top-0 end-0 my-1 mx-1 p-2'}"
+                   th:href="@{|/recipe/${recipe.id}/image|}"
+                   title="Upload image">
+                    <img alt="upload-btn"
+                         class="white-filter height-2-rem"
+                         th:src="@{/images/upload.png}">
+                </a>
+            </section>
+            <section class="row mt-3">
+                <!-- Categories -->
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.categories}">Categories:</h5>
+                </div>
+                <div class="col-lg-9">
+                    <ul>
+                        <li th:each="category : ${recipe.categories}" th:text="${category.name}">
+                            Category
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="row mt-2">
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.prepTime}">Preparation time:</h5>
+                </div>
+                <div class="col-lg-3">
+                    <p th:text="${recipe.prepTime + ' minutes'}">30 minutes</p>
+                </div>
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.difficulty}">Difficulty:</h5>
+                </div>
+                <div class="col-lg-3">
+                    <p th:text="${recipe.difficulty.name().substring(0, 1) + recipe.difficulty.name().substring(1).toLowerCase()}"></p>
+                </div>
+            </section>
+            <section class="row mt-2">
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.cookTime}">Cook time:</h5>
+                </div>
+                <div class="col-lg-3">
+                    <p th:text="${recipe.cookTime + ' minutes'}">30 minutes</p>
+                </div>
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.servings}">Servings:</h5>
+                </div>
+                <div class="col-lg-3">
+                    <p th:text="${recipe.servings}">4</p>
+                </div>
+            </section>
+            <section class="row mt-2">
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.sources}">Source:</h5>
+                </div>
+                <div class="col-lg-3">
+                    <p th:text="${recipe.source}">example</p>
+                </div>
+                <div class="col-lg-3">
+                    <h5 th:text="#{recipe.url}">URL:</h5>
+                </div>
+                <div class="col-lg-3">
+                    <a class="text-decoration-none d-block text-truncate"
+                       th:href="@{${recipe.url}}"
+                       th:text="${recipe.url}">
+                        https://www.example.com/
+                    </a>
+                </div>
+            </section>
             <hr class="bg-dark border-2 border-top border-dark">
-            <!-- Ingredients -->
             <div class="row">
                 <div class="col-lg-11">
                     <h2 class="card-title" th:text="#{recipe.ingredients}">Ingredients</h2>

@@ -2,17 +2,15 @@ package com.fedebonel.recipemvc.controllers;
 
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.RecipeService;
+import com.fedebonel.recipemvc.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -28,10 +26,13 @@ class IndexControllerTest {
     @Mock
     RecipeService recipeService;
 
+    @Mock
+    UserService userService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        indexController = new IndexController(recipeService);
+        indexController = new IndexController(recipeService, userService);
     }
 
     /* Controller test with HTTP GET request with MockMvcVuilders */

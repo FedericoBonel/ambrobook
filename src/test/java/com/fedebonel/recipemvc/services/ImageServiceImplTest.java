@@ -45,7 +45,7 @@ class ImageServiceImplTest {
         // Capture the recipe that got saved inside the service
         verify(recipeRepository).save(recipeCaptor.capture());
 
-        // Verify that the saved image has the same length that the one we wanted to save
+        // Verify that the saved image has the same length that the one we wanted to create
         Recipe savedRecipe = recipeCaptor.getValue();
         assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
     }

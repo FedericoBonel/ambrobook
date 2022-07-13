@@ -3,6 +3,7 @@ package com.fedebonel.recipemvc.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,4 +27,20 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
+
+    @ManyToMany
+    @JoinTable(name = "user_likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id"))
+    private List<Recipe> likedRecipes = new ArrayList<>();
+
+
+    public void likeRecipe(Recipe recipe) {
+        if (likedRecipes.stream()
+                .noneMatch(savedRecipe -> recipe.getId().equals(savedRecipe.getId()))) {
+            likedRecipes.add(recipe);
+        } else {
+            likedRecipes.removeIf(savedRecipe -> recipe.getId().equals(savedRecipe.getId()));
+        }
+    }
 }

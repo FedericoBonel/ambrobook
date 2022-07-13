@@ -19,12 +19,19 @@
 
 </head>
 <body>
-<div class="card m-3" th:fragment="cardrecipe(recipe)">
+<div class="card m-3" th:fragment="cardrecipe(recipe, likedRecipes)">
     <a th:href="@{'/recipe/' + ${recipe.id} + '/show'}"
        th:if="${not #lists.isEmpty(recipe.image)}">
-        <img alt="recipe image" class="card-img-top recipe-card-img"
-             src="/static/images/placeholder-image.jpeg"
-             th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}"/>
+        <section class="position-relative">
+            <img alt="recipe image" class="card-img-top recipe-card-img"
+                 src="/static/images/placeholder-image.jpeg"
+                 th:src="@{'/recipe/' + ${recipe.id} + '/image/render'}"/>
+            <img class="position-absolute top-0 end-0 my-1 mx-1 height-3-rem"
+                 src="/static/images/like.png"
+                 alt="liked recipe"
+                 th:if="${#lists.contains(likedRecipes, recipe)}"
+                 th:src="@{/images/like.png}">
+        </section>
     </a>
     <div class="card-body">
         <a class="card-title text-decoration-none h4" th:href="@{'/recipe/' + ${recipe.id} + '/show'}"

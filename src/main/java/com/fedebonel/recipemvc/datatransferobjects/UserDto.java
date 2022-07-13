@@ -1,5 +1,6 @@
 package com.fedebonel.recipemvc.datatransferobjects;
 
+import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.model.UserRole;
 import lombok.Data;
 
@@ -27,4 +28,6 @@ public class UserDto {
     private Boolean active;
 
     private List<UserRole> userRoles;
+
+    private List<Recipe> likedRecipes;
 }

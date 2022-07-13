@@ -4,7 +4,10 @@ import com.fedebonel.recipemvc.datatransferobjects.RecipeDto;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.services.CategoryService;
 import com.fedebonel.recipemvc.services.RecipeService;
+import com.fedebonel.recipemvc.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,10 +28,14 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public RecipeController(RecipeService recipeService, CategoryService categoryService) {
+    public RecipeController(RecipeService recipeService,
+                            CategoryService categoryService,
+                            UserService userService) {
         this.recipeService = recipeService;
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     /**
@@ -37,7 +44,10 @@ public class RecipeController {
     @GetMapping({"/{id}/show"})
     public String showById(@PathVariable Long id, Model model) {
         Recipe foundRecipe = recipeService.findById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         model.addAttribute("recipe", foundRecipe);
+        model.addAttribute("user", userService.findByUsername(username));
         return RECIPE_SHOW_PATH;
     }
 
@@ -65,7 +75,7 @@ public class RecipeController {
     }
 
     /**
-     * Handles POST methods to update or save a recipe
+     * Handles POST methods to update or create a recipe
      */
     @PostMapping
     public String saveOrUpdate(@RequestParam(value = "checkedCategories", required = false) List<Long> checkedCategories,
@@ -96,10 +106,22 @@ public class RecipeController {
     /**
      * Handles GET methods to delete recipes
      */
-    @GetMapping({"{id}/delete"})
+    @GetMapping({"/{id}/delete"})
     public String deleteById(@PathVariable Long id) {
         log.debug("Deleted recipe: " + id);
         recipeService.deleteById(id);
         return "redirect:/";
+    }
+
+    /**
+     * Handles POST methods to allow users to like recipes
+     */
+    @PostMapping("/{id}/user/like")
+    public String likeById(@PathVariable Long id) {
+        log.debug("User liking recipe with id: " + id);
+
+        recipeService.saveRecipeLike(id);
+
+        return "redirect:" + RECIPE_URI + "/" + id + "/show";
     }
 }

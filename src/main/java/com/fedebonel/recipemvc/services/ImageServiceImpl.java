@@ -28,7 +28,7 @@ public class ImageServiceImpl implements ImageService {
             return;
         }
 
-        // Transform the image to a byte array, assign it to the recipe, and save it
+        // Transform the image to a byte array, assign it to the recipe, and create it
         try {
             Byte[] imageInBytes = new Byte[image.getBytes().length];
 

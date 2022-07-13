@@ -4,7 +4,7 @@ import com.fedebonel.recipemvc.datatransferobjects.UserDto;
 
 public interface UserService {
 
-    UserDto save(UserDto userDto, String serverUrl);
+    UserDto create(UserDto userDto, String serverUrl);
 
     UserDto findByUsername(String username);
 

@@ -55,7 +55,7 @@
                            name="q"
                            placeholder="Search recipes..."
                            spellcheck="false"
-                           th:value="${q} ? ${q}"
+                           th:value="${param.q} ? ${param.q}"
                            type="search">
                 </form>
                 <div class="dropdown text-start text-lg-end">

@@ -5,8 +5,12 @@ import com.fedebonel.recipemvc.mappers.RecipeDtoToRecipe;
 import com.fedebonel.recipemvc.mappers.RecipeToRecipeDto;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
+import com.fedebonel.recipemvc.model.User;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
+import com.fedebonel.recipemvc.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,17 +28,19 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeDtoToRecipe recipeDtoToRecipe;
     private final RecipeToRecipeDto recipeToRecipeDto;
+    private final UserRepository userRepository;
 
     public RecipeServiceImpl(RecipeRepository recipeRepository,
                              RecipeDtoToRecipe recipeDtoToRecipe,
-                             RecipeToRecipeDto recipeToRecipeDto) {
+                             RecipeToRecipeDto recipeToRecipeDto,
+                             UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
         this.recipeDtoToRecipe = recipeDtoToRecipe;
         this.recipeToRecipeDto = recipeToRecipeDto;
+        this.userRepository = userRepository;
     }
 
     @Override
-    @Transactional
     public Set<Recipe> getRecipes() {
         log.debug("Getting recipes");
         HashSet<Recipe> recipes = new HashSet<>();
@@ -43,7 +49,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @Transactional
     public Recipe findById(Long id) {
         log.debug("Finding recipe by id: " + id);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
@@ -63,7 +68,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @Transactional
     public RecipeDto findCommandById(Long id) {
         log.debug("Finding command by id: " + id);
         return recipeToRecipeDto.convert(findById(id));
@@ -87,5 +91,20 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> findByQuery(String query) {
         return recipeRepository.findByDescriptionContainingIgnoreCaseOrCategories_nameContainingIgnoreCase(query, query);
+    }
+
+    @Override
+    @Transactional
+    public void saveRecipeLike(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User foundUser = userRepository.findByUsername(username).orElseThrow(NotFoundException::new);
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(NotFoundException::new);
+
+        recipe.likeByUser(foundUser);
+        foundUser.likeRecipe(recipe);
+
+        recipeRepository.save(recipe);
+        userRepository.save(foundUser);
     }
 }

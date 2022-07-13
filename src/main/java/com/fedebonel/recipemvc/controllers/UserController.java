@@ -67,7 +67,7 @@ public class UserController {
             return REGISTRATION_FORM_PATH;
         }
         user.setUserRoles(List.of(buildUserRole()));
-        model.addAttribute("user", userService.save(user, getSiteURLFrom(request)));
+        model.addAttribute("user", userService.create(user, getSiteURLFrom(request)));
 
         return "user/verificationnotification";
     }

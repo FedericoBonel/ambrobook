@@ -18,9 +18,9 @@
             th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<nav th:replace="fragments/navbar :: navbar(isIndex = true, q=${query})"></nav>
+<nav th:replace="fragments/navbar :: navbar(isIndex = true)"></nav>
 <div class="container">
-    <th:block th:if="${query == null}">
+    <th:block th:if="${param.q == null}">
         <header sec:authorize="!isAuthenticated()"
                 th:replace="fragments/hero :: hero"></header>
         <header class="text-center"
@@ -39,8 +39,8 @@
     </h1>
     <hr class="bg-dark border-2 border-top border-dark">
     <main role="main" class="row g-3">
-        <div th:if="${query != null}"
-             th:text="|#{query.leading}: ${query}|">
+        <div th:if="${param.q != null}"
+             th:text="|#{query.leading}: ${param.q}|">
             Searching for
         </div>
         <div th:if="${#lists.isEmpty(recipes)}"
@@ -50,7 +50,7 @@
         <div class="col-12 col-md-6 col-lg-4"
              th:each="recipe : ${recipes}"
              th:if="${not #lists.isEmpty(recipes)}"
-             th:insert="fragments/recipecard :: cardrecipe(recipe=${recipe})"></div>
+             th:insert="fragments/recipecard :: cardrecipe(recipe=${recipe}, likedRecipes=${likedRecipes})"></div>
     </main>
 </div>
 <div th:insert="fragments/footer :: footer"></div>

@@ -4,6 +4,7 @@ import com.fedebonel.recipemvc.mappers.*;
 import com.fedebonel.recipemvc.exceptions.NotFoundException;
 import com.fedebonel.recipemvc.model.Recipe;
 import com.fedebonel.recipemvc.repositories.RecipeRepository;
+import com.fedebonel.recipemvc.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +26,9 @@ class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    UserRepository userRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -36,7 +40,8 @@ class RecipeServiceImplTest {
                 new RecipeToRecipeDto(
                         new CategoryToCategoryDto(),
                         new NotesToNotesDto(),
-                        new IngredientToIngredientDto(new UnitOfMeasureToUnitOfMeasureDto())));
+                        new IngredientToIngredientDto(new UnitOfMeasureToUnitOfMeasureDto())),
+                userRepository);
     }
 
     @Test
