@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -32,15 +34,14 @@ public class User {
     @JoinTable(name = "user_likes",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "recipe_id"))
-    private List<Recipe> likedRecipes = new ArrayList<>();
+    private Set<Recipe> likedRecipes = new HashSet<>();
 
 
     public void likeRecipe(Recipe recipe) {
-        if (likedRecipes.stream()
-                .noneMatch(savedRecipe -> recipe.getId().equals(savedRecipe.getId()))) {
+        if (!likedRecipes.contains(recipe)) {
             likedRecipes.add(recipe);
         } else {
-            likedRecipes.removeIf(savedRecipe -> recipe.getId().equals(savedRecipe.getId()));
+            likedRecipes.remove(recipe);
         }
     }
 }

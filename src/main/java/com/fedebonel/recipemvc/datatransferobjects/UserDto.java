@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class UserDto {
@@ -29,5 +30,5 @@ public class UserDto {
 
     private List<UserRole> userRoles;
 
-    private List<Recipe> likedRecipes;
+    private Set<Recipe> likedRecipes;
 }

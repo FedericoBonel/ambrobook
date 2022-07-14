@@ -1,6 +1,7 @@
 package com.fedebonel.recipemvc.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Set;
  * Recipe POJO
  */
 @Data
+@EqualsAndHashCode(exclude = {"likedBy"})
 @Entity
 public class Recipe {
 
@@ -48,7 +50,7 @@ public class Recipe {
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(mappedBy = "likedRecipes")
-    private List<User> likedBy = new ArrayList<>();
+    private Set<User> likedBy = new HashSet<>();
 
     public void addIngredient(Ingredient ingredient) {
         ingredient.setRecipe(this);
@@ -71,11 +73,10 @@ public class Recipe {
     }
 
     public void likeByUser(User user) {
-        if(likedBy.stream()
-                .noneMatch(savedUser -> user.getId().equals(savedUser.getId()))) {
+        if(!likedBy.contains(user)) {
             likedBy.add(user);
         } else {
-            likedBy.removeIf(savedUser -> user.getId().equals(savedUser.getId()));
+            likedBy.remove(user);
         }
     }
 
