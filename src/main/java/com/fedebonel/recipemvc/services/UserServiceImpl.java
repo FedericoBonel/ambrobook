@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto, String serverUrl) {
         User user = toUser.convert(userDto);
+        user.setUsername(user.getUsername().replaceAll("\\s", ""));
         user.getUserRoles().forEach(role -> role.setUser(user));
         user.setActive(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

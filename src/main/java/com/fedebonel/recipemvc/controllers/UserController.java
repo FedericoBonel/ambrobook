@@ -23,6 +23,8 @@ public class UserController {
     public static final String USER_URI = "/user";
     public static final String REGISTRATION_FORM_PATH = "user/registrationform";
     public static final String VERIFICATION_CONFIRMED_PATH = "user/verificationconfirmed";
+    public static final String USER_LOGINFORM_PATH = "user/loginform";
+    public static final String USER_VERIFICATIONNOTIFICATION_PATH = "user/verificationnotification";
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -33,7 +35,7 @@ public class UserController {
     public String loginUserForm() {
         log.debug("Showing user sign in form");
 
-        return "user/loginform";
+        return USER_LOGINFORM_PATH;
     }
 
     @GetMapping("/signup")
@@ -69,13 +71,12 @@ public class UserController {
         user.setUserRoles(List.of(buildUserRole()));
         model.addAttribute("user", userService.create(user, getSiteURLFrom(request)));
 
-        return "user/verificationnotification";
+        return USER_VERIFICATIONNOTIFICATION_PATH;
     }
 
     @GetMapping("/verify")
     private String verifyAccount(Model model, @RequestParam(name = "code") String code) {
         UserDto userToVerify = userService.findByVerification(code);
-        userToVerify.setActive(true);
         userService.verify(userToVerify);
 
         model.addAttribute("user", userToVerify);

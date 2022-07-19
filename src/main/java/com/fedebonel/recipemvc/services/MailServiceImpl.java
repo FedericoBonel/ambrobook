@@ -34,7 +34,7 @@ public class MailServiceImpl implements MailService {
                 + "\uD83E\uDD73 Thank you for signing up to AmbroBook \uD83E\uDD73 <br>"
                 + "Please click the link below to complete your registration and begin your delicious journey:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "We can't wait to see what recipes you have in mind,<br>"
+                + "We can't wait to see what recipes you have in mind,<br><br>"
                 + "User Support, AmbroBook.";
 
         MimeMessage message = mailSender.createMimeMessage();
