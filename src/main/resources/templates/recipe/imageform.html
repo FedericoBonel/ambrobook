@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <main class="row justify-content-center">
         <div class="col-lg-9">
-            <h1 th:text="#{title.uploadImage}">Uploading new recipe image</h1>
+            <h1 th:text="|#{title.uploadImage} ${recipe.description}|">Uploading new recipe image</h1>
             <hr class="bg-dark border-2 border-top border-dark">
             <section class="col-lg-9 form-group">
                 <form enctype="multipart/form-data" method="post"
