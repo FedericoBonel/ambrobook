@@ -20,7 +20,7 @@
                 <form enctype="multipart/form-data" method="post"
                       th:action="@{'/recipe/' + ${recipe.id} + '/image'}">
                     <label class="form-label" th:text="#{selectFile}">Select file</label>
-                    <input class="form-control" id="imagefile" name="imagefile" type="file"/>
+                    <input class="form-control" id="imagefile" name="imagefile" type="file" accept="image/*"/>
                     <button class="btn btn-primary mt-2" th:text="#{submit}"
                             type="submit">Submit
                     </button>
