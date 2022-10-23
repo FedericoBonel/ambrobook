@@ -21,7 +21,7 @@ the following command:
 
     java -jar recipe-mvc-0.0.1-SNAPSHOT.jar
 
-Once you've done that you'll have the application running on your ip in the port 8080.
+Once you've done that you'll have the application running on your ip on port 8080.
 
 **_NOTE:_**  This will run the application with an in memory relational database, this is not what you want if you 
 were to deploy the app.
