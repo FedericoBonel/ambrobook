@@ -1,6 +1,6 @@
 # AmbroBook
 
-[![CircleCI](https://circleci.com/gh/FedericoBonel/recipe-mvc/tree/main.svg?style=svg&circle-token=02cc6eefb0d097c7eb8fc60ef8c4f69ea60ba0a7)](https://circleci.com/gh/FedericoBonel/recipe-mvc/tree/main)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/MXqELc8ViZYB9hfQ6uBdG5/Piv3t66JdaSYv5QL8qyNbF/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/MXqELc8ViZYB9hfQ6uBdG5/Piv3t66JdaSYv5QL8qyNbF/tree/main)
 
 ## What is this repository?
 There are many things I'm passionate about, and two of them are technology and food. Having worked in kitchens a lot in the past, I always enjoy sharing my knowledge with others. So, I decided to build a simple yet robust web application that allows you to share your recipes with anyone!
