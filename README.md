@@ -3,10 +3,9 @@
 [![CircleCI](https://circleci.com/gh/FedericoBonel/recipe-mvc/tree/main.svg?style=svg&circle-token=02cc6eefb0d097c7eb8fc60ef8c4f69ea60ba0a7)](https://circleci.com/gh/FedericoBonel/recipe-mvc/tree/main)
 
 ## What is this repository?
-There's a lot of things I'm passionate about, and two of those are technology and food. I've worked in kitchens a 
-lot in the past and I always enjoy sharing what I know with others, so I decided to build a simple, yet robust, 
-web application that allows you to share your recipes with anyone!
-This is a fullstack website that you can download and run to have your own, out of the box, responsive recipes website.
+There are many things I'm passionate about, and two of them are technology and food. Having worked in kitchens a lot in the past, I always enjoy sharing my knowledge with others. So, I decided to build a simple yet robust web application that allows you to share your recipes with anyone!
+
+This is a full-stack website that you can download and run to have your own responsive recipe-sharing site, right out of the box.
 
 <img src="src/main/resources/static/images/AmbroBook.gif" width="700px">
 
